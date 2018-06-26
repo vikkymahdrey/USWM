@@ -32,6 +32,16 @@ public class TblUserInfo implements Serializable {
 	private String status;
 
 	private String uname;
+	
+	private String pwdChangeDt;
+
+	public String getPwdChangeDt() {
+		return pwdChangeDt;
+	}
+
+	public void setPwdChangeDt(String pwdChangeDt) {
+		this.pwdChangeDt = pwdChangeDt;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;

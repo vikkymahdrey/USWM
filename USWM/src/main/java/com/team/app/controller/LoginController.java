@@ -14,27 +14,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.team.app.domain.AdminUser;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
-import com.team.app.service.LoginService;
+import com.team.app.service.UserLoginService;
 
 @Controller
 public class LoginController {
 	private static final AtLogger logger = AtLogger.getLogger(LoginController.class);
 	
-	@Autowired
-	private LoginService loginService;
 	
 	@Autowired
 	private ConsumerInstrumentService consumerInstrumentServiceImpl;
+	
+	@Autowired
+	private UserLoginService userLoginService;
 		
 	
 	@RequestMapping(value= {"/"})
 	public String defaultURL(){
 		return "index";
 	}
+	
+		
 	
 	@RequestMapping(value= {"/onSubmitlogin"}, method=RequestMethod.POST)
 	public ModelAndView loginUser(HttpServletRequest request, HttpSession session, HttpServletResponse response,RedirectAttributes redirectAttributes) throws Exception{
@@ -44,7 +46,7 @@ public class LoginController {
 		String password = request.getParameter("pass") == null ? "" : request
 				.getParameter("pass");
 		
-        AdminUser adminUser=null;
+        TblUserInfo userInfo=null;
         boolean needToChangePwd=false;
 		
         if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
@@ -52,17 +54,17 @@ public class LoginController {
 					"<div class='failure'>Enter User Name/Password!!</div");
 			return new ModelAndView("redirect:/");
 		} else {			
-			adminUser=loginService.getLoginUser(username,password);
+			userInfo=userLoginService.getUserByUserAndPwd(username,password);
 		}
         
-        if(adminUser!=null){
-        	session.setAttribute("adminUser", adminUser);
-        	         	
+        if(userInfo!=null){
+        	session.setAttribute("user", userInfo);
+        	        	         	
         }
         
         
-        if (adminUser!=null) {
-			if (adminUser.getPwdChangedDate()== null || adminUser.getPwdChangedDate().equals("")) {
+        if (userInfo!=null) {
+			if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
 				needToChangePwd = true;
 			}
 		}
@@ -74,19 +76,25 @@ public class LoginController {
 			
 		} 
         
-        if(adminUser!=null){
-        	 	return new ModelAndView("redirect:/adminHome");
-        	
+        if(userInfo!=null){
+        	if(userInfo.getRoleBean().getType().equalsIgnoreCase("admin")) {
+        	 	return new ModelAndView("redirect:/home");
+        	}else if(userInfo.getRoleBean().getType().equalsIgnoreCase("usr")) {
+        		return new ModelAndView("redirect:/userHome");
+        	}else {
+        		redirectAttributes.addFlashAttribute("status",
+    					"<div class='failure'>Incorrect role identified!</div");
+        		return new ModelAndView("redirect:/");
+        	}
         }else{
-        	session.setAttribute("adminUser", "");
+        	session.setAttribute("userInfo", "");
         	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid User Name/Password !</div");
         	return new ModelAndView("redirect:/");
         }
 		
 	
 	}
-	
-	 @RequestMapping(value= {"/adminHome"}, method=RequestMethod.GET)
+	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
 	 public String home(Map<String,Object> map) throws Exception{
 		List<TblUserInfo> userInfos= consumerInstrumentServiceImpl.getUserInfosCount();
 		  map.put("userInfos",userInfos);
@@ -107,7 +115,7 @@ public class LoginController {
 		 
 		
 		 
-	@RequestMapping(value= {"/logout"})
+			@RequestMapping(value= {"/logout"})
 			public String goToLogout(HttpServletRequest request,HttpServletResponse response,Map<String,Object> map){
 				logger.debug("In gotoLogout Page......");
 					HttpSession session = request.getSession(true);

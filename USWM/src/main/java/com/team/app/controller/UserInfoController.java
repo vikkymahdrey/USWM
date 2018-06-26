@@ -87,7 +87,76 @@ public class UserInfoController {
 					return "frames";
 		 
 	 }
-	
+	@RequestMapping(value= {"/userMgmt"}, method=RequestMethod.GET)
+    public String userMgmtHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
+		   logger.debug("/inside sync");
+		  		   
+		   String orgName="";
+		   String id="";
+		   String status="";
+	   try {
+		   String jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJuYmYiOjE1MDk5NjE1NzIsInN1YiI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.NDZGFGPDQNs7AgmGRzQk1WL5Y1tLjyRbw-n_TwHPZsY";
+			
+		   String url="https://139.59.14.31:8080/api/organizations?limit=100";
+			logger.debug("URLConn",url);
+			URL obj1 = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+			con.setDoOutput(true);
+			con.setRequestMethod("GET");
+			con.setRequestProperty("accept", "application/json");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setRequestProperty("Grpc-Metadata-Authorization",jwt);
+			
+			    
+			int responseCode = con.getResponseCode();
+				logger.debug("POST Response Code :: " + responseCode);
+					    				
+			if(responseCode == HttpURLConnection.HTTP_OK) {
+				logger.debug("Token valid,POST Response with 200");
+				
+				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				
+				in.close();
+				
+				JSONObject json=null;
+					json=new JSONObject();
+				json=(JSONObject)new JSONParser().parse(response.toString());
+			
+				JSONArray arr=(JSONArray) json.get("result");    					
+				
+				if(arr!=null && arr.size()>0){
+					logger.debug("Inside Array not null");
+					 for (int i = 0; i < arr.size(); i++) {
+						 JSONObject jsonObj = (JSONObject) arr.get(i);
+						
+						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
+							logger.debug("Name matching ..");
+							logger.debug("Organisation name ..",jsonObj.get("name").toString());
+							logger.debug("Organisation id ..",jsonObj.get("id").toString());
+							orgName=jsonObj.get("name").toString();
+							id=jsonObj.get("id").toString();
+							
+							
+						}
+					 }
+		        }
+			}
+			
+	   }catch(Exception e){
+			e.printStackTrace();
+	   }
+	   
+	   	map.put("id", id.trim());
+		map.put("name",orgName.trim());
+		
+	   return "UserMgmt";
+	}
 	
 	
 	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
