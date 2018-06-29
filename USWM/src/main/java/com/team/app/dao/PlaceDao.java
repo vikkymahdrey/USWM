@@ -14,5 +14,12 @@ public interface PlaceDao extends JpaRepository<Place, Serializable> {
 	Place getPlaceById(@Param("placeId") String placeId);
 
 	
+	@Query("Select p from Place p where p.placename=:placename and p.area.id=:areaId")
+	Place getPlaceByAreaAndName(@Param("placename") String placename,@Param("areaId") String areaId);
+
+	@Query("Select p from Place p where p.id=:placeId and p.area.id=:areaId")
+	Place getPlaceByPlaceAndAreaId(@Param("placeId") String placeId, @Param("areaId") String areaId);
+
+	
 
 }

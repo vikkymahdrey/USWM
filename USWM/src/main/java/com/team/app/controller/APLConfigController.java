@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.dom4j.Branch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
-import com.team.app.domain.TblUserInfo;
 import com.team.app.dto.OrganisationDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
@@ -43,7 +41,7 @@ public class APLConfigController {
 			 List<Area> areaList=aplService.getAreasByOrgId(orgId);
 			 map.put("areaList",areaList);
 		 }
-		 return "area1";
+		 return "area";
 	}
 	
 	
@@ -123,19 +121,19 @@ public class APLConfigController {
 				  Area a=aplService.insertArea(areaObj);
 				
 				if (a!=null) {
-					logger.debug("Inside Null");
+					
 					redirectAttributes.addFlashAttribute("status",
-							"<div class=\"failure\" > New area added successfully</div>");
+							"<div class=\"success\" > New area added successfully</div>");
 				}else{
 					
-					logger.debug("Inside Null111");
+					
 					redirectAttributes.addFlashAttribute("status",
-							"<div class=\"success\" > Area Already Exist !</div>");
+							"<div class=\"failure\" > Area Already Exist !</div>");
 					
 				}
 			}catch(Exception e){
 				logger.error("Error in adding area ",e);
-				map.put("status",
+				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"failure\" > Area adding failed</div>");
 					}
 					
@@ -157,7 +155,7 @@ public class APLConfigController {
 					logger.error("Error in showPlace",ex);
 				}
 				
-				return "place1";
+				return "place";
 			}
 			
 			@RequestMapping(value= {"/showLandmark"}, method=RequestMethod.GET)
@@ -174,6 +172,207 @@ public class APLConfigController {
 					logger.error("Error in showLandmark",ex);
 				}
 				
-				return "landmark1";
+				return "landmark";
 			}
+			
+			
+			@RequestMapping(value= {"/updateArea"}, method=RequestMethod.GET)
+			public String getUpdatedArea(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+
+				String areaId = request.getParameter("areaId");
+				String areaName = request.getParameter("area");
+				String orgId = request.getParameter("orgId");
+				
+				logger.debug("printing areaId /updateArea ",areaId);
+				logger.debug("printing areaName /updateArea ",areaName);
+				logger.debug("printing orgId /updateArea ",orgId);
+				
+				try{
+						Area area=aplService.getAreaByOrgAndAreaId(orgId,areaId);
+						if(area!=null){
+							area.setAreaname(areaName);
+							Area a=aplService.updateArea(area);	
+							 if(a!=null){
+								 redirectAttributes.addFlashAttribute("status",
+											"<div class=\"success\" > Area updated successfully</div>");
+							 }else{
+								 redirectAttributes.addFlashAttribute("status",
+											"<div class=\"failure\" > Area Already Exist !</div>");
+							 }
+						}else{
+							redirectAttributes.addFlashAttribute("status",
+									"<div class=\"success\" > Area not exist!</div>");
+						}
+										
+						
+			}catch(Exception e){
+				logger.error("Error in updating area ",e);
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"success\" > Adding area failed!</div>");
+				
+			}
+				return "redirect:/aplConfig?orgId="+orgId;
+	}
+			
+			
+
+			@RequestMapping(value= {"/addPlace"}, method=RequestMethod.GET)
+			public String addPlace(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				
+				String placeName = request.getParameter("place");
+				String areaId = request.getParameter("areaId");
+				
+				try{
+					Area areaBean = aplService.getAreasByAreaId(areaId);
+					Place place = new Place();
+					place.setPlacename(placeName);
+					place.setArea(areaBean);	
+			
+				Place p = aplService.insertPlace(place,areaId);
+				
+				 if(p!=null){
+					 redirectAttributes.addFlashAttribute("status",
+								"<div class=\"success\" > New place added successfully!</div>");
+				 }else{
+					 redirectAttributes.addFlashAttribute("status",
+								"<div class=\"failure\" > Place Already Exist in the area!</div>");
+				 }
+			
+				
+				
+			}catch(Exception e){
+					logger.error("Error in adding place ",e);
+					 redirectAttributes.addFlashAttribute("status",
+							"<div class=\"failure\" > Place adding failed</div>");
+			}
+						
+					return "redirect:/showPlace?areaId="+areaId;
+				}
+			
+			
+			@RequestMapping(value= {"/updatePlace"}, method=RequestMethod.GET)
+			public String getUpdatedPlace(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				
+				String placeId = request.getParameter("placeId");
+				String placeName = request.getParameter("place");
+				String areaId = request.getParameter("areaId");
+				
+				try{
+					Place place=aplService.getPlaceByPlaceAndAreaId(placeId,areaId);
+					if(place!=null){
+						if(place.getPlacename().equalsIgnoreCase(placeName)){
+							 redirectAttributes.addFlashAttribute("status",
+										"<div class=\"failure\" > Place Already Exist in the area!</div>");
+						}else{
+							place.setPlacename(placeName);
+							Place p=aplService.updatePlace(place);
+							redirectAttributes.addFlashAttribute("status",
+									"<div class=\"success\" > Place updated successfully!</div>");
+						}
+					}
+				
+									
+			}catch(Exception e){
+					logger.error("Error in updating place ",e);
+					redirectAttributes.addFlashAttribute("status",
+							"<div class=\"failure\" > Place updating failed</div>");
+						}
+							return "redirect:/showPlace?areaId="+areaId;
+				}
+			
+			
+			@RequestMapping(value= {"/addLandmark"}, method=RequestMethod.POST)
+			public String addLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				
+				String landmarkName = request.getParameter("landmark");
+				String placeId = request.getParameter("placeId");
+				
+				try{	
+					
+					Place place=aplService.getPlaceById(placeId);
+					Landmark landmark=null;
+				     		landmark=new Landmark();				
+							landmark.setLandmarkname(landmarkName);
+							landmark.setPlace(place);		
+					Landmark l=aplService.insertLandmark(landmark,placeId);
+					if(l!=null){
+						 redirectAttributes.addFlashAttribute("status",
+									"<div class=\"success\" > New Landmark added successfully!</div>");
+					 }else{
+						 redirectAttributes.addFlashAttribute("status",
+									"<div class=\"failure\" > Landmark Already Exist in the place!</div>");
+					 }
+				
+			}catch(Exception e){
+					logger.error("Error in adding landmark ",e);
+					map.put("status",
+							"<div class=\"failure\" > Landmark adding failed</div>");
+						}
+						
+					return "redirect:/showLandmark?placeId=" + placeId;
+				}
+					
+			@RequestMapping(value= {"/updateLandmark"}, method=RequestMethod.POST)
+			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				String retVal = "";
+				String placeId = request.getParameter("placeId");
+				String landmarkId = request.getParameter("landmarkId");
+				String landmark = request.getParameter("landmark");
+				String latLng= request.getParameter("latlng");
+				String orgId= request.getParameter("orgId");
+				String areaId= request.getParameter("area");
+				
+				logger.debug("latitude longitude = "+latLng);
+				
+				try{
+					
+					Landmark lm = aplService.getLandMarkByIdAndPlaceId(landmarkId,placeId);
+					if(lm != null){
+						if(lm.getLandmarkname().equalsIgnoreCase(landmark)){
+							 redirectAttributes.addFlashAttribute("status",
+										"<div class=\"failure\" > Landmark Already Exist in the place!</div>");
+							 retVal =  "redirect:/showLandmark?placeId=" + placeId;
+							 return retVal; 
+						}else{
+							lm.setLandmarkname(landmark);
+						}
+						
+					}
+				
+				
+				if(latLng!=null && latLng.trim().equals("")==false)  {			
+					/*String latitude=latLng.split(",")[0].substring(1,  latLng.split(",")[0].length()-1);
+					String longitude = latLng.split(",")[1].substring(1, latLng.split(",")[1].length()-1);
+						 lm.setLatitude(Double.parseDouble(latitude));
+						 lm.setLongitude(Double.parseDouble(longitude));
+						 lm = aplService.updateLandmark(lm,placeId);
+						 if(location != null){
+							 retVal =  "redirect:/marklandmark?location="+location;
+						 }else if(areaId != null){
+							 retVal =  "redirect:/marklandmark?area="+areaId;
+						 }else if(placeId != null){
+							 retVal =  "redirect:/marklandmark?place="+placeId;
+						 }
+						 */
+						 			
+				}else{
+					Landmark lnd = aplService.updateLandmark(lm);
+					if(lnd!=null){
+						redirectAttributes.addFlashAttribute("status",
+								"<div class=\"success\" > Landmark updated successfully !</div>");
+						
+					}else{
+						redirectAttributes.addFlashAttribute("status",
+								"<div class=\"failure\" > Landmark updation failed!</div>");
+						
+					}
+					retVal =  "redirect:/showLandmark?placeId=" + placeId;
+					
+				}				
+				}catch(Exception ex){
+					logger.error("Error in fetching the landmark ",ex);
+				}
+				return retVal;
+			}	
+				
 }

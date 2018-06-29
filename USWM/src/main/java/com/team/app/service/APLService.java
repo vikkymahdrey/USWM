@@ -21,6 +21,23 @@ public interface APLService {
 
 	Area getAreasByAreaId(String areaId)throws Exception;
 
+	Area getAreaByOrgAndAreaId(String orgId, String areaId)throws Exception;
+
+	Area updateArea(Area area)throws Exception;
+
+	Place insertPlace(Place place, String areaId)throws Exception;
+
+	Place getPlaceByPlaceAndAreaId(String placeId, String areaId)throws Exception;
+
+	Place updatePlace(Place place)throws Exception;
+
+	Landmark insertLandmark(Landmark landmark, String placeId)throws Exception;
+
+	Landmark getLandMarkByIdAndPlaceId(String landmarkId, String placeId)throws Exception;
+
+	Landmark updateLandmark(Landmark lm)throws Exception;
+
+
 
 
 	

@@ -27,3 +27,13 @@ a:focus {
 	outline: none;
 }
 
+
+div.failure {
+	color: red;
+}
+
+ 
+
+div.success {
+	color: green;
+}

@@ -150,6 +150,75 @@ public class APLServiceImpl implements APLService {
 
 
 	
+	public Area getAreaByOrgAndAreaId(String orgId, String areaId) {
+			return areaDao.getAreaByOrgAndAreaId(orgId,areaId);
+	}
+
+
+	
+	public Area updateArea(Area area) throws Exception {
+		Area a=areaDao.checkAreaExistence(area.getAreaname(), area.getOrgId());
+		if(a!=null){
+			return null;
+		}else{
+			return areaDao.save(area);	
+		}
+		
+	}
+
+
+	
+	public Place insertPlace(Place place, String areaId) throws Exception {
+		Place p=placeDao.getPlaceByAreaAndName(place.getPlacename(),areaId);
+		if(p!=null){
+			return null;
+		}else{
+			return placeDao.save(place);
+		}
+		
+	}
+
+
+	public Place getPlaceByPlaceAndAreaId(String placeId, String areaId) throws Exception {
+		return placeDao.getPlaceByPlaceAndAreaId(placeId,areaId);
+	}
+
+
+	
+	public Place updatePlace(Place place) throws Exception {
+		return placeDao.save(place);
+	}
+
+
+	
+	public Landmark insertLandmark(Landmark landmark, String placeId) throws Exception {
+		Landmark l=landmarkDao.getLandmarkByNameAndPlaceId(landmark.getLandmarkname(),placeId);
+		if(l!=null){
+			return null;
+		}else{
+			return landmarkDao.save(landmark);
+		}
+		
+	}
+
+
+	
+	public Landmark getLandMarkByIdAndPlaceId(String landmarkId, String placeId) throws Exception {
+		return landmarkDao.getLandMarkByIdAndPlaceId(landmarkId,placeId);
+	}
+
+
+	
+	public Landmark updateLandmark(Landmark lm) throws Exception {
+		return landmarkDao.save(lm);
+	}
+
+
+	
+	
+
+
+	
 	
 	
 	
