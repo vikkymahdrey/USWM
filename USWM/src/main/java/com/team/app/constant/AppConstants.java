@@ -37,7 +37,9 @@ public class AppConstants {
 	
 	public static final String Organisation = "Unizen";
 	
+	public static final String jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJuYmYiOjE1MDk5NjE1NzIsInN1YiI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.NDZGFGPDQNs7AgmGRzQk1WL5Y1tLjyRbw-n_TwHPZsY";
 	
+	public static final String org_url = "https://139.59.14.31:8080/api/organizations?limit=100";
 	
 	
 	

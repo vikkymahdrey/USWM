@@ -26,7 +26,7 @@ public class AtappCommonServiceImpl implements AtappCommonService {
 	public void validateXToken(String servicInvoker, String jwtToken) throws AtAppException {
 		TblToshibaKeyConfig mightyConfig = getKeyConfigByKey(servicInvoker);
 		
-		if(mightyConfig == null || mightyConfig.getToshiba_key_value() == null) {
+		if(mightyConfig == null || mightyConfig.getToshibaKeyValue() == null) {
 			throw new AtAppException("Invalid Service Invoker Value", HttpStatus.UNAUTHORIZED);
 		}
 		
@@ -34,7 +34,7 @@ public class AtappCommonServiceImpl implements AtappCommonService {
 			throw new AtAppException("Service Invoker Config is invalid", HttpStatus.NOT_IMPLEMENTED);
 		}
 		
-		JWTKeyGenerator.validateJWTToken(mightyConfig.getToshiba_key_value(), jwtToken);
+		JWTKeyGenerator.validateJWTToken(mightyConfig.getToshibaKeyValue(), jwtToken);
 		
 	}
 

@@ -52,7 +52,7 @@
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-arrow-right"></i>
+            <i class="fa fa-bolt"></i>
             <span><b>Settings</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -61,13 +61,10 @@
           
           
           <ul class="treeview-menu">
-            <li><a href="deleteNode"><i class="fa fa-circle-o"></i><b>Delete Node</b></a></li>
+            <li><a href="aplConfig"><i class="fa fa-circle-o"></i><b>APL config</b></a></li>
            
           </ul>
-           <ul class="treeview-menu">
-            <li><a href="delDevEUI"><i class="fa fa-circle-o"></i><b>Delete DevEUI</b></a></li>
            
-          </ul>
         </li>
         
         <li class="treeview">
@@ -81,7 +78,7 @@
           
           
           <ul class="treeview-menu">
-            <li><a href="userMgmt"><i class="fa fa-circle-o"></i><b>User Config</b></a></li>
+            <li><a href="userMgmt"><i class="fa fa-user-circle-o"></i><b>User Config</b></a></li>
            
           </ul>
           
@@ -90,15 +87,20 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-arrow-right"></i>
-            <span><b>Device Mgmt</b></span>
+            <span><b>Device Config</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           
           
-          <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i><b>Device Config</b></a></li>
+          
+           <ul class="treeview-menu">
+            <li><a href="deleteNode"><i class="fa fa-circle-o"></i><b>Delete Node</b></a></li>
+           
+          </ul>
+           <ul class="treeview-menu">
+            <li><a href="delDevEUI"><i class="fa fa-circle-o"></i><b>Delete DevEUI</b></a></li>
            
           </ul>
           

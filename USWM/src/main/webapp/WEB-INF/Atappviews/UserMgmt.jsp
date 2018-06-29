@@ -12,10 +12,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Node Sync</title>
+    <title>User Config</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
 	  <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -222,7 +223,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-dashboard"></span>&nbsp;&nbsp;<b>Sync</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-user-o"></span><b>Add User</b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -234,7 +235,7 @@ function getDevEUIByAppID()
 										
 								  <table class="table">
 								  	<tr>
-								  		<td align="right"><b>Organization</b></td>
+								  		<td align="right"><b>Organization:</b></td>
 								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
 										
 										<td>
@@ -245,7 +246,7 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									<tr>	
-									   <td align="right"><b>Applications</b></td>
+									   <td align="right"><b>Application:</b></td>
 									   
 										 <td>
 										 	<select name="appname" id="appid" onchange="getDevEUIByAppID()">
@@ -255,7 +256,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Device EUI</b></td>
+									   <td align="right"><b>Device EUI:</b></td>
 									   
 										 <td>
 										 	<select name="devname" id="devid" >
@@ -263,9 +264,33 @@ function getDevEUIByAppID()
 										    </select> 
 										</td>
 									</tr>
+									
+									<tr>	
+									   <td align="right"><b>Username:</b></td>
+									   
+										 <td>
+										 	<input type="text" value="Enter Username" id="uname">
+										</td>
+									</tr>
+									
+									<tr>	
+									   <td align="right"><b>EmailId:</b></td>
+									   
+										 <td>
+										 	<input type="text" value="Enter Email Address" id="email">
+										</td>
+									</tr>
+									
+									<tr>	
+									   <td align="right"><b>Contact#:</b></td>
+									   
+										 <td>
+										 	<input type="text" value="Enter Contact No." id="contact">
+										</td>
+									</tr>
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton text-bold " style="background-color:#3c8dbc; " value="Sync"/></td>
+											<td> <input type="submit"  class="formbutton text-bold " style="background-color:#3c8dbc; " value="Add user"/></td>
 										 
 									</tr>	
 								</table>	

@@ -443,7 +443,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 										  		
 										  		logger.debug("fport",json.get("fPort").toString());  	
 										  	  		
-										  		frm.setfPort(json.get("fPort").toString().trim());
+										  		frm.setFPort(json.get("fPort").toString().trim());
 										  		//frm.setCreatedAt(new Date(System.currentTimeMillis()));
 										  		//frm.setUpdatedAt(new Date(System.currentTimeMillis()));
 										  		
@@ -754,7 +754,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 							     		 			 frame.setDevEUI(frm.getDevEUI());
 							     		 			 frame.setGatewayMac(frm.getGatewayMac());
 							     		 			 frame.setGatewayName(frm.getGatewayName());
-							     		 			 frame.setfPort(frm.getfPort());
+							     		 			 frame.setFPort(frm.getFPort());
 							     		 			 frame.setCreatedAt(new Date(System.currentTimeMillis()));
 							     		 			 frame.setUpdatedAt(new Date(System.currentTimeMillis()));
 							     		 			 LoraFrame lfrm=frameDao.save(frame);

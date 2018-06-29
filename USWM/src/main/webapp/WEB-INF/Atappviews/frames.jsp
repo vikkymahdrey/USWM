@@ -52,9 +52,9 @@
 			            if (userSession == null){
 			                response.sendRedirect("/");
 			            }
-						String fname1=("ToshibaFrameList :").concat(new Date().toString()).concat(".csv");
-						String fname2=("ToshibaFrameList :").concat(new Date().toString()).concat(".xls");
-						String fname3=("ToshibaFrameList :").concat(new Date().toString()).concat(".xml");
+						String fname1=("CMSFrameList :").concat(new Date().toString()).concat(".csv");
+						String fname2=("CMSFrameList :").concat(new Date().toString()).concat(".xls");
+						String fname3=("CMSFrameList :").concat(new Date().toString()).concat(".xml");
 						
 						List<LoraFrame> frames=(List<LoraFrame>)request.getAttribute("frames");
 						%>
@@ -87,9 +87,7 @@
 						
 						<div class="row" style="overflow-y: auto;">
 							<div class="col-sm-12 ">	
-							
-						
-					     	<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
+							<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
 							<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
@@ -108,6 +106,8 @@
 							<display:column  property="pressure" title="Pressure" sortable="true"  />
 							<display:column  property="humidity" title="Humidity" sortable="true"  />
 							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
+						
+					     	
 								
 									
 								     		   

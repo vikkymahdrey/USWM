@@ -918,7 +918,7 @@ public class ConsumerInstrumentController {
 									json.put("humidity", frm.getHumidity());
 									json.put("pressure", frm.getPressure());
 									json.put("temperature", frm.getTemperature());
-									json.put("fPort", frm.getfPort());
+									json.put("fPort", frm.getFPort());
 									json.put("nodeName", frm.getNodeName());
 									json.put("devEUI", frm.getDevEUI());
 									json.put("deviceId", frm.getDeviceId());

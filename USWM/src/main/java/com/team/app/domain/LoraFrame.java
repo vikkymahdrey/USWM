@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name="lora_frames")
 @NamedQuery(name="LoraFrame.findAll", query="SELECT l FROM LoraFrame l")
-public class LoraFrame extends BaseEntityInfo implements Serializable {
+public class LoraFrame implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,6 +22,8 @@ public class LoraFrame extends BaseEntityInfo implements Serializable {
 	private String applicationID;
 
 	private String applicationName;
+
+	private String central;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
@@ -48,43 +50,16 @@ public class LoraFrame extends BaseEntityInfo implements Serializable {
 	private String led3;
 
 	private String led4;
-	
-	private String peripheral;
-	private String central;
 
-	
+	private String length;
 
-	public String getPeripheral() {
-		return peripheral;
-	}
-
-	public void setPeripheral(String peripheral) {
-		this.peripheral = peripheral;
-	}
-
-	public String getCentral() {
-		return central;
-	}
-
-	public void setCentral(String central) {
-		this.central = central;
-	}
+	private String loraId;
 
 	private String nodeName;
 
+	private String peripheral;
+
 	private String pressure;
-	
-	private String loraId;
-	
-	private String length;
-
-	public String getLength() {
-		return length;
-	}
-
-	public void setLength(String length) {
-		this.length = length;
-	}
 
 	private String temperature;
 
@@ -119,6 +94,14 @@ public class LoraFrame extends BaseEntityInfo implements Serializable {
 		this.applicationName = applicationName;
 	}
 
+	public String getCentral() {
+		return this.central;
+	}
+
+	public void setCentral(String central) {
+		this.central = central;
+	}
+
 	public Date getCreatedAt() {
 		return this.createdAt;
 	}
@@ -143,22 +126,12 @@ public class LoraFrame extends BaseEntityInfo implements Serializable {
 		this.deviceId = deviceId;
 	}
 
-	
-
-	public String getfPort() {
-		return fPort;
+	public String getFPort() {
+		return this.fPort;
 	}
 
-	public void setfPort(String fPort) {
+	public void setFPort(String fPort) {
 		this.fPort = fPort;
-	}
-
-	public String getLoraId() {
-		return loraId;
-	}
-
-	public void setLoraId(String loraId) {
-		this.loraId = loraId;
 	}
 
 	public String getGatewayMac() {
@@ -217,12 +190,36 @@ public class LoraFrame extends BaseEntityInfo implements Serializable {
 		this.led4 = led4;
 	}
 
+	public String getLength() {
+		return this.length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
+
+	public String getLoraId() {
+		return this.loraId;
+	}
+
+	public void setLoraId(String loraId) {
+		this.loraId = loraId;
+	}
+
 	public String getNodeName() {
 		return this.nodeName;
 	}
 
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
+	}
+
+	public String getPeripheral() {
+		return this.peripheral;
+	}
+
+	public void setPeripheral(String peripheral) {
+		this.peripheral = peripheral;
 	}
 
 	public String getPressure() {

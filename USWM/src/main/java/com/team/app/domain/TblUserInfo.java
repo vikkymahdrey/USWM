@@ -29,19 +29,12 @@ public class TblUserInfo implements Serializable {
 
 	private String password;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date pwdChangeDt;
+
 	private String status;
 
 	private String uname;
-	
-	private String pwdChangeDt;
-
-	public String getPwdChangeDt() {
-		return pwdChangeDt;
-	}
-
-	public void setPwdChangeDt(String pwdChangeDt) {
-		this.pwdChangeDt = pwdChangeDt;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;
@@ -58,6 +51,11 @@ public class TblUserInfo implements Serializable {
 			}
 		)
 	private List<TblDeviceInfo> tblDeviceInfos;
+
+	//bi-directional many-to-one association to Landmark
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="landmarkId")
+	private Landmark landmark;
 
 	//bi-directional many-to-one association to Role
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -107,6 +105,14 @@ public class TblUserInfo implements Serializable {
 		this.password = password;
 	}
 
+	public Date getPwdChangeDt() {
+		return this.pwdChangeDt;
+	}
+
+	public void setPwdChangeDt(Date pwdChangeDt) {
+		this.pwdChangeDt = pwdChangeDt;
+	}
+
 	public String getStatus() {
 		return this.status;
 	}
@@ -137,6 +143,14 @@ public class TblUserInfo implements Serializable {
 
 	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
 		this.tblDeviceInfos = tblDeviceInfos;
+	}
+
+	public Landmark getLandmark() {
+		return this.landmark;
+	}
+
+	public void setLandmark(Landmark landmark) {
+		this.landmark = landmark;
 	}
 
 	public Role getRoleBean() {

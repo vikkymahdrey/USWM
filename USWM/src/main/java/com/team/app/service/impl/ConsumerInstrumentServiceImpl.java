@@ -83,10 +83,10 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 			logger.debug("ttlMillisVal",ttlMillis);
 			logger.debug("ttlBaseMillisVal",ttlBaseMillis);
 			
-			UserLoginDTO accessToken = JWTKeyGenerator.createJWTAccessToken(appKeyConfig.getToshiba_key_value(), AppConstants.TOKEN_LOGN_ID,
+			UserLoginDTO accessToken = JWTKeyGenerator.createJWTAccessToken(appKeyConfig.getToshibaKeyValue(), AppConstants.TOKEN_LOGN_ID,
 					AppConstants.SUBJECT_SECURE, ttlMillis);
 			
-			UserLoginDTO baseToken = JWTKeyGenerator.createJWTBaseToken(appKeyConfig.getToshiba_key_value(), AppConstants.TOKEN_LOGN_ID,
+			UserLoginDTO baseToken = JWTKeyGenerator.createJWTBaseToken(appKeyConfig.getToshibaKeyValue(), AppConstants.TOKEN_LOGN_ID,
 					AppConstants.SUBJECT_SECURE, ttlBaseMillis);
 			
 									
@@ -124,10 +124,10 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 			long ttlBaseMillis=TimeUnit.DAYS.toMillis(30);		
 	
 						
-			UserLoginDTO newAccessToken = JWTKeyGenerator.createJWTAccessToken(appKeyConfig.getToshiba_key_value(), AppConstants.TOKEN_LOGN_ID,
+			UserLoginDTO newAccessToken = JWTKeyGenerator.createJWTAccessToken(appKeyConfig.getToshibaKeyValue(), AppConstants.TOKEN_LOGN_ID,
 					AppConstants.SUBJECT_SECURE, ttlMillis);
 			
-			UserLoginDTO newBaseToken = JWTKeyGenerator.createJWTBaseToken(appKeyConfig.getToshiba_key_value(), AppConstants.TOKEN_LOGN_ID,
+			UserLoginDTO newBaseToken = JWTKeyGenerator.createJWTBaseToken(appKeyConfig.getToshibaKeyValue(), AppConstants.TOKEN_LOGN_ID,
 					AppConstants.SUBJECT_SECURE, ttlBaseMillis);
 			
 			userLoginDTO.setAccessToken(newAccessToken.getApiToken());

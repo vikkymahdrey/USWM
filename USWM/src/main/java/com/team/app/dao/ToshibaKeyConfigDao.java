@@ -10,7 +10,7 @@ import com.team.app.domain.TblToshibaKeyConfig;
 
 public interface ToshibaKeyConfigDao extends JpaRepository<TblToshibaKeyConfig, Serializable> {
 	
-	@Query("Select key From TblToshibaKeyConfig key where key.toshiba_key_value=:keyMightyMobile")
+	@Query("Select key From TblToshibaKeyConfig key where key.toshibaKeyValue=:keyMightyMobile")
 	TblToshibaKeyConfig getKeyConfigValue(@Param("keyMightyMobile") String keyMightyMobile);
 
 }

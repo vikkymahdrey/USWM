@@ -19,16 +19,18 @@ public class TblToshibaKeyConfig implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
 
-	private String toshiba_key_name;
-
-	private String toshiba_key_value;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createddt;
 
 	private String is_Enabled;
 
 	private String status;
+
+	@Column(name="toshiba_key_name")
+	private String toshibaKeyName;
+
+	@Column(name="toshiba_key_value")
+	private String toshibaKeyValue;
 
 	public TblToshibaKeyConfig() {
 	}
@@ -39,24 +41,6 @@ public class TblToshibaKeyConfig implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	
-
-	public String getToshiba_key_name() {
-		return toshiba_key_name;
-	}
-
-	public void setToshiba_key_name(String toshiba_key_name) {
-		this.toshiba_key_name = toshiba_key_name;
-	}
-
-	public String getToshiba_key_value() {
-		return toshiba_key_value;
-	}
-
-	public void setToshiba_key_value(String toshiba_key_value) {
-		this.toshiba_key_value = toshiba_key_value;
 	}
 
 	public Date getCreateddt() {
@@ -81,6 +65,22 @@ public class TblToshibaKeyConfig implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getToshibaKeyName() {
+		return this.toshibaKeyName;
+	}
+
+	public void setToshibaKeyName(String toshibaKeyName) {
+		this.toshibaKeyName = toshibaKeyName;
+	}
+
+	public String getToshibaKeyValue() {
+		return this.toshibaKeyValue;
+	}
+
+	public void setToshibaKeyValue(String toshibaKeyValue) {
+		this.toshibaKeyValue = toshibaKeyValue;
 	}
 
 }
