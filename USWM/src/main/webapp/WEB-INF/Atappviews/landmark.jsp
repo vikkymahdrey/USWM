@@ -184,10 +184,10 @@
    						 
 					   
 					   
-					       <%
+					       <%-- <%
 							if (landmarkList != null  && !(landmarkList.isEmpty())) {
 															
-						   %>
+						   %> --%>
 					   
 					   <div class="row" >
     				    	<div class="col-sm-12">	
@@ -273,7 +273,7 @@
 									</tr>
 								</table>
 			<iframe  style="float: right; width: 48%" height="500px" src="marklandmark?place=<%=place.getId()%>" ></iframe>
-									<% }%>
+									<%-- <% }%> --%>
 							</div>	
 					   </div>
 					   

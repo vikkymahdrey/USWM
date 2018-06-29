@@ -45,14 +45,35 @@ public class APLConfigController {
 	}
 	
 	
-	@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
+	/*@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
 	public String getAPLFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
 		logger.debug("IN /marklandmark");
 		logger.debug("printing orgId in /marklandmark ",request.getParameter("orgId"));
 		 List<Area> areaList=aplService.getAreasByOrgId(request.getParameter("orgId"));
 		 map.put("areas",areaList);
 			
-		 return "marklandmark1";
+		 return "marklandmark";
+	}*/
+	
+	
+	@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
+	public String getAPLFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
+		String orgId=request.getParameter("orgId");
+		String areaId=request.getParameter("area");
+		String placeId=request.getParameter("place");
+		List<Area> areaList=null;
+		if(orgId!=null && !(orgId.isEmpty())){
+			 areaList=aplService.getAreasByOrgId(orgId);	
+		}else if(areaId!=null && !(areaId.isEmpty())){
+			areaList=aplService.getAreasListByAreaId(areaId);
+		}else if(placeId!=null && !(placeId.isEmpty())){
+			Place p=aplService.getPlaceById(placeId);
+			areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+		}
+		
+		map.put("areas",areaList);
+			
+		 return "marklandmark";
 	}
 	
 	
@@ -322,6 +343,9 @@ public class APLConfigController {
 				String orgId= request.getParameter("orgId");
 				String areaId= request.getParameter("area");
 				
+				logger.debug("printing placeId /updateLandmark",placeId);
+				logger.debug("printing landmarkId /updateLandmark",landmarkId);
+				
 				logger.debug("latitude longitude = "+latLng);
 				
 				try{
@@ -334,28 +358,33 @@ public class APLConfigController {
 							 retVal =  "redirect:/showLandmark?placeId=" + placeId;
 							 return retVal; 
 						}else{
-							lm.setLandmarkname(landmark);
+							logger.debug("printing /else = ");
+							if(landmark!=null && !landmark.isEmpty()){
+								lm.setLandmarkname(landmark);
+							}
 						}
 						
 					}
 				
 				
-				if(latLng!=null && latLng.trim().equals("")==false)  {			
-					/*String latitude=latLng.split(",")[0].substring(1,  latLng.split(",")[0].length()-1);
+				if(latLng!=null && latLng.trim().equals("")==false)  {	
+					logger.debug("Inside Latlng");
+					String latitude=latLng.split(",")[0].substring(1,  latLng.split(",")[0].length()-1);
 					String longitude = latLng.split(",")[1].substring(1, latLng.split(",")[1].length()-1);
-						 lm.setLatitude(Double.parseDouble(latitude));
-						 lm.setLongitude(Double.parseDouble(longitude));
-						 lm = aplService.updateLandmark(lm,placeId);
-						 if(location != null){
-							 retVal =  "redirect:/marklandmark?location="+location;
+						 lm.setLat(latitude);
+						 lm.setLon(longitude);
+						 lm = aplService.updateLandmark(lm);
+						 if(orgId != null){
+							 retVal =  "redirect:/marklandmark?orgId="+orgId;
 						 }else if(areaId != null){
 							 retVal =  "redirect:/marklandmark?area="+areaId;
 						 }else if(placeId != null){
 							 retVal =  "redirect:/marklandmark?place="+placeId;
 						 }
-						 */
+						 
 						 			
 				}else{
+					logger.debug("Else Inside Latlng");
 					Landmark lnd = aplService.updateLandmark(lm);
 					if(lnd!=null){
 						redirectAttributes.addFlashAttribute("status",
@@ -374,5 +403,26 @@ public class APLConfigController {
 				}
 				return retVal;
 			}	
+			
+			/* AJAX calling from marklandmark.jsp */		
+			@RequestMapping(value= {"/getPlace"}, method=RequestMethod.GET)
+			public @ResponseBody String getPlaceHandler(@RequestParam(required = true, value = "area") String area) throws Exception{
+				  String response="";
+						try {
+							Area a=aplService.getAreasByAreaId(area);
+								List<Place> placesUnderArea=a.getPlaces();
+						
+							response = "<select name='place' id='place' onchange='showLandmark(this.value)'>";
+							response += "<option value='0' >Select</option>";
+							for (Place place : placesUnderArea) {
+								response += "<option value='" + place.getId() + "' >"
+										+ place.getPlacename() + "</option>";
+							}
+							response += "</select>";
+						}catch(Exception ex){
+							logger.debug("Error during AJAX calling for getPlace",ex);
+						}
+				return response;
+						}
 				
 }

@@ -186,10 +186,10 @@
    						 
 					   
 					   
-					       <%
+					      <%--  <%
 							if (placesUnderArea != null  && !(placesUnderArea.isEmpty())) {
 															
-						   %>
+						   %> --%>
 					   
 					   <div class="row" >
     				    	<div class="col-sm-12">	
@@ -267,8 +267,8 @@
 								</table>
 			
 								<iframe  style="float: right; width: 48%" height="500px" src="marklandmark?area=<%=ar.getId()%>" ></iframe>
-											<% 
-												}%>
+											<%-- <% 
+												}%> --%>
 							</div>	
 					   </div>
 					   

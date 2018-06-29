@@ -26,4 +26,9 @@ public interface AreaDao extends JpaRepository<Area, Serializable> {
 	@Query("Select a from Area a where a.areaname=:areaname and a.orgId=:orgId")
 	Area checkAreaExistence(@Param("areaname") String areaname, @Param("orgId") String orgId);
 
+	@Query("Select a from Area a where a.id=:areaId")
+	List<Area> getAreasListByAreaId(@Param("areaId") String areaId);
+
+	
+
 }

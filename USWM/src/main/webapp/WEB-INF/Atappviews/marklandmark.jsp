@@ -76,9 +76,10 @@ function showExistingLandmarks(){
 	
 	xmlHttp=GetXmlHttpObject();
 	var orgId=document.getElementById("orgid").value;
+	
 	var area=document.getElementById("area").value;
 	var place=document.getElementById("place").value;	
-	
+		
 	var url="";
 	if(place!="null")
 		{
@@ -138,15 +139,17 @@ function displayExistingLandmarkMarkers(marker,latlng,message) {
 
 
 function displayWindowForSetAPL(marker,event) {
+	
 	   try{
-		   var location=document.getElementById("location").value;
+		   var orgId=document.getElementById("orgid").value;
 			var area=document.getElementById("area").value;
 			var place=document.getElementById("place").value;	
+			
 			var action="";
 			
-			 if (location!="null")		
+			 if (orgId!="null")		
 				{
-				action="updateLandmark?location="+location;
+				action="updateLandmark?orgId="+orgId;
 				}
 			 else if(area!="null")
 				{

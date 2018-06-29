@@ -37,6 +37,8 @@ public interface APLService {
 
 	Landmark updateLandmark(Landmark lm)throws Exception;
 
+	List<Area> getAreasListByAreaId(String areaId) throws Exception;
+
 
 
 

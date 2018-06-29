@@ -214,6 +214,14 @@ public class APLServiceImpl implements APLService {
 	}
 
 
+	public List<Area> getAreasListByAreaId(String areaId) throws Exception {
+		return areaDao.getAreasListByAreaId(areaId);
+	}
+
+
+	
+	
+
 	
 	
 
