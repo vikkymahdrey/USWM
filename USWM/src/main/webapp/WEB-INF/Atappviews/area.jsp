@@ -287,7 +287,7 @@
 							if (orgId != null  && !(orgId.isEmpty())) {
 								@SuppressWarnings("unchecked")
 								List<Area> areaList=(List<Area>)request.getAttribute("areaList");
-								if(areaList!=null && !areaList.isEmpty()){								
+								//if(areaList!=null && !areaList.isEmpty()){								
 								
 						   %>
 					   
@@ -364,7 +364,7 @@
 								</table>
 			
 								<iframe  style="float: right; width: 48%" height="500px" src="marklandmark?orgId=<%=orgId%>" ></iframe>
-											<% }
+											<% //}
 												}%>
 							</div>	
 					   </div>

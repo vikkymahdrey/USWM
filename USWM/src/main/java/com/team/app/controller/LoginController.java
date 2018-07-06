@@ -16,17 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.domain.TblUserInfo;
 import com.team.app.logger.AtLogger;
-import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.UserLoginService;
 
 @Controller
 public class LoginController {
 	private static final AtLogger logger = AtLogger.getLogger(LoginController.class);
-	
-	
-	@Autowired
-	private ConsumerInstrumentService consumerInstrumentServiceImpl;
-	
+		
 	@Autowired
 	private UserLoginService userLoginService;
 		
@@ -96,9 +91,9 @@ public class LoginController {
 	}
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
 	 public String home(Map<String,Object> map) throws Exception{
-		List<TblUserInfo> userInfos= consumerInstrumentServiceImpl.getUserInfosCount();
+		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
 		  map.put("userInfos",userInfos);
-				 return "AdminView";
+				 return "chartmap";
 	    	
 	}
 	

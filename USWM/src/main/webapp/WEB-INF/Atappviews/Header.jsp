@@ -52,7 +52,7 @@
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-bolt"></i>
+            <i class="fa fa-wrench"></i>
             <span><b>Settings</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -69,7 +69,7 @@
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-arrow-right"></i>
+            <i class="fa fa-user"></i>
             <span><b>User Mgmt</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -78,7 +78,7 @@
           
           
           <ul class="treeview-menu">
-            <li><a href="userMgmt"><i class="fa fa-user-circle-o"></i><b>User Config</b></a></li>
+            <li><a href="userMgmt"><i class="fa fa-circle-o"></i><b>Adding User</b></a></li>
            
           </ul>
           
@@ -86,8 +86,8 @@
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-arrow-right"></i>
-            <span><b>Device Config</b></span>
+            <i class="fa fa-cube"></i>
+            <span><b>Device Mgmt</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -95,18 +95,18 @@
           
           
           
-           <ul class="treeview-menu">
-            <li><a href="deleteNode"><i class="fa fa-circle-o"></i><b>Delete Node</b></a></li>
+         <!--   <ul class="treeview-menu">
+            <li><a href="deleteNode"><i class="fa fa-recycle"></i><b>Delete Node</b></a></li>
            
-          </ul>
+          </ul> -->
            <ul class="treeview-menu">
-            <li><a href="delDevEUI"><i class="fa fa-circle-o"></i><b>Delete DevEUI</b></a></li>
+            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Delete DevEUI</b></a></li>
            
           </ul>
           
         </li>
         
-        <li class="treeview"> 
+        <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span><b>Charts</b></span>
@@ -115,7 +115,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
+            <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li>
             <li><a href="chartsMap"><i class="fa fa-circle-o"></i> <b>Chart-Map</b></a></li>
              <li><a href="#"><i class="fa fa-circle-o"></i> <b>Bar-Pi</b></a></li>
              <li><a href="#"><i class="fa fa-circle-o"></i> <b>Flot</b></a></li>
@@ -123,7 +123,7 @@
           </ul>
           
              
-        </li>
+        </li> -->
         
          <li class="treeview">
           <a href="#">
@@ -149,13 +149,13 @@
             <i class="fa fa-files-o"></i>
             <span><b>Logs</b></span>
             <span class="pull-right-container">
-              <span class="label label-primary pull-right">3</span>
+              <span class="label label-primary pull-right">1</span>
             </span>
           </a>
           <ul class="treeview-menu">
             <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
             <li><a href="frameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
-             <li><a href="downlinkQueue"><i class="fa fa-circle-o"></i> <b>Downlink Log</b></a></li>
+           <!--   <li><a href="downlinkQueue"><i class="fa fa-circle-o"></i> <b>Downlink Log</b></a></li> -->
           </ul>
           
              
@@ -164,7 +164,7 @@
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-arrow-right"></i>
+            <i class="fa fa-bolt"></i>
             <span><b>Sync</b></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>

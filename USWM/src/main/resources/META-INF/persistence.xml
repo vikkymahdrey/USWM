@@ -6,8 +6,6 @@
 	<persistence-unit name="AppPU" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<non-jta-data-source>java:comp/env/jdbc/USWM</non-jta-data-source>
-		<class>com.team.app.domain.AdminUser</class>
-		<class>com.team.app.domain.Appconstant</class>
 		<class>com.team.app.domain.Application</class>
 		<class>com.team.app.domain.ApplicationUser</class>
 		<class>com.team.app.domain.Area</class>
@@ -20,7 +18,6 @@
 		<class>com.team.app.domain.GatewayStat</class>
 		<class>com.team.app.domain.GorpMigration</class>
 		<class>com.team.app.domain.GorpMigrationsN</class>
-		<class>com.team.app.domain.JwtToken</class>
 		<class>com.team.app.domain.Landmark</class>
 		<class>com.team.app.domain.LoraFrame</class>
 		<class>com.team.app.domain.Node</class>

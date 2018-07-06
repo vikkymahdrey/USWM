@@ -1,4 +1,5 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class test6 {
 	public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class test6 {
 	    System.out.println("Value print"+Arrays.binarySearch(a, 1));*/
 		//System.out.println("Value print"+a[1]);
 		
-		String decodeBinary="1234";
+		/*String decodeBinary="1234";
 		String led1 = decodeBinary.substring(0, 1);	
 		String	led2 = decodeBinary.substring(1, 2);	
 		String	led3 = decodeBinary.substring(2, 3);	
@@ -21,6 +22,21 @@ public class test6 {
 		System.out.println("Value led1"+decodeBinary.length());
 		System.out.println("Value led2"+led2);
 		System.out.println("Value led3"+led3);
-		System.out.println("Value led4"+led4);
-	}
+		System.out.println("Value led4"+led4);*/
+		
+		List<String> li=new ArrayList<String>();
+		
+		li.add("Vikky");
+		li.add("Sunil");
+		for(String s: li){
+		System.out.println(s);
+		}
+		
+		Object[] s=li.toArray();
+		for (Object i: s){
+		System.out.println(i.toString());
+		}
+		}
+		
+	
 }

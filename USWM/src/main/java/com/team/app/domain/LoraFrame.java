@@ -1,8 +1,17 @@
 package com.team.app.domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -23,15 +32,12 @@ public class LoraFrame implements Serializable {
 
 	private String applicationName;
 
-	private String central;
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
 	private Date createdAt;
 
 	private String devEUI;
-
-	private String deviceId;
 
 	private String fPort;
 
@@ -40,28 +46,19 @@ public class LoraFrame implements Serializable {
 
 	@Column(name="gateway_name")
 	private String gatewayName;
-
-	private String humidity;
-
-	private String led1;
-
-	private String led2;
-
-	private String led3;
-
-	private String led4;
-
-	private String length;
-
-	private String loraId;
-
+	
 	private String nodeName;
+	
+	private String waterLtr;
+	
 
-	private String peripheral;
+	public String getWaterLtr() {
+		return waterLtr;
+	}
 
-	private String pressure;
-
-	private String temperature;
+	public void setWaterLtr(String waterLtr) {
+		this.waterLtr = waterLtr;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at")
@@ -94,14 +91,7 @@ public class LoraFrame implements Serializable {
 		this.applicationName = applicationName;
 	}
 
-	public String getCentral() {
-		return this.central;
-	}
-
-	public void setCentral(String central) {
-		this.central = central;
-	}
-
+	
 	public Date getCreatedAt() {
 		return this.createdAt;
 	}
@@ -118,14 +108,7 @@ public class LoraFrame implements Serializable {
 		this.devEUI = devEUI;
 	}
 
-	public String getDeviceId() {
-		return this.deviceId;
-	}
-
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
-
+	
 	public String getFPort() {
 		return this.fPort;
 	}
@@ -150,62 +133,7 @@ public class LoraFrame implements Serializable {
 		this.gatewayName = gatewayName;
 	}
 
-	public String getHumidity() {
-		return this.humidity;
-	}
-
-	public void setHumidity(String humidity) {
-		this.humidity = humidity;
-	}
-
-	public String getLed1() {
-		return this.led1;
-	}
-
-	public void setLed1(String led1) {
-		this.led1 = led1;
-	}
-
-	public String getLed2() {
-		return this.led2;
-	}
-
-	public void setLed2(String led2) {
-		this.led2 = led2;
-	}
-
-	public String getLed3() {
-		return this.led3;
-	}
-
-	public void setLed3(String led3) {
-		this.led3 = led3;
-	}
-
-	public String getLed4() {
-		return this.led4;
-	}
-
-	public void setLed4(String led4) {
-		this.led4 = led4;
-	}
-
-	public String getLength() {
-		return this.length;
-	}
-
-	public void setLength(String length) {
-		this.length = length;
-	}
-
-	public String getLoraId() {
-		return this.loraId;
-	}
-
-	public void setLoraId(String loraId) {
-		this.loraId = loraId;
-	}
-
+	
 	public String getNodeName() {
 		return this.nodeName;
 	}
@@ -214,28 +142,12 @@ public class LoraFrame implements Serializable {
 		this.nodeName = nodeName;
 	}
 
-	public String getPeripheral() {
-		return this.peripheral;
+	public String getfPort() {
+		return fPort;
 	}
 
-	public void setPeripheral(String peripheral) {
-		this.peripheral = peripheral;
-	}
-
-	public String getPressure() {
-		return this.pressure;
-	}
-
-	public void setPressure(String pressure) {
-		this.pressure = pressure;
-	}
-
-	public String getTemperature() {
-		return this.temperature;
-	}
-
-	public void setTemperature(String temperature) {
-		this.temperature = temperature;
+	public void setfPort(String fPort) {
+		this.fPort = fPort;
 	}
 
 	public Date getUpdatedAt() {

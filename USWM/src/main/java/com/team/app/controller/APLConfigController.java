@@ -45,15 +45,7 @@ public class APLConfigController {
 	}
 	
 	
-	/*@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
-	public String getAPLFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("IN /marklandmark");
-		logger.debug("printing orgId in /marklandmark ",request.getParameter("orgId"));
-		 List<Area> areaList=aplService.getAreasByOrgId(request.getParameter("orgId"));
-		 map.put("areas",areaList);
-			
-		 return "marklandmark";
-	}*/
+	
 	
 	
 	@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
@@ -74,6 +66,27 @@ public class APLConfigController {
 		map.put("areas",areaList);
 			
 		 return "marklandmark";
+	}
+	
+	
+	@RequestMapping(value= {"/marklandmarkdash"}, method=RequestMethod.GET)
+	public String getAPLForDashFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
+		String orgId=request.getParameter("orgId");
+		String areaId=request.getParameter("area");
+		String placeId=request.getParameter("place");
+		List<Area> areaList=null;
+		if(orgId!=null && !(orgId.isEmpty())){
+			 areaList=aplService.getAreasByOrgId(orgId);	
+		}else if(areaId!=null && !(areaId.isEmpty())){
+			areaList=aplService.getAreasListByAreaId(areaId);
+		}else if(placeId!=null && !(placeId.isEmpty())){
+			Place p=aplService.getPlaceById(placeId);
+			areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+		}
+		
+		map.put("areas",areaList);
+			
+		 return "marklandmarkdash";
 	}
 	
 	

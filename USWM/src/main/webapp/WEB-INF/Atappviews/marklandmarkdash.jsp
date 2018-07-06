@@ -58,11 +58,11 @@
 	  		map = new google.maps.Map(document.getElementById("map"), myOptions);
 	  		//searchPlace();
 		  showExistingLandmarks();
-		  google.maps.event.addListener(map, 'click', function(event) {
+		 /*  google.maps.event.addListener(map, 'click', function(event) {
 		     placeMarker(event.latLng);
 		    displayWindowForSetAPL(marker,event);		    
 		    
-		  });
+		  }); */
 		}catch(e){
 			aler(e);	
 		}
@@ -176,27 +176,7 @@ function displayExistingLandmarks()
 			}
 }
 
-function validateMapForm(){
-	alert("hiii");
-	
-	/* var area1=document.getElementsByClassName("a").value;
-	alert("area"+area1);
-	return true; */
-	/* var place=document.getElementByName("place");
-	alert("place"+place);
-	var landmark=document.getElementByName("landmarkId");
-	alert("landmark"+landmark);
-	if(area==null){
-		return false;
-		alert("Please select area!");
-	}else if(place=="undefined"){
-		return false;
-		alert("Please select place!");
-	}else if(landmark=="undefined"){
-		return false;
-		alert("Please select landmark!");
-	} */
-}
+
 
 function displayExistingLandmarkMarkers(marker,latlng,message) {	  
 	  var infowindow = new google.maps.InfoWindow(
@@ -365,9 +345,6 @@ return xmlHttp;
   <body onload="loadScript()"> 
   		
   		<div id="map" style="width: 100%; height: 720px; float: right;"></div> 
-  		<div></div>
-  		<div></div>
-  		
-  		<input id="pac-input" class="controls" type="text"  placeholder="Search Box"> 
+  		 		
   </body>
 </html>
