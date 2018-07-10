@@ -10,7 +10,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="landmark")
 @NamedQuery(name="Landmark.findAll", query="SELECT l FROM Landmark l")
 public class Landmark implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,25 +19,10 @@ public class Landmark implements Serializable {
 	private String id;
 
 	private String landmarkname;
-	
+
 	private String lat;
+
 	private String lon;
-
-	public String getLat() {
-		return lat;
-	}
-
-	public void setLat(String lat) {
-		this.lat = lat;
-	}
-
-	public String getLon() {
-		return lon;
-	}
-
-	public void setLon(String lon) {
-		this.lon = lon;
-	}
 
 	//bi-directional many-to-one association to Place
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -66,6 +50,22 @@ public class Landmark implements Serializable {
 
 	public void setLandmarkname(String landmarkname) {
 		this.landmarkname = landmarkname;
+	}
+
+	public String getLat() {
+		return this.lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLon() {
+		return this.lon;
+	}
+
+	public void setLon(String lon) {
+		this.lon = lon;
 	}
 
 	public Place getPlace() {

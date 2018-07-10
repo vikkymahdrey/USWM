@@ -10,7 +10,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="area")
 @NamedQuery(name="Area.findAll", query="SELECT a FROM Area a")
 public class Area implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,15 +19,8 @@ public class Area implements Serializable {
 	private String id;
 
 	private String areaname;
+
 	private String orgId;
-
-	public String getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
 
 	//bi-directional many-to-one association to Place
 	@OneToMany(mappedBy="area")
@@ -51,6 +43,14 @@ public class Area implements Serializable {
 
 	public void setAreaname(String areaname) {
 		this.areaname = areaname;
+	}
+
+	public String getOrgId() {
+		return this.orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 
 	public List<Place> getPlaces() {

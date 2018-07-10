@@ -13,4 +13,7 @@ public interface RoleDao extends JpaRepository<Role, Serializable> {
 	@Query("SELECT r FROM Role r WHERE r.type=:type")
 	Role getRoleByUserType(@Param("type") String type);
 
+	@Query("SELECT r FROM Role r WHERE r.id=:roleId")
+	Role getRoleByRoleId(@Param("roleId") String roleId);
+
 }

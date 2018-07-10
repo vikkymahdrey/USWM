@@ -96,7 +96,7 @@
 							<display:column  property="fPort" title="fPort" sortable="true"  />
 							<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 							<display:column  property="gatewayName" title="GatewayName" sortable="true"  />
-							<display:column  property="waterLtr" title="Water_Val_In_Ltr"  sortable="true"  />
+							<display:column  property="waterltr" title="Water_Val_In_Ltr"  sortable="true"  />
 							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
 													     		   
 						 	<display:setProperty name="export.csv.filename" value="<%=fname1%>" />

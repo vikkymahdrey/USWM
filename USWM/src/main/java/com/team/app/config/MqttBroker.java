@@ -121,7 +121,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				     		 		  	logger.debug("dId : ",dId);
 				     		 		  		logger.debug("waterVal : ",waterVal);
 				     		 			
-				     		 		  				frame.setWaterLtr(String.valueOf(waterVal));
+				     		 		  				frame.setWaterltr(String.valueOf(waterVal));
 				     		 		   				frameDao.save(frame);
 				     		 		
 				     		 	}

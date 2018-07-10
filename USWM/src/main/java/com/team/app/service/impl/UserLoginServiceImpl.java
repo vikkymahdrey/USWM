@@ -4,9 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.team.app.dao.RoleDao;
+import com.team.app.dao.UserDeviceMappingDao;
 import com.team.app.dao.UserInfoDao;
+import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
+import com.team.app.domain.UserDeviceMapping;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.UserLoginService;
 
@@ -17,6 +22,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 	@Autowired
 	private UserInfoDao userInfoDao;
+	
+	@Autowired
+	private RoleDao roleDao;
+	
+	@Autowired
+	private UserDeviceMappingDao userDeviceMappingDao;
 	
 	
 	public TblUserInfo getUserByUserAndPwd(String username, String password) throws Exception {
@@ -31,8 +42,51 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 
 
-	public List<TblUserInfo> getUserInfos() {
+	public List<TblUserInfo> getUserInfos()throws Exception {
 		return userInfoDao.getUserInfos();
+	}
+
+
+
+	public TblUserInfo getUserByUnameAndEmail(String uname, String email) throws Exception {
+		return userInfoDao.getUserByUnameAndEmail(uname,email);
+	}
+
+
+
+	public TblUserInfo getUserByEmailId(String email) throws Exception {
+		return userInfoDao.getUserByEmailId(email);
+	}
+
+
+
+	public Role getRoleByRoleId(String roleId) throws Exception {
+		return roleDao.getRoleByRoleId(roleId);
+	}
+
+
+	@Transactional
+	public TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm) throws Exception {
+		TblUserInfo u=userInfoDao.save(user);
+		if(u!=null){
+			udm.setTblUserInfo(u);
+			UserDeviceMapping udmSave=userDeviceMappingDao.save(udm);
+			if(udmSave!=null){
+				return u;
+			}else{
+				return null;
+			}
+		}else{
+			return null;
+		}
+		
+		
+	}
+
+
+
+	public UserDeviceMapping saveUDM(UserDeviceMapping udm) throws Exception {
+		return userDeviceMappingDao.save(udm);
 	}
 
 }

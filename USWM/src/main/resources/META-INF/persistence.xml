@@ -28,6 +28,7 @@
 		<class>com.team.app.domain.TblDeviceInfo</class>
 		<class>com.team.app.domain.TblUserInfo</class>
 		<class>com.team.app.domain.User</class>
+		<class>com.team.app.domain.UserDeviceMapping</class>
 		
 
 		<properties>

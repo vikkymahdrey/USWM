@@ -62,6 +62,10 @@ public class TblUserInfo implements Serializable {
 	@JoinColumn(name="role")
 	private Role roleBean;
 
+	//bi-directional many-to-one association to UserDeviceMapping
+	@OneToMany(mappedBy="tblUserInfo")
+	private List<UserDeviceMapping> userDeviceMappings;
+
 	public TblUserInfo() {
 	}
 
@@ -159,6 +163,28 @@ public class TblUserInfo implements Serializable {
 
 	public void setRoleBean(Role roleBean) {
 		this.roleBean = roleBean;
+	}
+
+	public List<UserDeviceMapping> getUserDeviceMappings() {
+		return this.userDeviceMappings;
+	}
+
+	public void setUserDeviceMappings(List<UserDeviceMapping> userDeviceMappings) {
+		this.userDeviceMappings = userDeviceMappings;
+	}
+
+	public UserDeviceMapping addUserDeviceMapping(UserDeviceMapping userDeviceMapping) {
+		getUserDeviceMappings().add(userDeviceMapping);
+		userDeviceMapping.setTblUserInfo(this);
+
+		return userDeviceMapping;
+	}
+
+	public UserDeviceMapping removeUserDeviceMapping(UserDeviceMapping userDeviceMapping) {
+		getUserDeviceMappings().remove(userDeviceMapping);
+		userDeviceMapping.setTblUserInfo(null);
+
+		return userDeviceMapping;
 	}
 
 }

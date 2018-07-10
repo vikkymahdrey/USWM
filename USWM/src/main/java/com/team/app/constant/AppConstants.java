@@ -42,6 +42,7 @@ public class AppConstants {
 	public static final String org_url = domain+"/api/organizations?limit=100";
 	public static final String app_url =domain+"/api/applications?limit=100";
 	public static final String user_url=domain+"/api/users?limit=100";
+	public static final String status="Y";
 	
 	
 }

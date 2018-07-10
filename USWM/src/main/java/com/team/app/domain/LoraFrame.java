@@ -1,17 +1,8 @@
 package com.team.app.domain;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 /**
@@ -32,7 +23,6 @@ public class LoraFrame implements Serializable {
 
 	private String applicationName;
 
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
 	private Date createdAt;
@@ -46,23 +36,14 @@ public class LoraFrame implements Serializable {
 
 	@Column(name="gateway_name")
 	private String gatewayName;
-	
+
 	private String nodeName;
-	
-	private String waterLtr;
-	
-
-	public String getWaterLtr() {
-		return waterLtr;
-	}
-
-	public void setWaterLtr(String waterLtr) {
-		this.waterLtr = waterLtr;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at")
 	private Date updatedAt;
+
+	private String waterltr;
 
 	public LoraFrame() {
 	}
@@ -91,7 +72,6 @@ public class LoraFrame implements Serializable {
 		this.applicationName = applicationName;
 	}
 
-	
 	public Date getCreatedAt() {
 		return this.createdAt;
 	}
@@ -108,7 +88,6 @@ public class LoraFrame implements Serializable {
 		this.devEUI = devEUI;
 	}
 
-	
 	public String getFPort() {
 		return this.fPort;
 	}
@@ -133,7 +112,6 @@ public class LoraFrame implements Serializable {
 		this.gatewayName = gatewayName;
 	}
 
-	
 	public String getNodeName() {
 		return this.nodeName;
 	}
@@ -142,20 +120,20 @@ public class LoraFrame implements Serializable {
 		this.nodeName = nodeName;
 	}
 
-	public String getfPort() {
-		return fPort;
-	}
-
-	public void setfPort(String fPort) {
-		this.fPort = fPort;
-	}
-
 	public Date getUpdatedAt() {
 		return this.updatedAt;
 	}
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getWaterltr() {
+		return this.waterltr;
+	}
+
+	public void setWaterltr(String waterltr) {
+		this.waterltr = waterltr;
 	}
 
 }

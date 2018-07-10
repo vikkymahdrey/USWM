@@ -349,8 +349,8 @@ function getDevEUIByAppID()
 										<td>
 										 <select name="usertype" id="usertype">
 										    <option value="0">--Choose UserType--</option>	
-										    <option value="5">Admin</option>
-										    <option value="1">User</option>
+										    <option value="1">Admin</option>
+										    <option value="5">User</option>
 										 </select> 
 										</td>
 									</tr>
@@ -368,21 +368,21 @@ function getDevEUIByAppID()
 									   
 										 <td>
 										 	<input type="text" name="area" id="area" />
-										 	<input type="hidden" id="landMarkID" name="landMarkID" />
+										 	<input type="hidden" id="landMarkID" name="landMarkID" readonly/>
 										</td>
 									</tr>
 									<tr>	
 									   <td align="right"><b>Place:</b></td>
 									   
 										 <td>
-										 	<input type="text" name="place" id="place" />
+										 	<input type="text" name="place" id="place" readonly/>
 										</td>
 									</tr>
 									<tr>	
 									   <td align="right"><b>Landmark:</b></td>
 									   
 										 <td>
-										 	<input type="text" name="landmark" id="landmark" />
+										 	<input type="text" name="landmark" id="landmark" readonly/>
 										</td>
 									</tr>
 									

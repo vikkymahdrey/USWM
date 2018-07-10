@@ -1,15 +1,8 @@
 package com.team.app.domain;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 /**
@@ -32,7 +25,6 @@ public class Role implements Serializable {
 
 	private String type;
 
-	
 	//bi-directional many-to-one association to TblUserInfo
 	@OneToMany(mappedBy="roleBean")
 	private List<TblUserInfo> tblUserInfos;
@@ -71,7 +63,6 @@ public class Role implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
 
 	public List<TblUserInfo> getTblUserInfos() {
 		return this.tblUserInfos;

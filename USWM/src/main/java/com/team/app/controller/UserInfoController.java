@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +25,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.config.MqttIntrf;
 import com.team.app.constant.AppConstants;
+import com.team.app.domain.Landmark;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
+import com.team.app.domain.UserDeviceMapping;
 import com.team.app.dto.ApplicationDto;
 import com.team.app.dto.UserDeviceDto;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.APLService;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.UserLoginService;
 
@@ -46,22 +51,30 @@ public class UserInfoController {
 	private UserLoginService userLoginService;
 	
 	@Autowired
+	private APLService aplService;
+	
+	@Autowired
 	private ConsumerInstrumentService  consumerInstrumentServiceImpl;
 	
 	@RequestMapping(value= {"/userInfoHistory"}, method=RequestMethod.GET)
     public String userInfoHistoryHandler(Map<String,Object> map) {
 		
-			List<UserDeviceDto> dtoList=null;
-			UserDeviceDto dto=null;
-			List<TblUserInfo> userInfos=userLoginService.getUserInfos();
 			
-			if(userInfos!=null && userInfos.isEmpty()){
-				for(TblUserInfo u: userInfos){
-					dto.setUname(u.getUname());				
+			try{
+
+					UserDeviceDto dto=null;
+					List<TblUserInfo> userInfos=userLoginService.getUserInfos();
 					
-				}
+					if(userInfos!=null && userInfos.isEmpty()){
+						for(TblUserInfo u: userInfos){
+							dto.setUname(u.getUname());				
+							
+						}
+					}
+						map.put("userInfos", userInfos);
+			}catch(Exception e){
+				logger.error("/userInfoHistory Error ",e);
 			}
-				map.put("userInfos", userInfos);
 					return "userInfo";
 		 
 	 }
@@ -753,12 +766,51 @@ public class UserInfoController {
 		logger.debug("landMarkID....",landMarkID);
 		
 		try{
-		
-			redirectAttributes.addFlashAttribute("status",
-					"<div class=\"success\" > User registered Successfully !</div>");
+			TblUserInfo user=userLoginService.getUserByEmailId(email);
+			if(user!=null){
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" > Email alrady exist!</div>");
+			}else{
+				TblUserInfo newUser=null;
+					newUser=new TblUserInfo();
+					
+					UserDeviceMapping udm=null;
+					 udm=new UserDeviceMapping();	
+					
+					Role r=userLoginService.getRoleByRoleId(roleId);
+					Landmark l=aplService.getLandMarkById(landMarkID);
+					
+					newUser.setUname(uname);
+					newUser.setEmailId(email);
+					newUser.setContactnumber(contact);
+					newUser.setRoleBean(r);
+					newUser.setLandmark(l);
+					newUser.setCreateddt(new Date(System.currentTimeMillis()));
+					newUser.setUpdateddt(new Date(System.currentTimeMillis()));
+					newUser.setStatus(AppConstants.status);
+					
+					
+					udm.setDevEUI(devId);
+					udm.setOrgId(orgId);
+					
+					TblUserInfo u=userLoginService.saveUser(newUser,udm);
+						if(u!=null){
+												
+								 redirectAttributes.addFlashAttribute("status",
+										"<div class=\"success\" > User registered Successfully !</div>");
+						}else{
+								 redirectAttributes.addFlashAttribute("status",
+											"<div class=\"failure\" > user registration failed !</div>");
+						}
+						
+						
+			  }
 				
+										
 		}catch(Exception e){
-			logger.error("Error in userSubscription",e);			
+			logger.error("Error in userSubscription",e);
+			 redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" > Exception..Registratoin failed !</div>");
 		}
 			
 		return "redirect:/userMgmt";
