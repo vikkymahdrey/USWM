@@ -31,7 +31,8 @@
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.css">
-	  <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+	  <link rel="stylesheet" href="css/skins/_all-skins.min.css"> 
+	  <link href="css/style.css" rel="stylesheet" type="text/css" />
 	 
 
 	<script src="js/app.min.js"></script>
@@ -48,6 +49,7 @@
 	   var orgid=document.getElementById("orgid").value;
  	  	var appid=document.getElementById("appid").value;
  	  	var devid=document.getElementById("devid").value;
+ 	  	var usertype=document.getElementById("usertype").value;
  		
 	   	   
 	   if(orgid=="0"){
@@ -59,28 +61,29 @@
 	   }else if(devid=="0"){
 		   alert("Please select devEUI!");
 		   return false;
-	   }else{		   
-			   $.ajax({
-	               url: 'syncDev',
-	               type: 'POST',
-	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
-	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid}) ,
-	               success: function (data) {
-	               alert(data);
-	               window.location.reload();
-	            	   //$(".success").html(data);
-	                   	
-	                   },
-	  		 		error: function(e){
-	  	     			        alert('Error: ' + e);
-	  	     		 }
-	
-	                  
-	               });
-			   
-			  return false;
-	   		} 
-	   		
+	   }else if ($("input[name=uname]").val() == "") {
+			alert("Please specify LoginId");
+			return false;
+	   }else if ($("input[name=email]").val() == "") {
+			alert("Please specify EmailAddress");
+			return false;
+	   }else if (isNaN($("input[name=contact]").val())
+				|| ($("input[name=contact]").val()).length != 10) {
+			alert("Please specify 10 digit contact number");
+			return false;
+	   }else if(usertype == "0") {
+			alert("Please select usertype");
+			return false;
+	   }else if ($("input[name=area]").val() == "") {
+			alert("Please select area");
+			return false;
+	   }else if ($("input[name=place]").val() == "") {
+			alert("Please select place");
+			return false;
+	   }else if ($("input[name=landmark]").val() == "") {
+			alert("Please select landmark");
+			return false;
+	   }				
    }
    
 function getAppByOrgID()
@@ -190,7 +193,35 @@ function getDevEUIByAppID()
                     devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option>'+returnText+'</select>';                                             
                 }
             }
-     </script>       
+     </script>      
+     
+     
+     <script type="text/javascript">
+			function showPopup(url) {
+				var params = "toolbars=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+				size = "height=450,width=520,top=200,left=300," + params;
+				if (url == "LandMarkSearch") {
+					size = "height=450,width=600,top=200,left=300," + params;
+				}
+				
+				var orgId=document.getElementById("orgid").value;
+				if (url == "LandMarkSearch") {
+					
+					if(orgId=="0")
+					{
+					alert("Choose Organisation");
+					return false;
+					}
+					url+="?orgId="+orgId;
+				}
+				
+				newwindow = window.open(url, 'name', size);
+		
+				if (window.focus) {
+					newwindow.focus();
+				}
+			}
+</script> 
      
   </head>
   
@@ -223,15 +254,37 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-user-o"></span><b>Add User</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-user"></span><b>Add User</b></h5>
        
    				</div><!-- /.box-header -->
 		 							
+		 					<div class="row">
+									<div class="col-sm-12 text-center">
+									<%String message="";
+						
+										try{
+											message=request.getParameter("message");
+											if(message!=null&&!message.equals("")){
+												
+											}else{						
+													message = "";
+													message = request.getAttribute("status").toString();
+													session.setAttribute("status", "");
+											}
+				
+										}catch(Exception e)
+										{
+											;
+										}	%>
+				 						<span style="color: red;" ><%=message %></span>	
+				 									
+		   						</div>
+		   				  </div>		
    						
    						  <div class="row" >
     				    	<div class="col-sm-12">	
     				    	
-    				    	<form name="form1" action="syncDev" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="userSubscription" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
 								  	<tr>
@@ -239,7 +292,7 @@ function getDevEUIByAppID()
 								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
 										
 										<td>
-										 <select name="orgname" id="orgid" onchange="getAppByOrgID()">
+										 <select name="orgid" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">--Choose Organisation--</option>	
 										    <option value="<%=orgId%>"><%=orgName%></option>
 										 </select> 
@@ -249,7 +302,7 @@ function getDevEUIByAppID()
 									   <td align="right"><b>Application:</b></td>
 									   
 										 <td>
-										 	<select name="appname" id="appid" onchange="getDevEUIByAppID()">
+										 	<select name="appid" id="appid" onchange="getDevEUIByAppID()">
 										    	<option value="0">--Choose Application--</option>	
 										    </select> 
 										</td>
@@ -259,17 +312,17 @@ function getDevEUIByAppID()
 									   <td align="right"><b>Device EUI:</b></td>
 									   
 										 <td>
-										 	<select name="devname" id="devid" >
+										 	<select name="devid" id="devid" >
 										    	<option value="0">--Choose Device EUI--</option>	
 										    </select> 
 										</td>
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Username:</b></td>
+									   <td align="right"><b>LoginID:</b></td>
 									   
 										 <td>
-										 	<input type="text" value="Enter Username" id="uname">
+										 	<input type="text" name="uname" id="uname" >
 										</td>
 									</tr>
 									
@@ -277,7 +330,7 @@ function getDevEUIByAppID()
 									   <td align="right"><b>EmailId:</b></td>
 									   
 										 <td>
-										 	<input type="text" value="Enter Email Address" id="email">
+										 	<input type="text" name="email" id="email" >
 										</td>
 									</tr>
 									
@@ -285,12 +338,57 @@ function getDevEUIByAppID()
 									   <td align="right"><b>Contact#:</b></td>
 									   
 										 <td>
-										 	<input type="text" value="Enter Contact No." id="contact">
+										 	<input type="text"  name="contact" id="contact" >
+										</td>
+									</tr>
+									
+									
+									<tr>
+								  		<td align="right"><b>UserType:</b></td>
+								  													
+										<td>
+										 <select name="usertype" id="usertype">
+										    <option value="0">--Choose UserType--</option>	
+										    <option value="5">Admin</option>
+										    <option value="1">User</option>
+										 </select> 
+										</td>
+									</tr>
+									<tr>
+										<td align="right">
+											<input style="margin-left: 130%; background-color:#3c8dbc;"
+												type="button" value="Select APL" class="formbutton"
+													onclick="showPopup('LandMarkSearch') " />
+										</td>
+				
+									</tr>
+									
+									<tr>	
+									   <td align="right"><b>Area:</b></td>
+									   
+										 <td>
+										 	<input type="text" name="area" id="area" />
+										 	<input type="hidden" id="landMarkID" name="landMarkID" />
 										</td>
 									</tr>
 									<tr>	
+									   <td align="right"><b>Place:</b></td>
+									   
+										 <td>
+										 	<input type="text" name="place" id="place" />
+										</td>
+									</tr>
+									<tr>	
+									   <td align="right"><b>Landmark:</b></td>
+									   
+										 <td>
+										 	<input type="text" name="landmark" id="landmark" />
+										</td>
+									</tr>
+									
+									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton text-bold " style="background-color:#3c8dbc; " value="Add user"/></td>
+											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Add user"/></td>
 										 
 									</tr>	
 								</table>	

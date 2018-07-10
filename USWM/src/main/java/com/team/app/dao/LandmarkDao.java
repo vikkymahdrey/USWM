@@ -25,6 +25,12 @@ public interface LandmarkDao extends JpaRepository<Landmark, Serializable> {
 
 	@Query("from Landmark l where l.id=:landmarkId and l.place.id =:placeId")
 	Landmark getLandMarkByIdAndPlaceId(@Param("landmarkId") String landmarkId, @Param("placeId") String placeId);
+
+	@Query("from Landmark l where l.id =:landmarkId")
+	Landmark getLandMarkById(@Param("landmarkId") String landmarkId);
+
+	@Query(value="select l.id, l.landmarkname, p.placename, a.areaname from landmark l join place p on l.placeId=p.id join area a on p.areaId=a.id  where a.orgId=?1 and (l.landmarkname like %?2% or p.placename like %?2% or a.areaname like %?2%) order by a.areaname,p.placename,l.landmarkname",nativeQuery = true)
+	List<Object[]> getLandMarkByAPL(@Param("orgId") String orgId,@Param("landMarkText") String landMarkText);
 	
 	
 

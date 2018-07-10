@@ -5,6 +5,7 @@ import java.util.List;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
+import com.team.app.dto.APLDto;
 import com.team.app.dto.OrganisationDto;
 
 public interface APLService {
@@ -38,6 +39,10 @@ public interface APLService {
 	Landmark updateLandmark(Landmark lm)throws Exception;
 
 	List<Area> getAreasListByAreaId(String areaId) throws Exception;
+
+	Landmark getLandMarkById(String landmarkId)throws Exception;
+
+	List<Object[]> getLandMarkByAPL(String orgId,String landMarkText )throws Exception;
 
 
 

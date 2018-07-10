@@ -1,5 +1,6 @@
 package com.team.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
+import com.team.app.dto.APLDto;
 import com.team.app.dto.OrganisationDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
@@ -44,7 +46,15 @@ public class APLConfigController {
 		 return "area";
 	}
 	
-	
+		
+	@RequestMapping(value= {"/LandMarkSearch"}, method=RequestMethod.GET)
+	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
+		logger.debug("Inside /LandMarkSearch");		
+		String orgId=request.getParameter("orgId");
+			logger.debug("printing orgId as: ",orgId);
+		map.put("orgId", orgId);
+			 return "LandMarkSearch1";
+	}
 	
 	
 	
@@ -348,6 +358,7 @@ public class APLConfigController {
 					
 			@RequestMapping(value= {"/updateLandmark"}, method=RequestMethod.POST)
 			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				logger.debug("In Ajax /updateLandmark");
 				String retVal = "";
 				String placeId = request.getParameter("placeId");
 				String landmarkId = request.getParameter("landmarkId");
@@ -358,7 +369,7 @@ public class APLConfigController {
 				
 				logger.debug("printing placeId /updateLandmark",placeId);
 				logger.debug("printing landmarkId /updateLandmark",landmarkId);
-				
+				logger.debug("printing landmark /updateLandmark",landmark);
 				logger.debug("latitude longitude = "+latLng);
 				
 				try{
@@ -366,6 +377,7 @@ public class APLConfigController {
 					Landmark lm = aplService.getLandMarkByIdAndPlaceId(landmarkId,placeId);
 					if(lm != null){
 						if(lm.getLandmarkname().equalsIgnoreCase(landmark)){
+							logger.debug("inside matching landmark");
 							 redirectAttributes.addFlashAttribute("status",
 										"<div class=\"failure\" > Landmark Already Exist in the place!</div>");
 							 retVal =  "redirect:/showLandmark?placeId=" + placeId;
@@ -417,6 +429,55 @@ public class APLConfigController {
 				return retVal;
 			}	
 			
+			
+			
+			@RequestMapping(value= {"/updateMapLandmark"}, method=RequestMethod.POST)
+			public String updateMapLandmarkHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+				logger.debug("In Ajax /updateMapLandmark");
+				String retVal = "";
+				String placeId = request.getParameter("placeId");
+				String landmarkId = request.getParameter("landmarkId");
+				String landmark = request.getParameter("landmark");
+				String latLng= request.getParameter("latlng");
+				String orgId= request.getParameter("orgId");
+				String areaId= request.getParameter("area");
+				
+				logger.debug("printing placeId /updateLandmark",placeId);
+				logger.debug("printing landmarkId /updateLandmark",landmarkId);
+				logger.debug("printing landmark /updateLandmark",landmark);
+				logger.debug("latitude longitude = ",latLng);
+				logger.debug("areaId areaId = ",areaId);
+				logger.debug("placeId placeId = ",placeId);
+				logger.debug("orgId orgId = ",orgId);
+				
+				try{
+					
+					Landmark lm = aplService.getLandMarkByIdAndPlaceId(landmarkId,placeId);
+					if(lm != null){				
+				
+							if(latLng!=null && latLng.trim().equals("")==false)  {	
+								logger.debug("Inside Latlng");
+								String latitude=latLng.split(",")[0].substring(1,  latLng.split(",")[0].length()-1);
+								String longitude = latLng.split(",")[1].substring(1, latLng.split(",")[1].length()-1);
+									 lm.setLat(latitude);
+									 lm.setLon(longitude);
+									 lm = aplService.updateLandmark(lm);
+									 if(orgId != null){
+										 retVal =  "redirect:/marklandmark?orgId="+orgId;
+									 }else if(placeId != null){
+										 retVal =  "redirect:/marklandmark?place="+placeId;
+										 
+									 }else if(areaId != null){
+										 retVal =  "redirect:/marklandmark?area="+areaId;
+									 }
+							}
+					}		
+				}catch(Exception ex){
+					logger.error("Error in fetching the landmark ",ex);
+				}
+				return retVal;
+			}
+			
 			/* AJAX calling from marklandmark.jsp */		
 			@RequestMapping(value= {"/getPlace"}, method=RequestMethod.GET)
 			public @ResponseBody String getPlaceHandler(@RequestParam(required = true, value = "area") String area) throws Exception{
@@ -425,7 +486,7 @@ public class APLConfigController {
 							Area a=aplService.getAreasByAreaId(area);
 								List<Place> placesUnderArea=a.getPlaces();
 						
-							response = "<select name='place' id='place' onchange='showLandmark(this.value)'>";
+							response = "<select name='placeId' id='place' onchange='showLandmark(this.value)'>";
 							response += "<option value='0' >Select</option>";
 							for (Place place : placesUnderArea) {
 								response += "<option value='" + place.getId() + "' >"
@@ -437,5 +498,51 @@ public class APLConfigController {
 						}
 				return response;
 						}
+			
+			
+			
+			@RequestMapping(value= {"/GetLandMark"}, method=RequestMethod.GET)
+			public @ResponseBody String GetLandMarkHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
+				logger.debug("Inside /GetLandMark");		
+				String landMarkText=request.getParameter("landMarkText");
+				String orgId=request.getParameter("orgId");
+				
+					logger.debug("printing landMarkText as: ",landMarkText);
+					logger.debug("printing orgId as: ",orgId);
+					
+					String response="";
+					try {
+						List<Object[]> dtos=null;
+							dtos=aplService.getLandMarkByAPL(orgId,landMarkText);
+							
+						List<APLDto> aplDto=null;
+									aplDto=new ArrayList<APLDto>();		
+									
+									APLDto dto=null;
+							
+								for(Object[] obj: dtos){
+									dto=new APLDto();
+									dto.setLandMarkID(String.valueOf(obj[0]));
+									dto.setLandMark(String.valueOf(obj[3]) + " ->"
+											+ String.valueOf(obj[2]) + " ->"
+											+ String.valueOf(obj[1]));
+																	
+									aplDto.add(dto);
+								}
+								
+							
+							
+							if(aplDto!=null && !aplDto.isEmpty()){
+								for(APLDto d : aplDto ){
+									response += d.getLandMarkID() + ":" + d.getLandMark()
+									+ "|";
+								}
+							}
+					}catch(Exception e){
+						logger.debug("Error during AJAX calling for GetLandMark",e);	
+					}
+					logger.debug("Response",response);
+					return response;
+			}
 				
 }

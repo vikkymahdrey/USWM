@@ -47,6 +47,8 @@
  
 	function initialize()
 	{
+		var placeId=document.getElementById("place").value;
+			
 		try{
 	    	geocoder = new google.maps.Geocoder();
 	  		var myLatlng = new google.maps.LatLng(cityLat, cityLon);
@@ -58,11 +60,14 @@
 	  		map = new google.maps.Map(document.getElementById("map"), myOptions);
 	  		//searchPlace();
 		  showExistingLandmarks();
-		  google.maps.event.addListener(map, 'click', function(event) {
-		     placeMarker(event.latLng);
-		    displayWindowForSetAPL(marker,event);		    
-		    
-		  });
+		  if(placeId!='null'){
+			  google.maps.event.addListener(map, 'click', function(event) {
+			     placeMarker(event.latLng);
+			    displayWindowForSetAPL(marker,event);		    
+			    
+			  });
+		  }	  
+		  
 		}catch(e){
 			aler(e);	
 		}
@@ -222,16 +227,16 @@ function displayWindowForSetAPL(marker,event) {
 			
 			 if (orgId!="null")		
 				{
-				action="updateLandmark?orgId="+orgId;
+				action="updateMapLandmark?orgId="+orgId;
 				}
 			 else if(area!="null")
 				{
 				
-				action="updateLandmark?area="+area;
+				action="updateMapLandmark?area="+area;
 				}
 			 else if(place!="null")
 				{
-				action="updateLandmark?placeId="+place;
+				action="updateMapLandmark?placeId="+place;
 				}
 			
 			

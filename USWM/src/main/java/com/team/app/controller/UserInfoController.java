@@ -229,7 +229,7 @@ public class UserInfoController {
 	/* Ajax calling for /getApplications */	
 	@RequestMapping(value= {"/getApplications"}, method=RequestMethod.GET)
 	public @ResponseBody String getApplicationsHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
-		logger.debug("/*Ajax getting getApplications */");
+		//logger.debug("/*Ajax getting getApplications */");
 		
 		String orgId = request.getParameter("orgId");
 		logger.debug("Organisation Id as ",orgId);
@@ -726,6 +726,44 @@ public class UserInfoController {
 		
 	   return "deleteAllNode";
 	}
+	
+	
+	
+	@RequestMapping(value= {"/userSubscription"}, method=RequestMethod.POST)
+    public String userSubscriptionHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+		logger.debug("/inside userSubscription");
+		String orgId=request.getParameter("orgid").trim();
+		String appId=request.getParameter("appid").trim();
+		String devId=request.getParameter("devid").trim();
+		String uname=request.getParameter("uname").trim();
+		String email=request.getParameter("email").trim();
+		String contact=request.getParameter("contact").trim();
+		String roleId=request.getParameter("usertype").trim();
+		String landMarkID=request.getParameter("landMarkID").trim();
+		
+		
+		
+		logger.debug("OrgId....",orgId);
+		logger.debug("appId....",appId);
+		logger.debug("devId....",devId);
+		logger.debug("uname....",uname);
+		logger.debug("email....",email);
+		logger.debug("contact....",contact);
+		logger.debug("usertype....",roleId);		
+		logger.debug("landMarkID....",landMarkID);
+		
+		try{
+		
+			redirectAttributes.addFlashAttribute("status",
+					"<div class=\"success\" > User registered Successfully !</div>");
+				
+		}catch(Exception e){
+			logger.error("Error in userSubscription",e);			
+		}
+			
+		return "redirect:/userMgmt";
+		 
+	 }
 	
 
 }

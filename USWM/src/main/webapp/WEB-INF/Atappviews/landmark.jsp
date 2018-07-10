@@ -97,7 +97,7 @@
  	//--------------
 
  	function validateLandmark() {
-	alert("hiiii");
+	
  		var flag = true;
 
  		try {

@@ -220,6 +220,18 @@ public class APLServiceImpl implements APLService {
 
 
 	
+	public Landmark getLandMarkById(String landmarkId) throws Exception {
+		return landmarkDao.getLandMarkById(landmarkId);
+	}
+
+
+	public List<Object[]> getLandMarkByAPL(String orgId,String landMarkText) throws Exception {
+					
+		return landmarkDao.getLandMarkByAPL(orgId,landMarkText);
+	}
+
+
+	
 	
 
 	

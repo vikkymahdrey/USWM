@@ -93,24 +93,12 @@
 							<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
 							<display:column  property="applicationName" title="ApplicationName" sortable="true"  />
 							<display:column  property="devEUI" title="DevEUI" sortable="true"  />
-							<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
+							<display:column  property="fPort" title="fPort" sortable="true"  />
 							<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 							<display:column  property="gatewayName" title="GatewayName" sortable="true"  />
-							<display:column  property="deviceId" title="DeviceId" sortable="true"  />
-							<%-- <display:column  property="length" title="Length" sortable="true"  /> --%>
-							<display:column  property="led1" title="Led1" sortable="true"  />
-							<display:column  property="led2" title="Led2" sortable="true"  />
-							<display:column  property="led3" title="Led3" sortable="true"  />
-							<display:column  property="led4" title="Led4" sortable="true"  />
-							<display:column  property="temperature" title="Temperature" sortable="true"  />
-							<display:column  property="pressure" title="Pressure" sortable="true"  />
-							<display:column  property="humidity" title="Humidity" sortable="true"  />
+							<display:column  property="waterLtr" title="Water_Val_In_Ltr"  sortable="true"  />
 							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
-						
-					     	
-								
-									
-								     		   
+													     		   
 						 	<display:setProperty name="export.csv.filename" value="<%=fname1%>" />
 							<display:setProperty name="export.excel.filename" value="<%=fname2%>" />
 							<display:setProperty name="export.xml.filename" value="<%=fname3%>" /> 
