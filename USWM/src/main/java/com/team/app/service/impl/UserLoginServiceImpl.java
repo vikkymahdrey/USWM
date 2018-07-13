@@ -2,9 +2,10 @@ package com.team.app.service.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.team.app.dao.RoleDao;
 import com.team.app.dao.UserDeviceMappingDao;
@@ -66,9 +67,10 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 
 	@Transactional
-	public TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm) throws Exception {
+	public TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm) throws Exception  {
+		validateDeviceEUI(udm.getDevEUI(),udm.getOrgId());		
 		TblUserInfo u=userInfoDao.save(user);
-		if(u!=null){
+		if(u!=null){						
 			udm.setTblUserInfo(u);
 			UserDeviceMapping udmSave=userDeviceMappingDao.save(udm);
 			if(udmSave!=null){
@@ -80,6 +82,20 @@ public class UserLoginServiceImpl implements UserLoginService {
 			return null;
 		}
 		
+		
+	}
+
+
+
+	
+
+
+
+	void validateDeviceEUI(String devEUI,String orgId) throws Exception{
+		UserDeviceMapping dEUI=userDeviceMappingDao.getDeviceByEUIAndOrgId(devEUI,orgId);
+		if(dEUI!=null){
+			throw new Exception("Device already exist");
+		}
 		
 	}
 

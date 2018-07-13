@@ -10,6 +10,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="landmark")
 @NamedQuery(name="Landmark.findAll", query="SELECT l FROM Landmark l")
 public class Landmark implements Serializable {
 	private static final long serialVersionUID = 1L;

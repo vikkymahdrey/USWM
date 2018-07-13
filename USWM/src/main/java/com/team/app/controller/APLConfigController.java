@@ -504,8 +504,8 @@ public class APLConfigController {
 			@RequestMapping(value= {"/GetLandMark"}, method=RequestMethod.GET)
 			public @ResponseBody String GetLandMarkHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
 				logger.debug("Inside /GetLandMark");		
-				String landMarkText=request.getParameter("landMarkText");
-				String orgId=request.getParameter("orgId");
+				String landMarkText=request.getParameter("landMarkText").trim();
+				String orgId=request.getParameter("orgId").trim();
 				
 					logger.debug("printing landMarkText as: ",landMarkText);
 					logger.debug("printing orgId as: ",orgId);

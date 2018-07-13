@@ -767,15 +767,26 @@ public class UserInfoController {
 		
 		try{
 			TblUserInfo user=userLoginService.getUserByEmailId(email);
+			UserDeviceMapping udm=null;
+			 	udm=new UserDeviceMapping();			 	
+			 	udm.setDevEUI(devId);
+				udm.setOrgId(orgId);
+			
 			if(user!=null){
+				/*TblUserInfo usr=userLoginService.saveUser(user,udm);
+				if(usr!=null){
+					
+				}else{
+					redirectAttributes.addFlashAttribute("status",
+							"<div class=\"failure\" > Email alrady exist!</div>");
+				}*/
+				
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"failure\" > Email alrady exist!</div>");
+				
 			}else{
 				TblUserInfo newUser=null;
-					newUser=new TblUserInfo();
-					
-					UserDeviceMapping udm=null;
-					 udm=new UserDeviceMapping();	
+					newUser=new TblUserInfo();					
 					
 					Role r=userLoginService.getRoleByRoleId(roleId);
 					Landmark l=aplService.getLandMarkById(landMarkID);
@@ -787,11 +798,7 @@ public class UserInfoController {
 					newUser.setLandmark(l);
 					newUser.setCreateddt(new Date(System.currentTimeMillis()));
 					newUser.setUpdateddt(new Date(System.currentTimeMillis()));
-					newUser.setStatus(AppConstants.status);
-					
-					
-					udm.setDevEUI(devId);
-					udm.setOrgId(orgId);
+					newUser.setStatus(AppConstants.status);				
 					
 					TblUserInfo u=userLoginService.saveUser(newUser,udm);
 						if(u!=null){
@@ -808,12 +815,42 @@ public class UserInfoController {
 				
 										
 		}catch(Exception e){
-			logger.error("Error in userSubscription",e);
-			 redirectAttributes.addFlashAttribute("status",
-						"<div class=\"failure\" > Exception..Registratoin failed !</div>");
+			logger.error("Error in userSubscription",e.getMessage());
+			if(e.getMessage().equals("Device already exist")){
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" >Device already exist!</div>");
+			}else{
+				 redirectAttributes.addFlashAttribute("status",
+							"<div class=\"failure\" > System Exception..Registratoin failed !</div>");
+			}
+			
 		}
 			
-		return "redirect:/userMgmt";
+		return "redirect:/userReport";
+		 
+	 }
+	
+	
+	@RequestMapping(value= {"/userReport"}, method=RequestMethod.GET)
+    public String userReportHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+		logger.debug("/inside userReport");
+		try{
+			List<TblUserInfo> userList=userLoginService.getUserInfos();
+			if(userList!=null && !userList.isEmpty()){
+				logger.debug("inside userlist :");
+				map.put("subscribedUsers", userList);
+			}else{
+				logger.debug("inside userlist :");
+				map.put("subscribedUsers", "");	
+			}
+		}catch(Exception e){
+			logger.error("Error in userSubscription",e.getMessage());		
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" >Systemc Exception while fetching users!</div>");	
+			
+		}
+			
+		return "userReport";
 		 
 	 }
 	

@@ -137,7 +137,7 @@
           
           <ul class="treeview-menu">
             <li><a href="#"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i><b>User</b></a></li>
+             <li><a href="userReport"><i class="fa fa-circle-o"></i><b>User</b></a></li>
            
           </ul>
           

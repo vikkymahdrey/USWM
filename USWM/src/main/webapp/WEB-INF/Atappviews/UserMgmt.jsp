@@ -367,8 +367,8 @@ function getDevEUIByAppID()
 									   <td align="right"><b>Area:</b></td>
 									   
 										 <td>
-										 	<input type="text" name="area" id="area" />
-										 	<input type="hidden" id="landMarkID" name="landMarkID" readonly/>
+										 	<input type="text" name="area" id="area" readonly/>
+										 	<input type="hidden" id="landMarkID" name="landMarkID" />
 										</td>
 									</tr>
 									<tr>	

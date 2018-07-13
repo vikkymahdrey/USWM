@@ -20,7 +20,7 @@ public interface UserLoginService {
 
 	Role getRoleByRoleId(String roleId)throws Exception;
 
-	TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm)throws Exception;
+	TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm)throws Exception; 
 
 	
 
