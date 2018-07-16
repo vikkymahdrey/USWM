@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
+import com.team.app.domain.TblUserInfo;
 import com.team.app.dto.APLDto;
 import com.team.app.dto.OrganisationDto;
 import com.team.app.logger.AtLogger;
@@ -100,6 +101,30 @@ public class APLConfigController {
 	}
 	
 	
+	@RequestMapping(value= {"/marklandmarkUserDash"}, method=RequestMethod.GET)
+	public String marklandmarkUserDashHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+		logger.debug("/marklandmarkUserDash");
+		TblUserInfo user=(TblUserInfo)session.getAttribute("user");		
+		logger.debug("/landmarkId",user.getLandmark().getId());
+		String orgId=request.getParameter("orgId");
+		
+		List<Area> areaList=null;
+			areaList=new ArrayList<Area>();
+		Landmark landmark=aplService.getLandMarkById(user.getLandmark().getId());
+		if(orgId!=null && !(orgId.isEmpty())){			
+			Area area=landmark.getPlace().getArea();
+			if(area.getOrgId().equals(orgId)){
+				areaList.add(area);
+			}
+		}
+		
+		map.put("areas",areaList);
+		map.put("landmarkId", user.getLandmark().getId());
+			
+		 return "marklandmarkUserDash";
+	}
+	
+	
 	// An ajax call comes from marklandmark.jsp
 			@RequestMapping(value = {"/getLandmarks"},  method=RequestMethod.POST)
 			public  @ResponseBody String getLandmarks(@RequestParam(required = false, value = "place") String place,
@@ -147,6 +172,56 @@ public class APLConfigController {
 				return response;
 			}
 			
+			
+			
+			// An ajax call comes from marklandmark.jsp
+						@RequestMapping(value = {"/getLandmarksByLandmarkId"},  method=RequestMethod.POST)
+						public  @ResponseBody String getLandmarksByLandmarkIdHanlder(@RequestParam(required = false, value = "place") String place,
+								@RequestParam(required = false, value = "area") String area, @RequestParam(required = false, value = "orgId") String orgId,
+								@RequestParam(required = false, value = "placeforLandmark") String placeforLandmark,
+								@RequestParam(required = false, value = "landmarkId") String landmarkId)
+						{
+							String response = "";
+						
+							if (placeforLandmark != null) {
+								try {
+									  
+									Place p=aplService.getPlaceById(placeforLandmark);
+									List<Landmark> landmarks=p.getLandmarks();
+									
+									response = "<select name='landmarkId' id='landmarkId'>";
+								
+									for (Landmark eachlandmark : landmarks) {
+										response += "<option value='" + eachlandmark.getId()
+												+ "' >" + eachlandmark.getLandmarkname() + "</option>";
+									}
+									response += "</select>";
+								}catch(Exception ex){
+									logger.error("Error in fetching landmarks for place ", ex);
+								} 
+							}else{
+								try {
+								
+									List<Landmark> landmarks = aplService.getLandMarkByUserLandmarkId(landmarkId);
+									
+									for (Landmark eachlandmark : landmarks) {
+										response +=  "$" + eachlandmark.getPlace().getArea().getAreaname() + ":"
+												+ eachlandmark.getPlace().getPlacename() + ":"
+												+ eachlandmark.getId() + ":"
+												+ eachlandmark.getLandmarkname() + ":"
+												+ eachlandmark.getLat() + ":"
+												+ eachlandmark.getLon();
+									}
+								
+								}catch(Exception ex){
+									logger.error("Error in fetching the specific landmarks ",ex);												
+								}
+							}
+							
+							
+							return response;
+						}
+						
 			
 			@RequestMapping(value= {"/addArea"}, method=RequestMethod.GET)
 			public String getArea(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{

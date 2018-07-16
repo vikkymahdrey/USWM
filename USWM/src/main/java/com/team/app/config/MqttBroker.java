@@ -98,7 +98,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  		logger.debug("fport",json.get("fPort").toString());
 				  	  		logger.debug("Data As:",json.get("data").toString());
 				  	  		
-				  	  	frame.setFPort(json.get("fPort").toString().trim());
+				  	  	frame.setfPort(json.get("fPort").toString().trim());
 				  	  	frame.setCreatedAt(new Date(System.currentTimeMillis()));
 				  	  	frame.setUpdatedAt(new Date(System.currentTimeMillis()));
 				  	  	

@@ -172,15 +172,7 @@
   </head>
   
   <body class="hold-transition skin-blue sidebar-mini" onload="loadScript()">
-  
-  			<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
-  			
-  			
-  			%>
-  			
+    			
 							 
   <div class="wrapper">  
   	
@@ -191,69 +183,14 @@
 			<section class="content">
 		 		<div class="content-wrap box box-primary">
 		 		
-						 <!-- row -->
-					      <div class="row">
-					        <div class="col-md-12">
-					          <!-- jQuery Knob -->
-					    <div class="box box-solid">
-					        <div class="box-header">
-					            <i class="fa fa-user"></i>
-									<h3 class="box-title">
-										<b>User-Device</b>
-									</h3>
-					           
-					
-					            <div class="box-tools pull-right">
-					                <button type="button" class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-					                </button>
-					                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-					            </div>
-					        </div>
-					            <!-- /.box-header -->
-					            <div class="box-body">
-					              <div class="row">
-					               <!--  <div class="col-xs-6 col-md-3 text-center">
-					                  <input type="text" class="knob" value="30" data-width="90" data-height="90" data-fgColor="#3c8dbc">
-					
-					                  <div class="knob-label">Total Users</div>
-					                </div> -->
-					                <!-- ./col -->
-					               <!--  <div class="col-xs-6 col-md-3 text-center">
-					                  <input type="text" class="knob" value="70" data-width="90" data-height="90" data-fgColor="#f56954">
-					
-					                  <div class="knob-label">Total DevEUI</div>
-					                </div> -->
-					                <!-- ./col -->
-					                <div class="col-xs-6 col-md-6 text-center">
-					                  <input type="text" class="knob" value="45" data-min="0" data-max="100" data-width="90" data-height="90" data-fgColor="#00a65a">
-					
-					                  <div class="knob-label">Users</div>
-					                </div>
-					                <!-- ./col -->
-					                
-					                
-					                
-					                <div class="col-xs-6 col-md-6 text-center">
-					                  <input type="text" class="knob" value="40" data-min="0" data-max="100" data-width="90" data-height="90" data-fgColor="#00c0ef">
-					
-					                  <div class="knob-label">Sensors</div>
-					                </div>
-					                <!-- ./col -->
-					              </div>
-					              <!-- /.row -->
-					
-					              
-					            </div>
-					            <!-- /.box-body -->
-					          </div>
-					          <!-- /.box -->
-					        </div>
-					        <!-- /.col -->
-					      </div>
-					      <!-- /.row -->
-							 		
-							 		
-							 		
+		 			<div class="row">
+							<div class="col-sm-12 text-right ">	
+							   <img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> 
+							</div>
+													
+						</div><br/>
+		 		
+						 
 		 		
 		 			<div class="row">
 						<div class="col-md-12">
@@ -332,7 +269,7 @@
 			                  <div class="pad">
 			                    <!-- Map will be created here -->
 			                   
-			                  <iframe  style="float: right; width: 100%" height="300px" src="marklandmarkdash?orgId=6" ></iframe>
+			                  <iframe  style="float: right; width: 100%" height="300px" src="marklandmarkUserDash?orgId=6" ></iframe>
 			                  </div>
 			                </div>
 			                <!-- /.col -->

@@ -101,6 +101,29 @@ public class UserInfoController {
 					return "frames";
 		 
 	 }
+	
+	
+	@RequestMapping(value= {"/userFrameInfos"}, method=RequestMethod.GET)
+    public String userFrameInfosHandler(HttpSession session,Map<String,Object> map) {
+			logger.debug("/inside framesInfo");
+			
+			TblUserInfo user=(TblUserInfo) session.getAttribute("user");
+			List<LoraFrame> frames=null;
+			try{
+				frames=consumerInstrumentServiceImpl.getDeviceIdByDevEUI(user.getUserDeviceMappings().get(0).getDevEUI());
+				
+				if(frames!=null && !frames.isEmpty()){
+					logger.debug("size is ",frames.size());
+					map.put("frames", frames);
+				}
+			
+			}catch(Exception e){
+				logger.error("/frameInfos controller ",e);
+				e.printStackTrace();
+			}
+					return "userFrames";
+		 
+	 }
 	@RequestMapping(value= {"/userMgmt"}, method=RequestMethod.GET)
     public String userMgmtHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		   logger.debug(" IN /userMgmt ");

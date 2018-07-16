@@ -1,5 +1,6 @@
 package com.team.app.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,14 @@ public class LoginController {
 			userInfo=userLoginService.getUserByUserAndPwd(username,password);
 		}
         
+        if (userInfo!=null) {
+        	logger.debug("Inside NeedToPwd Change");
+			if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
+				logger.debug("Inside NeedToPwd is null");
+				needToChangePwd = true;
+			} 
+		}
+        
         if(userInfo!=null){
         	session.setAttribute("user", userInfo);
         	        	         	
@@ -65,9 +74,7 @@ public class LoginController {
 		}
         
         if (needToChangePwd) {
-			session.setAttribute("username", username);
-			session.setAttribute("password", password);
-				return new ModelAndView("redirect:/changePasswordReq");
+			return new ModelAndView("redirect:/changePasswordReq");
 			
 		} 
         
@@ -93,7 +100,7 @@ public class LoginController {
 	 public String home(Map<String,Object> map) throws Exception{
 		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
 		  map.put("userInfos",userInfos);
-				 return "chartmap";
+				 return "adminDashboard";
 	    	
 	}
 	
@@ -105,6 +112,11 @@ public class LoginController {
 	@RequestMapping(value= {"/forgotPassword"})
 	public String forgetPasswordHandler(){
 		return "forgotPassword";
+	}
+	
+	@RequestMapping(value= {"/userHome"},method=RequestMethod.GET)
+	public String userHome(Map<String,Object> map){
+		return "userHome";
 	}
 	
 		 
@@ -123,7 +135,34 @@ public class LoginController {
 		 	
 		 	
 		 	
+			@RequestMapping(value= {"/changePasswordReq"})
+			public String changePwdReqHandler(){
+				logger.debug("IN ChangePassword");
+				return "changePassword";
+			}	
+			
+			
+			@RequestMapping(value= {"/changePasswordSubmit"},method=RequestMethod.POST)
+			public String changePwdSubmitHandler(HttpSession session,HttpServletRequest request,RedirectAttributes redirectAttributes) throws Exception{
+				logger.debug("IN ChangePassword Controller....");
+			TblUserInfo user=(TblUserInfo)session.getAttribute("user");
+				String password=request.getParameter("pwd");
+				String oldpwd=request.getParameter("oldpwd");
+				if(user.getPassword().equals(oldpwd)){
+					user.setPassword(password);
+					user.setPwdChangeDt(new Date(System.currentTimeMillis()));
+					userLoginService.updateUserInfo(user);
+					redirectAttributes.addFlashAttribute("status",
+							"<div class='success'>New password updated successfully!</div");
+					
+				}else{
+					redirectAttributes.addFlashAttribute("status",
+							"<div class='failure'>Old password didn't match!</div");
+				}				
 				
+		        
+				return "redirect:/";
+			}
 
 			
 }

@@ -1,3 +1,5 @@
+<%@page import="java.util.*"%>
+<%@page import="com.team.app.domain.*"%>
 <header class="main-header" >
    
 	    <a href="#" class="logo affix">
@@ -27,7 +29,14 @@
   
   
   <aside class="main-sidebar" style="position:fixed;">
-   
+  
+   <% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
+			            if (userSession == null){
+			                response.sendRedirect("/");
+			            }else if(userSession.getRoleBean().getType().equals("admin")){
+			            
+			            
+  %>
     <section class="sidebar">
         
       <!-- search form -->
@@ -185,5 +194,90 @@
       
       </ul>
     </section>
+  <%}else if(userSession.getRoleBean().getType().equals("usr")){ %>
   
+    <section class="sidebar">
+          
+      <ul class="sidebar-menu">
+        <li class="header"><b>MAIN NAVIGATION</b></li>
+        <li class="active treeview">
+          <a href="userHome">
+            <i class="fa fa-dashboard"></i> <span><b>Dashboard</b></span>
+          </a>
+        </li>
+        
+        
+       <li class="treeview">
+          <a href="#">
+            <i class="fa fa-user"></i>
+            <span><b>Personal Information</b></span>
+            <span class="pull-right-container">
+                      </span>
+          </a>
+              
+          
+        </li>
+        
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-cog"></i>
+            <span><b>Device Information</b></span>
+            <span class="pull-right-container">
+             
+            </span>
+          </a>
+          
+                   
+        </li>
+        
+        
+        
+         <li class="treeview">
+          <a href="#">
+            <i class="fa fa-arrow-right"></i>
+            <span><b>Reports</b></span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          
+          
+          <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
+                       
+          </ul>
+          
+        </li>
+        
+        
+        <li class="treeview"> 
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span><b>Logs</b></span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">1</span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
+            <li><a href="userFrameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
+           
+          </ul>
+          
+             
+        </li>
+        
+        
+        
+         <li class="treeview">
+          <a href="logout">
+            <i class="fa fa-sign-out"></i> <span><b>Sign-Out</b></span>
+           
+          </a>
+        </li>
+        
+      
+      </ul>
+    </section>
+  <%} %>
   </aside>

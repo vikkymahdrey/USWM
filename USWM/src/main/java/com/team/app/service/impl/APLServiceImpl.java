@@ -231,6 +231,12 @@ public class APLServiceImpl implements APLService {
 	}
 
 
+	public List<Landmark> getLandMarkByUserLandmarkId(String landmarkId) throws Exception {
+		
+		return landmarkDao.getLandMarkByUserLandmarkId(landmarkId);
+	}
+
+
 	
 	
 

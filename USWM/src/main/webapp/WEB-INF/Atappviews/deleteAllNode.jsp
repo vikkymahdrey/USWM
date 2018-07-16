@@ -204,10 +204,7 @@ function getDevEUIByAppID()
   
   <body class="hold-transition skin-blue sidebar-mini">
   
-  			<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
+  			<% 
   			String orgName=request.getAttribute("name").toString();
   			String orgId=request.getAttribute("id").toString();
   			

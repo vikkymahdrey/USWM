@@ -193,11 +193,7 @@
   
   <body class="hold-transition skin-blue sidebar-mini">
   
-  			<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
-  			
+  			<% 
   			List<OrganisationDto> list=(List<OrganisationDto>)request.getAttribute("organisations");
   		  			
   			String orgId = request.getParameter("orgid");

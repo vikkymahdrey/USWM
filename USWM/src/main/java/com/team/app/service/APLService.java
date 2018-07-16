@@ -44,9 +44,8 @@ public interface APLService {
 
 	List<Object[]> getLandMarkByAPL(String orgId,String landMarkText )throws Exception;
 
+	List<Landmark> getLandMarkByUserLandmarkId(String landmarkId)throws Exception;
 
-
-
-	
+		
 
 }

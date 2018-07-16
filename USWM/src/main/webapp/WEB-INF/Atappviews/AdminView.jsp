@@ -56,10 +56,7 @@
   
   <body class="hold-transition skin-blue sidebar-mini">
   
-  			<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
+  			<% 
   			   List<TblUserInfo> userInfos=(List<TblUserInfo>)request.getAttribute("userInfos");
   			%>
   			

@@ -125,11 +125,7 @@
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<%
-	  			TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
-			
+	  						
 				 List<Landmark> landmarkList = (List<Landmark>)request.getAttribute("landmarkList");
             		Place place = (Place)request.getAttribute("place");
 			%>

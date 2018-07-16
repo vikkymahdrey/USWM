@@ -29,7 +29,16 @@ public class LoraFrame implements Serializable {
 
 	private String devEUI;
 
+	@Column(name="fPort")
 	private String fPort;
+
+	public String getfPort() {
+		return fPort;
+	}
+
+	public void setfPort(String fPort) {
+		this.fPort = fPort;
+	}
 
 	@Column(name="gateway_mac")
 	private String gatewayMac;
@@ -88,13 +97,7 @@ public class LoraFrame implements Serializable {
 		this.devEUI = devEUI;
 	}
 
-	public String getFPort() {
-		return this.fPort;
-	}
-
-	public void setFPort(String fPort) {
-		this.fPort = fPort;
-	}
+	
 
 	public String getGatewayMac() {
 		return this.gatewayMac;

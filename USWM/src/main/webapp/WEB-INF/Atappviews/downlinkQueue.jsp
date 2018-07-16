@@ -196,10 +196,7 @@ function getDevEUIByAppID()
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-						<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-			            if (userSession == null){
-			                response.sendRedirect("/");
-			            }
+						<% 
 						String fname1=("DownlinkQueue :").concat(new Date().toString()).concat(".csv");
 						String fname2=("DownlinkQueue :").concat(new Date().toString()).concat(".xls");
 						String fname3=("DownlinkQueue :").concat(new Date().toString()).concat(".xml");

@@ -125,11 +125,6 @@
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<%
-	  			TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
-	            if (userSession == null){
-	                response.sendRedirect("/");
-	            }
-			
 				//int areaId = Integer.parseInt("" + request.getParameter("areaId"));
 
 				List<Place> placesUnderArea=(List<Place>)request.getAttribute("placeList");

@@ -105,4 +105,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 		return userDeviceMappingDao.save(udm);
 	}
 
+
+
+	
+	public void updateUserInfo(TblUserInfo user) throws Exception {
+		userInfoDao.save(user);
+		
+	}
+
 }
