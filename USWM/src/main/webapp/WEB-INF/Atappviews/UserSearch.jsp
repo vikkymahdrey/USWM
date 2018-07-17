@@ -1,8 +1,12 @@
-<%-- 
+<%--
+    Author     : Vikky
+--%>
+
+
+<%@page import="com.team.app.domain.*"%>
+<%@page import="com.team.app.dto.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
-<%@page import="com.agiledge.atom.dao.BranchDao"%>
-<%@page import="com.agiledge.atom.dto.BranchDto"%>
-<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
@@ -33,15 +37,10 @@
 	//  get Land Mark via Ajax
 	function getLandMarks() {
 
-		var value = document.getElementById("place").value;
-		var location = document.getElementById("location").value;
-		var site = document.getElementById("site").value;
-		var url;
-		if (site.length < 1)
-			url = "GetLandMark?landMarkText=" + value + "&location=" + location;
-		else
-			url = "GetLandMark?landMarkText=" + value + "&site=" + site;
-	
+		var place = document.getElementById("place").value;
+		var orgId = document.getElementById("orgId").value;
+		var url="GetLandMark?landMarkText=" + place + "&orgId=" + orgId;
+			
 		var xmlhttp;
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
 			xmlhttp = new XMLHttpRequest();
@@ -55,7 +54,7 @@
 			}
 		}
 
-		xmlhttp.open("POST", url, true);
+		xmlhttp.open("GET", url, true);
 
 		xmlhttp.send();
 		return false;
@@ -88,7 +87,7 @@
 				innerHtml = "No Matching APL found";
 
 			}
-			document.getElementById("EmployeeDetails").innerHTML = innerHtml;
+			document.getElementById("UserDetails").innerHTML = innerHtml;
 
 		} catch (e) {
 			alert(e);
@@ -102,11 +101,8 @@
 </head>
 <body>
 	<%
-		String location = request.getParameter("branchId");
-		String site = request.getParameter("site");
-
-		site = site == null ? "" : site;
-		location = location == null ? "" : location;
+		String orgId = (String)request.getAttribute("orgId");
+		
 	%>
 	<form name="SearchForm" action="" onsubmit="return getLandMarks();">
 
@@ -114,22 +110,24 @@
 		<table border="0">
 
 			<tr>
-				<td colspan="3"><input type="hidden" id="site"
-					value="<%=site%>"> <input type="hidden" id="location"
-					value="<%=location%>"></td>
+				<td colspan="3">
+					<input type="hidden" id="orgId"	value="<%=orgId%>"></td>
 			</tr>
 			<tr>
-				<td>APL</td>
-				<td><input type="text" name="place" id="place" /></td>
-				<td align="left"><input type="submit" name="Search"
-					class="formbutton" value="Search" /></td>
+				<td>User Information</td>
+				<td>
+					<input type="text" name="email" id="email" placeholder="Search by email" />
+				</td>
+				<td align="left">
+					<input type="submit" name="Search" class="formbutton" value="Search" />
+				</td>
 			</tr>
 
 
 
 		</table>
 	</form>
-	<div id="EmployeeDetails"></div>
+	<div id="UserDetails"></div>
 
 </body>
 </html>
@@ -137,4 +135,3 @@
 
 
 
- --%>

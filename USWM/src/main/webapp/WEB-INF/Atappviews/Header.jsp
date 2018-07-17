@@ -110,6 +110,7 @@
           </ul> -->
            <ul class="treeview-menu">
             <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Delete DevEUI</b></a></li>
+             <li><a href="addDevice"><i class="fa fa-user-plus"></i><b>Add Device</b></a></li>
            
           </ul>
           
@@ -208,9 +209,9 @@
         
         
        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-user"></i>
-            <span><b>Personal Information</b></span>
+          <a href="personalInfo">
+            <i class="fa fa-edit"></i>
+            <span><b>Edit Information</b></span>
             <span class="pull-right-container">
                       </span>
           </a>

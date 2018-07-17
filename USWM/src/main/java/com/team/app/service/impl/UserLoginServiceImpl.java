@@ -14,7 +14,10 @@ import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.UserLoginService;
+import com.team.mighty.notification.SendMail;
+import com.team.mighty.notification.SendMailFactory;
 
 @Service
 public class UserLoginServiceImpl implements UserLoginService {
@@ -29,6 +32,9 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 	@Autowired
 	private UserDeviceMappingDao userDeviceMappingDao;
+	
+	@Autowired
+	private ConsumerInstrumentService consumerInstrumentServiceImpl;
 	
 	
 	public TblUserInfo getUserByUserAndPwd(String username, String password) throws Exception {
@@ -74,6 +80,20 @@ public class UserLoginServiceImpl implements UserLoginService {
 			udm.setTblUserInfo(u);
 			UserDeviceMapping udmSave=userDeviceMappingDao.save(udm);
 			if(udmSave!=null){
+				try{
+					logger.debug("in try block");
+					String subject = "Your brand new USWM account";
+					String message = consumerInstrumentServiceImpl.getUserAccountMessage(u);
+							
+					SendMail mail =SendMailFactory.getMailInstance();
+					mail.send(u.getEmailId().trim(), subject, message);
+					
+				
+				}catch(Exception e){
+					logger.error("Exception in mail ",e);
+					throw new Exception("System Exception while registering user!");
+				}
+				
 				return u;
 			}else{
 				return null;
@@ -111,6 +131,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 	public void updateUserInfo(TblUserInfo user) throws Exception {
 		userInfoDao.save(user);
 		
+	}
+
+
+	public TblUserInfo getUserByUId(String uId) throws Exception {
+		
+		return userInfoDao.getUserByUId(uId);
 	}
 
 }

@@ -24,6 +24,8 @@ public interface UserLoginService {
 
 	void updateUserInfo(TblUserInfo user)throws Exception;
 
+	TblUserInfo getUserByUId(String uId)throws Exception;
+
 	
 
 }

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.config.MqttIntrf;
 import com.team.app.constant.AppConstants;
+import com.team.app.constant.PasswordGenerator;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.Role;
@@ -36,6 +37,8 @@ import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.UserLoginService;
+import com.team.mighty.notification.SendMail;
+import com.team.mighty.notification.SendMailFactory;
 
 @Controller
 @SessionAttributes({"status"})
@@ -813,8 +816,9 @@ public class UserInfoController {
 					
 					Role r=userLoginService.getRoleByRoleId(roleId);
 					Landmark l=aplService.getLandMarkById(landMarkID);
-					
+					String password = new PasswordGenerator().randomString(6);
 					newUser.setUname(uname);
+					newUser.setPassword(password);
 					newUser.setEmailId(email);
 					newUser.setContactnumber(contact);
 					newUser.setRoleBean(r);
@@ -825,9 +829,9 @@ public class UserInfoController {
 					
 					TblUserInfo u=userLoginService.saveUser(newUser,udm);
 						if(u!=null){
-												
+																
 								 redirectAttributes.addFlashAttribute("status",
-										"<div class=\"success\" > User registered Successfully !</div>");
+										"<div class=\"success\" > User registered Successfully.Please check your email to login into USWM !</div>");
 						}else{
 								 redirectAttributes.addFlashAttribute("status",
 											"<div class=\"failure\" > user registration failed !</div>");
@@ -877,6 +881,134 @@ public class UserInfoController {
 		 
 	 }
 	
+	
+	@RequestMapping(value= {"/personalInfo"}, method=RequestMethod.GET)
+    public String personalInfoHanlder(HttpSession session,Map<String,Object> map) throws Exception {
+		
+			logger.debug("/inside personalInfo");
+			TblUserInfo user=(TblUserInfo)session.getAttribute("user");
+			TblUserInfo u=userLoginService.getUserByUId(user.getId());
+			if(u!=null){
+				map.put("user", u);
+			}
+			
+				return "personalInfo";
+		 
+	 }
+	
+	
+	@RequestMapping(value= {"/userUpdateInfo"}, method=RequestMethod.POST)
+    public String userUpdateInfoHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+		logger.debug("/inside userUpdateInfo");
+		String contact=request.getParameter("contact");
+		String email=request.getParameter("email");
+		String uId=request.getParameter("uId");
+		logger.debug("uId as ",uId);
+		logger.debug("contact as ",contact);
+		logger.debug("email as ",email);
+		try{
+			TblUserInfo user=userLoginService.getUserByUId(uId);
+			if(user!=null){				
+				user.setContactnumber(contact);
+				user.setEmailId(email);
+				userLoginService.updateUserInfo(user);
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"success\" >User details updated successfully!</div>");
+			}else{
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" >Incorrect UserId!</div>");	
+			}
+		}catch(Exception e){
+			logger.error("Error in userUpdateInfo",e.getMessage());		
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" >Systemc Exception while updating user infos!</div>");	
+			
+		}
+			
+		return "redirect:/personalInfo";
+		 
+	 }
+	
+	
+	@RequestMapping(value= {"/addDevice"}, method=RequestMethod.GET)
+    public String addDeviceHandler(HttpSession session,Map<String,Object> map) throws Exception {
+		
+			logger.debug("/inside addDevice");
+			 logger.debug(" IN /userMgmt ");
+	  		   
+			   String orgName="";
+			   String id="";
+			 try {
+			   	String url=AppConstants.org_url;
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");    					
+					
+					if(arr!=null && arr.size()>0){
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);
+							
+							if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
+								logger.debug("Name matching ..");
+								logger.debug("Organisation name ..",jsonObj.get("name").toString());
+								logger.debug("Organisation id ..",jsonObj.get("id").toString());
+								orgName=jsonObj.get("name").toString();
+								id=jsonObj.get("id").toString();
+								
+								
+							}
+						 }
+			        }
+				}
+				
+		   }catch(Exception e){
+				e.printStackTrace();
+		   }
+		   
+		   	map.put("id", id.trim());
+			map.put("name",orgName.trim());
+			
+		   
+						
+				return "addDevice";
+		 
+	 }
+	@RequestMapping(value= {"/UserSearch"}, method=RequestMethod.GET)
+	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
+		logger.debug("Inside /UserSearch");		
+		String orgId=request.getParameter("orgId");
+			logger.debug("printing orgId as: ",orgId);
+		map.put("orgId", orgId);
+			 return "UserSearch";
+	}
 
 }
 

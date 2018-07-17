@@ -53,7 +53,7 @@ function browserIdentity()
 		 
 }
 }
- $(document).ready(function() {
+  $(document).ready(function() {
 	$( "#uname" ).click(function() {
 		var passvalid= document.getElementById("sts").value;
 		
@@ -64,19 +64,16 @@ function browserIdentity()
 		}
 			
 		});
-	}); 
+	});  
 
 function validate() {
 	var uname = document.getElementById("uname").value;
 	var password = document.getElementById("pass").value;
 	document.getElementById("namevalid").innerHTML = "";
 	document.getElementById("passvalid").innerHTML = "";
-	var passvalid= document.getElementById("sts").value;
 	
-	if(passvalid!="" && passvalid!="null"){
-		window.location.reload();
-		return false;
-	}else if (uname.length < 1) {
+	
+	 if (uname.length < 1) {
 		document.getElementById("namevalid").innerHTML = "Please enter user name!";
 		document.getElementById("uname").focus(); 
 		return false;
@@ -84,9 +81,9 @@ function validate() {
 		document.getElementById("passvalid").innerHTML = "Please enter password!";
 		document.getElementById("pass").focus(); 
 		return false;
-	}  else{
+	} 
 		return true;
-	}
+	
 	
 }
 </script>
@@ -107,6 +104,7 @@ function validate() {
 							message=request.getParameter("message");
 							if(message!=null&&!message.equals(""))
 											{
+								System.out.println("Hello message");
 							}
 							else{						
 									message = "";

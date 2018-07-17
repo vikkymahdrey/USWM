@@ -3,6 +3,7 @@ package com.team.app.service;
 import java.util.List;
 
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblUserInfo;
 
 /**
  * 
@@ -16,5 +17,6 @@ public interface ConsumerInstrumentService {
 	public List<LoraFrame> getDevEUIByAppId(String appId)throws Exception;
 	public List<LoraFrame> getDeviceIdByDevEUI(String devEUI)throws Exception;
 	public List<LoraFrame> getFrames()throws Exception;
+	public String getUserAccountMessage(TblUserInfo u)throws Exception;
 	
 }
