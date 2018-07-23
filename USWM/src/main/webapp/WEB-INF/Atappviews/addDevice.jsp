@@ -61,7 +61,16 @@
 	   }else if(devid=="0"){
 		   alert("Please select devEUI!");
 		   return false;
-	   }
+	   }else if ($("input[name=uname]").val() == "") {
+			alert("Please select uname");
+			return false;
+	   }else if ($("input[name=email]").val() == "") {
+			alert("Please select email");
+			return false;
+	   }else if ($("input[name=contact]").val() == "") {
+			alert("Please select contact");
+			return false;
+	   }		
    }
    
 function getAppByOrgID()

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class test6 {
@@ -26,8 +27,8 @@ public class test6 {
 		
 		List<String> li=new ArrayList<String>();
 		
+		li.add("Sizy");
 		li.add("Vikky");
-		li.add("Sunil");
 		for(String s: li){
 		System.out.println(s);
 		}

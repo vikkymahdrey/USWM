@@ -31,14 +31,14 @@ import com.team.app.domain.LoraFrame;
 import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
+import com.team.app.dto.APLDto;
 import com.team.app.dto.ApplicationDto;
 import com.team.app.dto.UserDeviceDto;
+import com.team.app.dto.UserDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.UserLoginService;
-import com.team.mighty.notification.SendMail;
-import com.team.mighty.notification.SendMailFactory;
 
 @Controller
 @SessionAttributes({"status"})
@@ -1009,6 +1009,108 @@ public class UserInfoController {
 		map.put("orgId", orgId);
 			 return "UserSearch";
 	}
+	
+	
+	@RequestMapping(value= {"/getUserInfoSearch"}, method=RequestMethod.GET)
+	public @ResponseBody String getUserInfoSearchHanlder(HttpServletRequest request,Map<String,Object> map) throws Exception{
+		logger.debug("Inside /getUserInfoSearch");		
+		String email=request.getParameter("email").trim();
+		String orgId=request.getParameter("orgId").trim();
+		
+			logger.debug("printing email as: ",email);
+			logger.debug("printing orgId as: ",orgId);
+			
+			String response="";
+			try {
+				List<TblUserInfo> dtos=userLoginService.getUserListByEmail(email);
+					
+				List<UserDto> userDto=null;
+						userDto=new ArrayList<UserDto>();		
+							
+							UserDto dto=null;
+							
+					if(dtos!=null && !dtos.isEmpty()){
+						for(TblUserInfo obj: dtos){
+							dto=new UserDto();
+							
+							dto.setuId(obj.getId());
+							dto.setUserInfo(obj.getUname() + " ->"
+									+ obj.getEmailId() + " ->"
+									+ obj.getContactnumber());
+															
+							userDto.add(dto);
+						}
+					}	
+					
+					
+					if(userDto!=null && !userDto.isEmpty()){
+						for(UserDto d : userDto ){
+							response += d.getuId() + ":" + d.getUserInfo()
+							+ "|";
+						}
+					}
+			}catch(Exception e){
+				logger.debug("Error during AJAX calling for GetLandMark",e);	
+			}
+			logger.debug("Response",response);
+			return response;
+	}
+	
+	
+	@RequestMapping(value= {"/addDeviceToUser"}, method=RequestMethod.POST)
+    public String addDeviceToUserHanlder(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+		logger.debug("/inside addDeviceToUser");
+		String orgId=request.getParameter("orgid").trim();
+		String devId=request.getParameter("devid").trim();
+		String uId=request.getParameter("uId").trim();
+		
+		
+		logger.debug("OrgId....",orgId);
+		logger.debug("devId....",devId);
+		logger.debug("uId....",uId);
+		
+		
+		try{
+			TblUserInfo user=userLoginService.getUserByUId(uId);
+			if(user!=null){
+				List<UserDeviceMapping> udmList=user.getUserDeviceMappings();
+				if(udmList!=null && !udmList.isEmpty()){
+					for(UserDeviceMapping udm : udmList){
+						if(udm.getDevEUI().equals(devId)){
+							redirectAttributes.addFlashAttribute("status",
+									"<div class=\"failure\" > Device already registered to user!</div>");
+							return "redirect:/";
+						}
+					}
+				}
+				
+				
+				
+				UserDeviceMapping udm=null;
+				 	udm=new UserDeviceMapping();			 	
+				 	udm.setDevEUI(devId);
+					udm.setOrgId(orgId);
+					udm.setTblUserInfo(user);
+					UserDeviceMapping udmReg=userLoginService.saveNewUDMToUser(udm);
+						
+			  }
+				
+										
+		}catch(Exception e){
+			logger.error("Error in userSubscription",e.getMessage());
+			if(e.getMessage().equals("Device already exist")){
+				redirectAttributes.addFlashAttribute("status",
+						"<div class=\"failure\" >Device already exist!</div>");
+			}else{
+				 redirectAttributes.addFlashAttribute("status",
+							"<div class=\"failure\" > System Exception..Registratoin failed !</div>");
+			}
+			
+		}
+			
+		return "redirect:/userReport";
+		 
+	 }
 
 }
 

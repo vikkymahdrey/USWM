@@ -17,16 +17,16 @@
 <script type="text/javascript">
 	function selectRow(id) {
 		var name;
-		var places;
-		var place;
+		var users;
+		var user;
 		try {
-			name = document.getElementById("landMarkValue-" + id).innerHTML;
-			places = name.split("-&gt;");
-			place = places[0] + "\n" + places[1] + "\n" + places[2];
-			opener.document.getElementById("landMarkID").value = id;
-			opener.document.getElementById("area").value = places[0];
-			opener.document.getElementById("place").value = places[1];
-			opener.document.getElementById("landmark").value = places[2];
+			name = document.getElementById("uId-" + id).innerHTML;
+			users = name.split("-&gt;");
+			user = users[0] + "\n" + users[1] + "\n" + users[2];
+			opener.document.getElementById("uId").value = id;
+			opener.document.getElementById("uname").value = users[0];
+			opener.document.getElementById("email").value = users[1];
+			opener.document.getElementById("contact").value = users[2];
 
 		} catch (e) {
 			alert(e);
@@ -34,12 +34,12 @@
 		self.close();
 	}
 
-	//  get Land Mark via Ajax
-	function getLandMarks() {
+	//  get User Info via Ajax
+	function getUserInfo() {
 
-		var place = document.getElementById("place").value;
+		var email = document.getElementById("email").value;
 		var orgId = document.getElementById("orgId").value;
-		var url="GetLandMark?landMarkText=" + place + "&orgId=" + orgId;
+		var url="getUserInfoSearch?email=" + email + "&orgId=" + orgId;
 			
 		var xmlhttp;
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -50,7 +50,7 @@
 		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
-				setLandMarks(xmlhttp.responseText);
+				setUserMarks(xmlhttp.responseText);
 			}
 		}
 
@@ -60,14 +60,14 @@
 		return false;
 	}
 
-	function setLandMarks(data) {
+	function setUserMarks(data) {
 
 		try {
 			var emp = data.toString().split("|");
 			var innerHtml = "";
 			if (emp.length > 1) {
 				var innerHtml = "<table width=500 border=1 >"
-						+ " <thead> <th> Area -> Place -> Landmark </th> <th> </th> </thead> <tbody> ";
+						+ " <thead> <th> Username -> Email -> Contact </th> <th> </th> </thead> <tbody> ";
 
 				for (i = 0; i < emp.length - 1; i++) {
 					//   alert(emp[i] + " length : " );
@@ -76,7 +76,7 @@
 					// document.getElementsByName("supervisor1").add(new Option(attr[0],attr[1],true,false));
 
 					innerHtml = innerHtml
-							+ " <tr> <td id=landMarkValue-" + attr[0] +" >"
+							+ " <tr> <td id=uId-" + attr[0] +" >"
 							+ attr[1]
 							+ "</td> <td> <a href='#' onClick='selectRow("
 							+ attr[0] + ")' >Select </a> </tr>";
@@ -84,7 +84,7 @@
 				}
 				innerHtml + "</tbody> </table>";
 			} else {
-				innerHtml = "No Matching APL found";
+				innerHtml = "No Matching User Info found";
 
 			}
 			document.getElementById("UserDetails").innerHTML = innerHtml;
@@ -104,7 +104,7 @@
 		String orgId = (String)request.getAttribute("orgId");
 		
 	%>
-	<form name="SearchForm" action="" onsubmit="return getLandMarks();">
+	<form name="SearchForm" action="" onsubmit="return getUserInfo();">
 
 
 		<table border="0">

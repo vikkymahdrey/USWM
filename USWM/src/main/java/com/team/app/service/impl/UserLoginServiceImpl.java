@@ -139,4 +139,18 @@ public class UserLoginServiceImpl implements UserLoginService {
 		return userInfoDao.getUserByUId(uId);
 	}
 
+
+
+	public List<TblUserInfo> getUserListByEmail(String email) throws Exception {
+		return userInfoDao.getUserListByEmail(email);
+	}
+
+
+
+	
+	public UserDeviceMapping saveNewUDMToUser(UserDeviceMapping udm) throws Exception {
+		validateDeviceEUI(udm.getDevEUI(),udm.getOrgId());	
+		return userDeviceMappingDao.save(udm);
+	}
+
 }

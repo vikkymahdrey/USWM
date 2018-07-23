@@ -26,6 +26,12 @@ public interface UserLoginService {
 
 	TblUserInfo getUserByUId(String uId)throws Exception;
 
+	List<TblUserInfo> getUserListByEmail(String email)throws Exception;
+
+	UserDeviceMapping saveUDM(UserDeviceMapping udm)throws Exception;
+
+	UserDeviceMapping saveNewUDMToUser(UserDeviceMapping udm)throws Exception;
+
 	
 
 }
