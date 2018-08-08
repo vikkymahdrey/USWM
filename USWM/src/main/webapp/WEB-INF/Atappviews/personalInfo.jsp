@@ -143,15 +143,7 @@
 										</td>
 									</tr>
 									
-									
-									
-									<tr>	
-									   <td align="right"><b>Serial Number:</b></td>
-									   
-										 <td>
-										 	<input type="text" name="devSerial" id="devSerial" value="<%=user.getUserDeviceMappings().get(0).getDevEUI()%>" readonly>
-										</td>
-									</tr>
+																									
 									
 									<tr>	
 									   <td align="right"><b>Contact#:</b></td>

@@ -1,6 +1,7 @@
 package com.team.app.dao;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -33,9 +34,14 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 
 	@Query("Select f from LoraFrame f where f.devEUI=:devEUI")
 	List<LoraFrame> getDeviceIdByDevEUI(@Param("devEUI") String devEUI);
-	
-	
 
+	/*@Query(value="Select f.* from lora_frames  f where f.devEUI=?1 and f.created_at between ?2 and ?3",nativeQuery=true)
+	List<Object[]> getFramesByFrmToDateAndDevEUI(@Param("devEUI") String devEUI,@Param("fromDate") String fromDate,@Param("toDate") String toDate);
+	*/
+	
+	@Query("Select f from LoraFrame f where f.devEUI=:devEUI and f.createdAt between :fromDate and :toDate")
+	List<LoraFrame> getFramesByFrmToDateAndDevEUI(@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
+	
 
 
 }

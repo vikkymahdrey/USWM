@@ -1,6 +1,8 @@
 package com.team.app.domain;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.*;
 
 
@@ -21,6 +23,15 @@ public class UserDeviceMapping implements Serializable {
 	private String devEUI;
 
 	private String orgId;
+	
+	private String devNode;
+	
+	
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createddt;
+
+	
 
 	//bi-directional many-to-one association to TblUserInfo
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -41,9 +52,25 @@ public class UserDeviceMapping implements Serializable {
 	public String getDevEUI() {
 		return this.devEUI;
 	}
+	
+	public Date getCreateddt() {
+		return createddt;
+	}
+
+	public void setCreateddt(Date createddt) {
+		this.createddt = createddt;
+	}
 
 	public void setDevEUI(String devEUI) {
 		this.devEUI = devEUI;
+	}
+	
+	public String getDevNode() {
+		return devNode;
+	}
+
+	public void setDevNode(String devNode) {
+		this.devNode = devNode;
 	}
 
 	public String getOrgId() {

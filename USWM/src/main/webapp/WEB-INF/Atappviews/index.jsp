@@ -54,6 +54,7 @@ function browserIdentity()
 }
 }
   $(document).ready(function() {
+	  alert("hello");
 	$( "#uname" ).click(function() {
 		var passvalid= document.getElementById("sts").value;
 		
@@ -138,7 +139,6 @@ function validate() {
 			      <div class="form-group has-feedback">
 			        <input type="password" name="pass" id="pass" class="form-control" placeholder="Password">
 			        <span class="fa fa-lock form-control-feedback"></span>
-			        <span id="passvalid" style="color: red;"></span>
 			        
 			        <span id="passvalid" style="color: red;" ><%=message %></span>
 					<input type="hidden" name="sts" id="sts" value="<%=(String)request.getAttribute("status")%>">

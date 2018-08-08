@@ -1,5 +1,6 @@
 package com.team.app.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.team.app.domain.LoraFrame;
@@ -18,5 +19,6 @@ public interface ConsumerInstrumentService {
 	public List<LoraFrame> getDeviceIdByDevEUI(String devEUI)throws Exception;
 	public List<LoraFrame> getFrames()throws Exception;
 	public String getUserAccountMessage(TblUserInfo u)throws Exception;
+	public List<LoraFrame> getFramesByFrmToDateAndDevEUI(String devEUI, Date d1, Date d2);
 	
 }

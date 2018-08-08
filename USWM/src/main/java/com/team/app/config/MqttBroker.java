@@ -1,5 +1,8 @@
 package com.team.app.config;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.transaction.Transactional;
 
@@ -16,6 +19,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team.app.constant.AppConstants;
 import com.team.app.dao.FrameDao;
 import com.team.app.domain.LoraFrame;
 import com.team.app.logger.AtLogger;
@@ -99,8 +103,12 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  	  		logger.debug("Data As:",json.get("data").toString());
 				  	  		
 				  	  	frame.setfPort(json.get("fPort").toString().trim());
-				  	  	frame.setCreatedAt(new Date(System.currentTimeMillis()));
-				  	  	frame.setUpdatedAt(new Date(System.currentTimeMillis()));
+				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be
+				  	  	formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
+				  	  	frame.setCreatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
+				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
 				  	  	
 				  	  	
 				  	  	

@@ -31,13 +31,13 @@ import com.team.app.domain.LoraFrame;
 import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
-import com.team.app.dto.APLDto;
 import com.team.app.dto.ApplicationDto;
 import com.team.app.dto.UserDeviceDto;
 import com.team.app.dto.UserDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
 @Controller
@@ -57,11 +57,13 @@ public class UserInfoController {
 	private APLService aplService;
 	
 	@Autowired
-	private ConsumerInstrumentService  consumerInstrumentServiceImpl;
+	private ConsumerInstrumentService  consumerInstrumentServiceImpl;	
+	
+	@Autowired
+	private OrganisationService organisationService;
 	
 	@RequestMapping(value= {"/userInfoHistory"}, method=RequestMethod.GET)
-    public String userInfoHistoryHandler(Map<String,Object> map) {
-		
+    public String userInfoHistoryHandler(Map<String,Object> map) {		
 			
 			try{
 
@@ -195,7 +197,7 @@ public class UserInfoController {
 	}
 	
 	
-	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
+	/*@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
     public String autoSyncHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		   logger.debug("/inside sync");
 		  		   
@@ -262,7 +264,18 @@ public class UserInfoController {
 		map.put("name",orgName.trim());
 		
 	   return "AutoSync";
+	}*/
+	
+	
+	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
+    public String autoSyncHandler(Map<String,Object> map) throws Exception {
+		   logger.debug("/inside sync");
+		   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+		   return "AutoSync";
 	}
+	
+	
 	
 	
 	/* Ajax calling for /getApplications */	
@@ -532,6 +545,93 @@ public class UserInfoController {
 
 	}
 	
+	
+	@RequestMapping(value= {"/getDevEUIByAppId"}, method=RequestMethod.GET)
+	public @ResponseBody String getDevEUIByAppIdHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
+		logger.debug("/*Ajax getting getDevEUIByAppId */");
+		
+		String appId = request.getParameter("appId").trim();
+		logger.debug("Application Id as ",appId);
+		String returnVal="";
+		
+		
+		try{
+			
+			
+			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+					
+				
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");
+					
+					List<ApplicationDto> dtos=null;	
+					
+					if(arr!=null && arr.size()>0){
+						logger.debug("Inside Array not null");
+							dtos=new ArrayList<ApplicationDto>();
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);
+							 ApplicationDto dto=null;
+							 		dto=new ApplicationDto();						
+							
+								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
+													
+								dto.setDevEUI(jsonObj.get("devEUI").toString());
+								dto.setDevName(jsonObj.get("name").toString());
+								dtos.add(dto);							
+							
+						  }
+			         }
+					
+					if(dtos!=null && !dtos.isEmpty()){
+						for(ApplicationDto a : dtos){
+							 returnVal+="<option value="+a.getDevEUI()+":"+a.getDevName()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
+								
+						}
+					}
+				}
+			
+				
+			
+		}catch(Exception e){
+			logger.error("Error in Ajax/getDevEUIByAppId",e);
+			e.printStackTrace();
+		}
+			
+			
+		return returnVal;
+
+	}
+	
 	@RequestMapping(value= {"/getDevEUIDel"}, method=RequestMethod.GET)
 	public @ResponseBody String getDevEUIDelHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUIDel */");
@@ -773,12 +873,15 @@ public class UserInfoController {
 		logger.debug("/inside userSubscription");
 		String orgId=request.getParameter("orgid").trim();
 		String appId=request.getParameter("appid").trim();
-		String devId=request.getParameter("devid").trim();
+		String devNode=request.getParameter("devid").trim();
 		String uname=request.getParameter("uname").trim();
 		String email=request.getParameter("email").trim();
 		String contact=request.getParameter("contact").trim();
 		String roleId=request.getParameter("usertype").trim();
 		String landMarkID=request.getParameter("landMarkID").trim();
+		String[] devArr=devNode.split(":");
+		String devId=devArr[0];
+		String devNodeName=devArr[1].trim();
 		
 		
 		
@@ -794,9 +897,11 @@ public class UserInfoController {
 		try{
 			TblUserInfo user=userLoginService.getUserByEmailId(email);
 			UserDeviceMapping udm=null;
-			 	udm=new UserDeviceMapping();			 	
+			 	udm=new UserDeviceMapping();
+			 	udm.setDevNode(devNodeName);
 			 	udm.setDevEUI(devId);
 				udm.setOrgId(orgId);
+				udm.setCreateddt(new Date(System.currentTimeMillis()));
 			
 			if(user!=null){
 				/*TblUserInfo usr=userLoginService.saveUser(user,udm);
@@ -911,6 +1016,7 @@ public class UserInfoController {
 			if(user!=null){				
 				user.setContactnumber(contact);
 				user.setEmailId(email);
+				user.setUpdateddt(new Date(System.currentTimeMillis()));
 				userLoginService.updateUserInfo(user);
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"success\" >User details updated successfully!</div>");
@@ -1061,8 +1167,11 @@ public class UserInfoController {
     public String addDeviceToUserHanlder(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("/inside addDeviceToUser");
 		String orgId=request.getParameter("orgid").trim();
-		String devId=request.getParameter("devid").trim();
+		String devNode=request.getParameter("devid").trim();
 		String uId=request.getParameter("uId").trim();
+		String[] devArr=devNode.split(":");
+		String devId=devArr[0];
+		String devNodeName=devArr[1].trim();
 		
 		
 		logger.debug("OrgId....",orgId);
@@ -1079,7 +1188,7 @@ public class UserInfoController {
 						if(udm.getDevEUI().equals(devId)){
 							redirectAttributes.addFlashAttribute("status",
 									"<div class=\"failure\" > Device already registered to user!</div>");
-							return "redirect:/";
+							return "redirect:/addDevice";
 						}
 					}
 				}
@@ -1087,11 +1196,20 @@ public class UserInfoController {
 				
 				
 				UserDeviceMapping udm=null;
-				 	udm=new UserDeviceMapping();			 	
+				 	udm=new UserDeviceMapping();
+				 	udm.setDevNode(devNodeName);
 				 	udm.setDevEUI(devId);
 					udm.setOrgId(orgId);
 					udm.setTblUserInfo(user);
+					udm.setCreateddt(new Date(System.currentTimeMillis()));
 					UserDeviceMapping udmReg=userLoginService.saveNewUDMToUser(udm);
+					if(udmReg!=null){
+						redirectAttributes.addFlashAttribute("status",
+								"<div class=\"success\" >new device mapped to the user successfully!</div>");
+					}else{
+						redirectAttributes.addFlashAttribute("status",
+								"<div class=\"failure\" > System Exception while persisting new device...result failed!</div>");
+					}
 						
 			  }
 				
@@ -1103,14 +1221,23 @@ public class UserInfoController {
 						"<div class=\"failure\" >Device already exist!</div>");
 			}else{
 				 redirectAttributes.addFlashAttribute("status",
-							"<div class=\"failure\" > System Exception..Registratoin failed !</div>");
+							"<div class=\"failure\" > System Exception..result failed !</div>");
 			}
 			
 		}
 			
-		return "redirect:/userReport";
+		return "redirect:/addDevice";
 		 
 	 }
+	
+	
+	@RequestMapping(value= {"/userDeviceMapped"}, method=RequestMethod.GET)
+	public String userDeviceMappedHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+		logger.debug("Inside /userDeviceMapped");		
+		TblUserInfo user=(TblUserInfo) session.getAttribute("user");		
+		map.put("userInfo", user);
+			 return "UserDeviceMapping";
+	}
 
 }
 

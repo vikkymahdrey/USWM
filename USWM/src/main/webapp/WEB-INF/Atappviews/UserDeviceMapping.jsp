@@ -23,7 +23,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>Frame</title>
+<title>User Device Mapping</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom_siemens.css" rel="stylesheet">
@@ -34,6 +34,7 @@
 <link rel="stylesheet" href="css/AdminLTE.min.css">
 <link rel="stylesheet" href="css/skins/_all-skins.min.css">
 <link rel="stylesheet" href="css/slider.css">
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="js/jquery-latest.js"></script>
 <script  src="https://code.jquery.com/jquery-2.2.0.js"></script>
@@ -49,11 +50,10 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 					<% 
-						String fname1=("CMSFrameList :").concat(new Date().toString()).concat(".csv");
-						String fname2=("CMSFrameList :").concat(new Date().toString()).concat(".xls");
-						String fname3=("CMSFrameList :").concat(new Date().toString()).concat(".xml");
-						
-						List<LoraFrame> frames=(List<LoraFrame>)request.getAttribute("frames");
+						String fname1=("UserDevieMapping :").concat(new Date().toString()).concat(".csv");
+						String fname2=("UserDevieMapping :").concat(new Date().toString()).concat(".xls");
+						String fname3=("UserDevieMapping :").concat(new Date().toString()).concat(".xml");
+												
 						%>
 	
 <div class="wrapper">  
@@ -74,34 +74,71 @@
 						</div><br/>
 					
 					
+						
+						<div class="box-header with-border">
+  					 		 <h5 class="text-blue text-left "><span class="fa fa-user"></span><b>User Device Mapping</b></h5>
+          				</div><!-- /.box-header -->
+						
+						
+						
 						<div class="row">
-								<div class="col-sm-8 page-heading mar-top-20">
-								<i class="fa fa-files-o"></i>
-								<h5 class="text-blue text-semi-bold"><b>Frames</b></h5>
-								</div>
-													
-						</div><br/>
+									<div class="col-sm-12 text-center">
+									<%String message="";
 						
-						
+										try{
+											message=request.getParameter("message");
+											if(message!=null&&!message.equals("")){
+												
+											}else{						
+													message = "";
+													message = request.getAttribute("status").toString();
+													session.setAttribute("status", "");
+											}
+				
+										}catch(Exception e)
+										{
+											;
+										}	%>
+				 						<span style="color: red;" ><%=message %></span>	
+				 									
+		   						</div>
+		   				  </div>	
+		   				  	
 						
 						<div class="row" style="overflow-y: auto;">
 							<div class="col-sm-12 ">	
-							<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
+							
+							<display:table  class="table table-hover  text-center"  name="<%=userSession.getUserDeviceMappings()%>" id="row"
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
+							
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-							<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
-							<display:column  property="applicationName" title="ApplicationName" sortable="true"  />
+							<display:column  property="devNode" title="DevNode" sortable="true"  />
 							<display:column  property="devEUI" title="DevEUI" sortable="true"  />
-							<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
-							<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
-							<display:column  property="gatewayName" title="GatewayName" sortable="true"  />
-							<display:column  property="waterltr" title="Water_Val_In_Ltr"  sortable="true"  />
-							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
-													     		   
+							<display:column  property="createddt" title="Device_CreatedDt" sortable="true"  />
+							<display:column  title="UserName" sortable="true">
+								<%=userSession.getUname()%>							
+							</display:column>
+							<display:column  title="EmailAddress" sortable="true">
+								<%=userSession.getEmailId()%>							
+							</display:column>
+							<display:column   title="UserType" sortable="true">
+								<%=userSession.getRoleBean().getType()%>						
+							</display:column>
+							<display:column  title="ContactNumber" sortable="true">
+							<%=userSession.getContactnumber()%>						
+							</display:column>
+							<display:column title="User_createdDt"  sortable="true">
+							<%=userSession.getCreateddt()%>						
+							</display:column>			
+							
+										     		   
 						 	<display:setProperty name="export.csv.filename" value="<%=fname1%>" />
 							<display:setProperty name="export.excel.filename" value="<%=fname2%>" />
 							<display:setProperty name="export.xml.filename" value="<%=fname3%>" /> 
+							
 						</display:table> 
+						
+						
 							</div>
 						</div>
 						<a  id="goTop"><i class="fa fa-eject"></i></a>	

@@ -44,5 +44,7 @@ public class AppConstants {
 	public static final String user_url=domain+"/api/users?limit=100";
 	public static final String status="Y";
 	
+	public static final String timeZone="Asia/Kolkata";
+	
 	
 }

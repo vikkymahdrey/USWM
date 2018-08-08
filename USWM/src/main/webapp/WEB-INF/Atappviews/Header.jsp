@@ -71,6 +71,7 @@
           
           <ul class="treeview-menu">
             <li><a href="aplConfig"><i class="fa fa-circle-o"></i><b>APL config</b></a></li>
+            <li><a href="#"><i class="fa fa-paypal"></i><b>Payment-CutOff</b></a></li>
            
           </ul>
            
@@ -116,38 +117,38 @@
           
         </li>
         
-        <!-- <li class="treeview"> 
+         <li class="treeview"> 
           <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span><b>Charts</b></span>
+            <i class="fa fa-cc-visa"></i>
+            <span><b>Pay Bills</b></span>
             <span class="pull-right-container">
-              <span class="label label-primary pull-right">3</span>
+              <span class="label label-primary pull-right">1</span>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li>
-            <li><a href="chartsMap"><i class="fa fa-circle-o"></i> <b>Chart-Map</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i> <b>Bar-Pi</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i> <b>Flot</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i> <b>Inline</b></a></li>
+            <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li>
+             <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney-JSP</b></a></li>
+                       
           </ul>
           
              
-        </li> -->
+        </li>
         
          <li class="treeview">
           <a href="#">
             <i class="fa fa-arrow-right"></i>
             <span><b>Reports</b></span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
+              <span class="label label-primary pull-right">4</span>
             </span>
           </a>
           
           
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
+            <li><a href="waterConsumptionCal"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
              <li><a href="userReport"><i class="fa fa-circle-o"></i><b>User</b></a></li>
+             <li><a href="#"><i class="fa fa-circle-o"></i><b>User-Device-Mapped</b></a></li>
+             <li><a href="#"><i class="fa fa-circle-o"></i><b>Payment-Info</b></a></li>
            
           </ul>
           
@@ -244,7 +245,8 @@
           
           
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
+            <li><a href="endUserWaterConsumption"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
+            <li><a href="userDeviceMapped"><i class="fa fa-circle-o"></i><b>User-Device-Mapped</b></a></li>
                        
           </ul>
           
@@ -263,6 +265,22 @@
             <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
             <li><a href="userFrameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
            
+          </ul>
+          
+             
+        </li>
+        
+        <li class="treeview"> 
+          <a href="#">
+            <i class="fa fa-cc-visa"></i>
+            <span><b>Payment</b></span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">1</span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
+                       
           </ul>
           
              

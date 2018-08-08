@@ -176,7 +176,9 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Application--</Option>'+returnText+'</select>';                                             
+                    var devid=document.getElementById("devid");
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Application--</Option>'+returnText+'</select>';  
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option></select>';
                 }
             }
             
@@ -196,8 +198,9 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<% 
-  			String orgName=request.getAttribute("name").toString();
-  			String orgId=request.getAttribute("id").toString();
+  			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+  			/* String orgName=request.getAttribute("name").toString();
+  			String orgId=request.getAttribute("id").toString(); */
   			
   			%>
   			
@@ -237,7 +240,11 @@ function getDevEUIByAppID()
 										<td>
 										 <select name="orgname" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">--Choose Organisation--</option>	
-										    <option value="<%=orgId%>"><%=orgName%></option>
+										    <%if(organisations!=null && !organisations.isEmpty()){
+										    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+										    	    <option value="<%=map.getKey()%>"><%=map.getValue()%></option>
+										    	<%}
+										    }%>	    
 										 </select> 
 										</td>
 									</tr>

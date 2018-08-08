@@ -133,7 +133,7 @@ public static String changeDateFromatToSqlFormat(Date anyDate) {
 	try {
 		String naturalFormat = "";
 		DateFormat formatter;
-		formatter = new SimpleDateFormat("yyyy-MM-dd");
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		naturalFormat = formatter.format(anyDate);
 
 		// System.out.println("Date" + naturalFormat);

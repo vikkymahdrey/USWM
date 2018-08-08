@@ -116,6 +116,7 @@ function getAppByOrgID()
 function getDevEUIByAppID()
 {     
 	var appid=document.getElementById("appid").value;	
+	//devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
@@ -124,6 +125,7 @@ function getDevEUIByAppID()
     	}
     else
     	{
+    	
     var url="getDevEUIDel?appId="+appid;                                    
     xmlHttp=GetXmlHttpObj()
     if (xmlHttp==null)
@@ -187,12 +189,13 @@ function getDevEUIByAppID()
                 if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
                 { 
                     var returnText=xmlHttp.responseText;
-                    if(returnText!=""){
-                	  
                     var devid=document.getElementById("devid");
+                    if(returnText!=""){ 	  
+                    
                     devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option>'+returnText+'</select>';      
                    }else{
                 	   alert("No DevEUI Found!");
+                	    devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>'
                    }	
                 }
             }
@@ -236,7 +239,7 @@ function getDevEUIByAppID()
    						  <div class="row" >
     				    	<div class="col-sm-12">	
     				    	
-    				    	<form name="form1" action="deleteDevEUI" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
 															 	

@@ -1,5 +1,6 @@
 package com.team.app.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,14 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		
 	}
 
+	
+	
+	public List<LoraFrame> getFramesByFrmToDateAndDevEUI(String devEUI, Date fromDate, Date toDate) {
+		return frameDao.getFramesByFrmToDateAndDevEUI(devEUI,fromDate,toDate);
+	}
+
+	
+	
 
 
 
