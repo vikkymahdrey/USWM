@@ -64,11 +64,44 @@ public class DateUtil {
 			}
 		}	
 		
+		public static String changeDateFromatIST(Date sqlFormat) {
+			// System.out.println("Got Here");
+			try {
+				String naturalFormat = "";
+				DateFormat formatter;
+				formatter = new SimpleDateFormat("yyyy-MM-dd");
+				naturalFormat = formatter.format(sqlFormat);
+
+				// System.out.println("Date" + naturalFormat);
+				return naturalFormat;
+			} catch (Exception e) {
+				// System.out.println("Error" + e);
+				return sqlFormat.toString();
+			}
+		}	
+		
 		public static Date convertLongToDate(long longTime, String format) {
 			Date date = null;
 			try {
 				DateFormat formatter = new SimpleDateFormat(format);
 				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(longTime);
+				System.out.println(formatter.format(calendar.getTime()));
+				date = formatter.parse(formatter.format(calendar.getTime()));
+			} catch (Exception e) {
+
+				logger.error("error in Timestamp", e);
+			}
+			return date;
+		}
+		
+		public static Date convertLongToDateIST(long longTime, String format) {
+			Date date = null;
+			try {
+				DateFormat formatter = new SimpleDateFormat(format);
+				//formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+				formatter.setTimeZone(TimeZone.getTimeZone("IST"));
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(longTime);
 				System.out.println(formatter.format(calendar.getTime()));

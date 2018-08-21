@@ -3,7 +3,17 @@ package com.team.app.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -20,18 +30,55 @@ public class UserDeviceMapping implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
 
-	private String devEUI;
-
-	private String orgId;
-	
-	private String devNode;
-	
-	
+	private String appId;
+	private String appName;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createddt;
-
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateddt;
+
+	private String devEUI;
+	
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getUpdateddt() {
+		return updateddt;
+	}
+
+	public void setUpdateddt(Date updateddt) {
+		this.updateddt = updateddt;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	private String devNode;
+
+	private String orgId;
+	private String orgName;
 
 	//bi-directional many-to-one association to TblUserInfo
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -49,24 +96,32 @@ public class UserDeviceMapping implements Serializable {
 		this.id = id;
 	}
 
-	public String getDevEUI() {
-		return this.devEUI;
+	public String getAppId() {
+		return this.appId;
 	}
-	
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
 	public Date getCreateddt() {
-		return createddt;
+		return this.createddt;
 	}
 
 	public void setCreateddt(Date createddt) {
 		this.createddt = createddt;
 	}
 
+	public String getDevEUI() {
+		return this.devEUI;
+	}
+
 	public void setDevEUI(String devEUI) {
 		this.devEUI = devEUI;
 	}
-	
+
 	public String getDevNode() {
-		return devNode;
+		return this.devNode;
 	}
 
 	public void setDevNode(String devNode) {

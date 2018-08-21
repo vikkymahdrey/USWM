@@ -77,9 +77,10 @@
 					
 						<div class="row">
 								<div class="col-sm-8 page-heading mar-top-20">
-								<i class="fa fa-files-o"></i>
-								<h5 class="text-blue text-semi-bold"><b>User Subscription Report</b></h5>
-								</div>
+								<h5 class="text-blue text-left "><span class="fa fa-files-o"></span><b>User Subscription Report</b></h5>
+						</div>
+						
+						
 													
 						</div>
 						<div class="row">
@@ -109,7 +110,7 @@
 						<div class="row" style="overflow-y: auto;">
 							<div class="col-sm-12 ">	
 							
-							<display:table  class="table table-hover  text-center"  name="<%=subscribedUsers%>" id="row"
+							<display:table  class="table table-hover text-center"  name="<%=subscribedUsers%>" id="row"
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 							
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />

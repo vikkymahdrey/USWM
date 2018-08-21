@@ -66,7 +66,7 @@ public class RequestProcessingInterceptor extends HandlerInterceptorAdapter {
 				}
 		
 			
-				if(page.equals("/") || page.equals("forgotPassword") || page.equals("resetPassword"))
+				if(page.equals("/") || page.equals("forgotPassword") || page.equals("resetPassword") || page.contains("rest/consumer"))
 				{	
 					return true;
 				}else if(page.equals("onSubmitlogin")) { 

@@ -26,9 +26,11 @@
 		<class>com.team.app.domain.Place</class>
 		<class>com.team.app.domain.Role</class>
 		<class>com.team.app.domain.TblDeviceInfo</class>
+		<class>com.team.app.domain.TblPaymentInfo</class>
 		<class>com.team.app.domain.TblUserInfo</class>
 		<class>com.team.app.domain.User</class>
 		<class>com.team.app.domain.UserDeviceMapping</class>
+		<class>com.team.app.domain.TblUnizenKeyConfig</class>
 		
 
 		<properties>

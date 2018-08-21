@@ -208,9 +208,7 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<% 
-  			String orgName=request.getAttribute("name").toString();
-  			String orgId=request.getAttribute("id").toString();
-  			
+  				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   			%>
   			
 							 
@@ -245,12 +243,27 @@ function getDevEUIByAppID()
 															 	
 								  	<tr>
 								  		<td align="right"><b>Organization</b></td>
-								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
-										
+								  											
 										<td>
 										 <select name="orgname" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">--Choose Organisation--</option>	
-										    <option value="<%=orgId%>"><%=orgName%></option>
+										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+											    if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+											    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    	<%}
+											    }
+										    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+										    	if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+											    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+											    		   if(udm.getOrgId().equals(map.getKey())){%>
+											    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    		   <%}
+											    		} 
+											    	}
+											    }	    
+										    }%>
 										 </select> 
 										</td>
 									</tr>

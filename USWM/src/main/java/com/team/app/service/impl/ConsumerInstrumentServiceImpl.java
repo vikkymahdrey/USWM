@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team.app.dao.FrameDao;
+import com.team.app.dao.UserInfoDao;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblUserInfo;
+import com.team.app.exception.AtAppException;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
 
@@ -24,7 +26,10 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	
 		
 	@Autowired
-	private FrameDao frameDao;		
+	private FrameDao frameDao;	
+	
+	@Autowired
+	private UserInfoDao userInfoDao;
 		
 	public void setUpdateNodeName(String nodeName,String devEUI) throws Exception {
 		frameDao.setUpdateNodeName(nodeName,devEUI);
@@ -71,6 +76,13 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 		return frameDao.getFramesByFrmToDateAndDevEUI(devEUI,fromDate,toDate);
 	}
 
+	
+	public Object[] getLoraFrameByDevEUIandAppIdandDates(Date sDt, Date eDt, String appId, String devEUI,String intrvl)
+			throws AtAppException {
+		return frameDao.getLoraFrameByDevEUIandAppIdandDates(sDt,eDt,appId,devEUI,intrvl);
+	}
+
+	
 	
 	
 

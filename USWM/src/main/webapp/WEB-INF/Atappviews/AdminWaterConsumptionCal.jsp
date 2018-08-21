@@ -252,8 +252,9 @@ function getDevEUIByAppID()
 			String fname2=("WaterConsumptionUnits :").concat(new Date().toString()).concat(".xls");
 			String fname3=("WaterConsumptionUnits :").concat(new Date().toString()).concat(".xml");
 			
-  			String orgName=request.getAttribute("name").toString();
-  			String orgId=request.getAttribute("id").toString();
+			 
+				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+			
   			
   			%>	
 <div class="wrapper">  
@@ -292,14 +293,30 @@ function getDevEUIByAppID()
 								  		<td>
 								  			<label>Organization</label>
 								  			 <div>
-										          <select name="orgid" class="form-control" id="orgid" onchange="getAppByOrgID()">
-													    <option value="0">Select Organisation</option>	
-													    <option value="<%=orgId%>"><%=orgName%></option>
-												  </select> 
-												  <input type="hidden" id="orgName" name="orgName" value=<%=orgName%>>									            
+										           <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
+										    			<option value="0">Select Organisation</option>	
+													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+														    if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+														    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+														    	<%}
+														    }
+													    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+													    	if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+														    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+														    		   if(udm.getOrgId().equals(map.getKey())){%>
+														    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>" ><%=map.getValue()%></option>
+														    		   <%}
+														    		} 
+														    	}
+														    }	    
+													    }%>
+													 </select> 
+										 			  <%-- <input type="hidden" id="orgName" name="orgName" value=<%=orgName%>> --%>									            
 									        </div>										
 										</td>
-										
+																														
 									    <td> 
 									   		<label>Application</label>
 									   		<div>

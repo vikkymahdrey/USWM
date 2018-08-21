@@ -1,4 +1,5 @@
 <%@page import="java.util.*"%>
+<%@page import="com.team.app.constant.*"%>
 <%@page import="com.team.app.domain.*"%>
 <header class="main-header" >
    
@@ -33,7 +34,7 @@
    <% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user");
 			            if (userSession == null){
 			                response.sendRedirect("/");
-			            }else if(userSession.getRoleBean().getType().equals("admin")){
+			            }else if(userSession.getRoleBean().getType().equals(AppConstants.admin) || userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){
 			            
 			            
   %>
@@ -89,6 +90,7 @@
           
           <ul class="treeview-menu">
             <li><a href="userMgmt"><i class="fa fa-circle-o"></i><b>User Subscription</b></a></li>
+            <li><a href="orgUserMgmt"><i class="fa fa-circle-o"></i><b>Organisation-User</b></a></li>
            
           </ul>
           

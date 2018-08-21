@@ -52,7 +52,7 @@
  	  	var usertype=document.getElementById("usertype").value;
  		
 	   	   
-	   if(orgid=="0"){
+ 	   if(orgid=="0"){
 		   alert("Please select organisation!");
 		   return false;
 	   }else if(appid=="0"){
@@ -61,6 +61,9 @@
 	   }else if(devid=="0"){
 		   alert("Please select devEUI!");
 		   return false;
+	   }else if(usertype == "0") {
+			alert("Please select usertype");
+			return false;
 	   }else if ($("input[name=uname]").val() == "") {
 			alert("Please specify LoginId");
 			return false;
@@ -70,9 +73,6 @@
 	   }else if (isNaN($("input[name=contact]").val())
 				|| ($("input[name=contact]").val()).length != 10) {
 			alert("Please specify 10 digit contact number");
-			return false;
-	   }else if(usertype == "0") {
-			alert("Please select usertype");
 			return false;
 	   }else if ($("input[name=area]").val() == "") {
 			alert("Please select area");
@@ -84,6 +84,57 @@
 			alert("Please select landmark");
 			return false;
 	   }				
+   }
+   
+   
+   function checkUsername(){
+		var uname=document.getElementById("uname").value;
+	   if(uname!=''){
+	   $.ajax({
+           url: 'validateUserName',
+           type: 'POST',
+           //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
+           data: jQuery.param({uname: uname}) ,
+           success: function (data) {
+        	   if(data!=''){
+        	  		alert(data); 
+        	  		document.getElementById("uname").value = "";
+        	  		document.getElementById("uname").focus();
+        	  		
+        	   }
+               },
+		 		error: function(e){
+	     			        alert('Error: ' + e);
+	     		 }
+
+              
+           });
+	   }  
+	  //return false;
+   }
+   
+   function checkEmail(){
+	   var email=document.getElementById("email").value;
+	   if(email!=''){
+		   $.ajax({
+	           url: 'validateEmail',
+	           type: 'POST',
+	           data: jQuery.param({email: email}) ,
+	           success: function (data) {
+	        	   if(data!=''){
+	        	  		alert(data);
+	        	  		document.getElementById("email").value = ""; 
+	        	  		document.getElementById("email").focus();
+	        	  		
+	        	   }
+	               },
+			 		error: function(e){
+		     			        alert('Error: ' + e);
+		     		 }
+
+	              
+	           });
+		   }  
    }
    
 function getAppByOrgID()
@@ -120,7 +171,7 @@ function getAppByOrgID()
 function getDevEUIByAppID()
 {     
 	var appid=document.getElementById("appid").value;
-	
+		
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
@@ -228,9 +279,8 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<% 
-  			String orgName=request.getAttribute("name").toString();
-  			String orgId=request.getAttribute("id").toString();
-  			
+  				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+  		  		List<Role> roles=(List<Role>)request.getAttribute("roles");
   			%>
   			
 							 
@@ -284,16 +334,34 @@ function getDevEUIByAppID()
     				    	<form name="form1" action="userSubscription" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
+								  	
+								  
 								  	<tr>
 								  		<td align="right"><b>Organization:</b></td>
-								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
-										
+								  			
 										<td>
 										 <select name="orgid" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">--Choose Organisation--</option>	
-										    <option value="<%=orgId%>"><%=orgName%></option>
+										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+											    if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+											    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    	<%}
+											    }
+										    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+										    	if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+											    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+											    		   if(udm.getOrgId().equals(map.getKey())){%>
+											    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    		   <%}
+											    		} 
+											    	}
+											    }	    
+										    }%>
 										 </select> 
 										</td>
+										
 									</tr>
 									<tr>	
 									   <td align="right"><b>Application:</b></td>
@@ -315,11 +383,28 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									
+									<tr>
+								  		<td align="right"><b>UserType:</b></td>
+								  													
+										<td>
+										 <select name="usertype" id="usertype">
+										    <option value="0">--Choose UserType--</option>	
+										    <%if(roles!=null && !roles.isEmpty()){
+										    	for(Role r: roles){
+											    	if(r.getType().equalsIgnoreCase(AppConstants.user)){%>
+											    		<option value="<%=r.getId()%>" ><%=r.getName()%></option> 
+											   		<%}
+										    	}	
+										     }%> 
+										 </select> 
+										</td>
+									</tr>
+									
 									<tr>	
 									   <td align="right"><b>LoginID:</b></td>
 									   
 										 <td>
-										 	<input type="text" name="uname" id="uname" >
+										 	<input type="text" name="uname" id="uname" onchange="checkUsername()">
 										</td>
 									</tr>
 									
@@ -327,7 +412,7 @@ function getDevEUIByAppID()
 									   <td align="right"><b>EmailId:</b></td>
 									   
 										 <td>
-										 	<input type="text" name="email" id="email" >
+										 	<input type="text" name="email" id="email" onchange="checkEmail()" >
 										</td>
 									</tr>
 									
@@ -340,17 +425,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									
-									<tr>
-								  		<td align="right"><b>UserType:</b></td>
-								  													
-										<td>
-										 <select name="usertype" id="usertype">
-										    <option value="0">--Choose UserType--</option>	
-										    <option value="1">Admin</option>
-										    <option value="5">User</option>
-										 </select> 
-										</td>
-									</tr>
+									
 									<tr>
 										<td align="right">
 											<input style="margin-left: 130%; background-color:#3c8dbc;"

@@ -1,22 +1,6 @@
 
-td {
-	padding: 3.5px 3.5px;
-}
-
-th {
-	color: #000;
-	background: #ccc none repeat-x scroll left top;
-	border-bottom: 2px solid #FF4000;
-	padding: 5px 5px
-}
-
-td {
-	border-bottom: 1px solid #ddd;
-}
-
-
 a {
-	color: #0080ff;
+	color: #0080c0;
 }
 
 a:hover {

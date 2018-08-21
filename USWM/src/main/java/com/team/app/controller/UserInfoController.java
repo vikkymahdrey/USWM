@@ -130,141 +130,25 @@ public class UserInfoController {
 		 
 	 }
 	@RequestMapping(value= {"/userMgmt"}, method=RequestMethod.GET)
-    public String userMgmtHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
-		   logger.debug(" IN /userMgmt ");
-		  		   
-		   String orgName="";
-		   String id="";
-		 try {
-		   	String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
-	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
-		
-	   return "UserMgmt";
+    public String userMgmtHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception {
+		   logger.debug(" IN /userMgmt ");		  		   
+			   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+					map.put("organisations", orgMapped);	
+			   List<Role> roles=userLoginService.getRoles();
+					map.put("roles", roles);
+						return "UserMgmt";
 	}
 	
+	@RequestMapping(value= {"/orgUserMgmt"}, method=RequestMethod.GET)
+    public String orgUserMgmtHanlder(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception {
+		   logger.debug(" IN /orgUserMgmt ");		  		   
+			   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+					map.put("organisations", orgMapped);	
+			List<Role> roles=userLoginService.getRoles();
+					map.put("roles", roles);
+						return "OrganisationUser";
+	}
 	
-	/*@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
-    public String autoSyncHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
-		   logger.debug("/inside sync");
-		  		   
-		   String orgName="";
-		   String id="";
-		 try {
-		   			
-		   String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					logger.debug("Inside Array not null");
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
-	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
-		
-	   return "AutoSync";
-	}*/
 	
 	
 	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
@@ -281,9 +165,11 @@ public class UserInfoController {
 	/* Ajax calling for /getApplications */	
 	@RequestMapping(value= {"/getApplications"}, method=RequestMethod.GET)
 	public @ResponseBody String getApplicationsHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
-		//logger.debug("/*Ajax getting getApplications */");
+		logger.debug("/*Ajax getting getApplications */");
 		
-		String orgId = request.getParameter("orgId");
+		String orgs = request.getParameter("orgId");
+		String[] orgIdName=orgs.split(":");
+		String orgId=orgIdName[0];
 		logger.debug("Organisation Id as ",orgId);
 		String returnVal="";
 		
@@ -349,7 +235,7 @@ public class UserInfoController {
 					
 					if(dtos!=null && !dtos.isEmpty()){
 						for(ApplicationDto a : dtos){
-							returnVal+="<option value="+a.getAppId()+ ">"+ a.getAppName() + "</option>";
+							returnVal+="<option value="+a.getAppId()+":"+a.getAppName()+">"+ a.getAppName() + "</option>";
 						}
 					}
 				}
@@ -463,7 +349,9 @@ public class UserInfoController {
 	public @ResponseBody String getDevEUISyncHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUISync */");
 		
-		String appId = request.getParameter("appId").trim();
+		String apps = request.getParameter("appId").trim();
+		String[] appIdName=apps.split(":");
+		String appId=appIdName[0];
 		logger.debug("Application Id as ",appId);
 		String returnVal="";
 		
@@ -550,7 +438,10 @@ public class UserInfoController {
 	public @ResponseBody String getDevEUIByAppIdHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUIByAppId */");
 		
-		String appId = request.getParameter("appId").trim();
+		String apps = request.getParameter("appId").trim();
+		logger.debug("Application.. as ",apps);
+		String[] appIdName=apps.split(":");
+		String appId=appIdName[0];
 		logger.debug("Application Id as ",appId);
 		String returnVal="";
 		
@@ -636,7 +527,9 @@ public class UserInfoController {
 	public @ResponseBody String getDevEUIDelHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUIDel */");
 		
-		String appId = request.getParameter("appId").trim();
+		String apps = request.getParameter("appId").trim();
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
 		logger.debug("Application Id as ",appId);
 		String returnVal="";
 		
@@ -669,8 +562,12 @@ public class UserInfoController {
 	@RequestMapping(value= {"/deleteDevEUI"}, method=RequestMethod.POST)
     public @ResponseBody String deleteDevEUIHandler(HttpServletRequest request,Map<String,Object> map) {
 		logger.debug("/inside deleteDevEUI");
-		String orgId=request.getParameter("orgId").trim();
-		String appId=request.getParameter("appId").trim();
+		String orgs=request.getParameter("orgId").trim();
+		String[] orgArr=orgs.split(":");
+		String orgId=orgArr[0];
+		String apps=request.getParameter("appId").trim();
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
 		String devId=request.getParameter("devId").trim();
 				
 		logger.debug("OrgId....",orgId);
@@ -699,8 +596,12 @@ public class UserInfoController {
 	@RequestMapping(value= {"/syncDev"}, method=RequestMethod.POST)
     public @ResponseBody String syncDevHandler(HttpServletRequest request, HttpSession session, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("/inside syncDev");
-		String orgId=request.getParameter("orgId").trim();
-		String appId=request.getParameter("appId").trim();
+		String orgs=request.getParameter("orgId").trim();
+		String[] orgArr=orgs.split(":");
+		String orgId=orgArr[0];
+		String apps=request.getParameter("appId").trim();
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
 		String devId=request.getParameter("devId").trim();
 		
 		String returnVal="";
@@ -727,143 +628,20 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/deleteNode"}, method=RequestMethod.GET)
-    public String deleteNodeHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
+    public String deleteNodeHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception {
 		   logger.debug("/inside deleteNode");
-		  		   
-		   String orgName="";
-		   String id="";
-		 try {
-		   
-		   String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					logger.debug("Inside Array not null");
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
-	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
-		
-	   return "deleteNode";
+		   	Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+		   		map.put("organisations", orgMapped);		   
+		   			return "deleteNode";
 	}
 	
 	
 	@RequestMapping(value= {"/delDevEUI"}, method=RequestMethod.GET)
-    public String delDevEUIHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
+    public String delDevEUIHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception {
 		   logger.debug("/inside delDevEUI");
-		  		   
-		   String orgName="";
-		   String id="";
-		   
-	   try {
-		   
-		   String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					logger.debug("Inside Array not null");
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
-	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
-		
-	   return "deleteAllNode";
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+	   			map.put("organisations", orgMapped);
+	   				return "deleteAllNode";
 	}
 	
 	
@@ -871,8 +649,8 @@ public class UserInfoController {
 	@RequestMapping(value= {"/userSubscription"}, method=RequestMethod.POST)
     public String userSubscriptionHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("/inside userSubscription");
-		String orgId=request.getParameter("orgid").trim();
-		String appId=request.getParameter("appid").trim();
+		String orgIdName=request.getParameter("orgid").trim();
+		String appIdName=request.getParameter("appid").trim();
 		String devNode=request.getParameter("devid").trim();
 		String uname=request.getParameter("uname").trim();
 		String email=request.getParameter("email").trim();
@@ -880,8 +658,14 @@ public class UserInfoController {
 		String roleId=request.getParameter("usertype").trim();
 		String landMarkID=request.getParameter("landMarkID").trim();
 		String[] devArr=devNode.split(":");
-		String devId=devArr[0];
+		String[] appArr=appIdName.split(":");
+		String[] orgArr=orgIdName.split(":");		
+		String devId=devArr[0].trim();
 		String devNodeName=devArr[1].trim();
+		String appId=appArr[0].trim();
+		String appName=appArr[1].trim();
+		String orgId=orgArr[0].trim();
+		String orgName=orgArr[1].trim();
 		
 		
 		
@@ -898,19 +682,17 @@ public class UserInfoController {
 			TblUserInfo user=userLoginService.getUserByEmailId(email);
 			UserDeviceMapping udm=null;
 			 	udm=new UserDeviceMapping();
-			 	udm.setDevNode(devNodeName);
-			 	udm.setDevEUI(devId);
-				udm.setOrgId(orgId);
+			 	udm.setOrgId(orgId);
+				udm.setOrgName(orgName);
+				udm.setAppId(appId);
+				udm.setAppName(appName);
+				udm.setDevEUI(devId);
+				udm.setDevNode(devNodeName);
+				udm.setStatus(AppConstants.IND_A);
 				udm.setCreateddt(new Date(System.currentTimeMillis()));
+				udm.setUpdateddt(new Date(System.currentTimeMillis()));
 			
 			if(user!=null){
-				/*TblUserInfo usr=userLoginService.saveUser(user,udm);
-				if(usr!=null){
-					
-				}else{
-					redirectAttributes.addFlashAttribute("status",
-							"<div class=\"failure\" > Email alrady exist!</div>");
-				}*/
 				
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"failure\" > Email alrady exist!</div>");
@@ -936,7 +718,7 @@ public class UserInfoController {
 						if(u!=null){
 																
 								 redirectAttributes.addFlashAttribute("status",
-										"<div class=\"success\" > User registered Successfully.Please check your email to login into USWM !</div>");
+										"<div class=\"success\" > User registered successfully.Please check your email notification for activation!</div>");
 						}else{
 								 redirectAttributes.addFlashAttribute("status",
 											"<div class=\"failure\" > user registration failed !</div>");
@@ -1040,77 +822,18 @@ public class UserInfoController {
     public String addDeviceHandler(HttpSession session,Map<String,Object> map) throws Exception {
 		
 			logger.debug("/inside addDevice");
-			 logger.debug(" IN /userMgmt ");
-	  		   
-			   String orgName="";
-			   String id="";
-			 try {
-			   	String url=AppConstants.org_url;
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");    					
-					
-					if(arr!=null && arr.size()>0){
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							
-							if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-								logger.debug("Name matching ..");
-								logger.debug("Organisation name ..",jsonObj.get("name").toString());
-								logger.debug("Organisation id ..",jsonObj.get("id").toString());
-								orgName=jsonObj.get("name").toString();
-								id=jsonObj.get("id").toString();
-								
-								
-							}
-						 }
-			        }
-				}
-				
-		   }catch(Exception e){
-				e.printStackTrace();
-		   }
-		   
-		   	map.put("id", id.trim());
-			map.put("name",orgName.trim());
-			
-		   
-						
-				return "addDevice";
+				  		   
+			 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);						
+				      return "addDevice";
 		 
 	 }
 	@RequestMapping(value= {"/UserSearch"}, method=RequestMethod.GET)
 	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
 		logger.debug("Inside /UserSearch");		
-		String orgId=request.getParameter("orgId");
+		String orgs=request.getParameter("orgId");
+		String[] orgArr=orgs.split(":");
+		String orgId=orgArr[0];
 			logger.debug("printing orgId as: ",orgId);
 		map.put("orgId", orgId);
 			 return "UserSearch";
@@ -1128,7 +851,7 @@ public class UserInfoController {
 			
 			String response="";
 			try {
-				List<TblUserInfo> dtos=userLoginService.getUserListByEmail(email);
+				List<TblUserInfo> dtos=userLoginService.getUserListByEmailAndType(email);
 					
 				List<UserDto> userDto=null;
 						userDto=new ArrayList<UserDto>();		
@@ -1163,10 +886,56 @@ public class UserInfoController {
 	}
 	
 	
+	@RequestMapping(value= {"/validateUserName"}, method=RequestMethod.POST)
+	public @ResponseBody String validateUserNameHandler(HttpServletRequest request) throws Exception{
+		logger.debug("Inside /validateUserName");		
+		String uname=request.getParameter("uname").trim();
+		logger.debug("uanme as",uname);	
+		String response="";
+			try {
+				TblUserInfo userInfo=userLoginService.getUserByUsername(uname);
+					if(userInfo!=null){
+						response="LoginId already exists";
+					}				
+			}catch(Exception e){
+				logger.debug("Error during AJAX calling for validateUserName",e);	
+			}
+			logger.debug("Response",response);
+			return response;
+	}
+	
+	
+	@RequestMapping(value= {"/validateEmail"}, method=RequestMethod.POST)
+	public @ResponseBody String validateEmailHandler(HttpServletRequest request) throws Exception{
+		logger.debug("Inside /validateEmail");		
+		String email=request.getParameter("email").trim();
+		logger.debug("email as",email);	
+		String response="";
+			try {
+				TblUserInfo userInfo=userLoginService.getUserByEmailId(email);
+					if(userInfo!=null){
+						response="EmailId already exists";
+					}				
+			}catch(Exception e){
+				logger.debug("Error during AJAX calling for validateEmail",e);	
+			}
+			logger.debug("Response",response);
+			return response;
+	}
+	
 	@RequestMapping(value= {"/addDeviceToUser"}, method=RequestMethod.POST)
     public String addDeviceToUserHanlder(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("/inside addDeviceToUser");
-		String orgId=request.getParameter("orgid").trim();
+		String orgs=request.getParameter("orgid").trim();
+		String[] orgArr=orgs.split(":");
+		String orgId=orgArr[0];
+		String orgName=orgArr[1];
+		
+		String apps=request.getParameter("appid").trim();
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
+		String appName=appArr[1];
+		
 		String devNode=request.getParameter("devid").trim();
 		String uId=request.getParameter("uId").trim();
 		String[] devArr=devNode.split(":");
@@ -1200,8 +969,13 @@ public class UserInfoController {
 				 	udm.setDevNode(devNodeName);
 				 	udm.setDevEUI(devId);
 					udm.setOrgId(orgId);
+					udm.setOrgName(orgName);
+					udm.setAppId(appId);
+					udm.setAppName(appName);
 					udm.setTblUserInfo(user);
+					udm.setStatus(AppConstants.IND_A);
 					udm.setCreateddt(new Date(System.currentTimeMillis()));
+					udm.setUpdateddt(new Date(System.currentTimeMillis()));
 					UserDeviceMapping udmReg=userLoginService.saveNewUDMToUser(udm);
 					if(udmReg!=null){
 						redirectAttributes.addFlashAttribute("status",
@@ -1237,6 +1011,42 @@ public class UserInfoController {
 		TblUserInfo user=(TblUserInfo) session.getAttribute("user");		
 		map.put("userInfo", user);
 			 return "UserDeviceMapping";
+	}
+	
+	
+	@RequestMapping(value= {"/getOrgUserView"}, method=RequestMethod.GET)
+	public @ResponseBody String getOrgUserViewHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
+		logger.debug("/*Ajax getting getOrgUserView */");
+		
+		String orgId = request.getParameter("orgId").trim();
+		String usertype = request.getParameter("ut").trim();
+		logger.debug("Org Id as ",orgId);
+		String returnVal="";
+		
+		
+		try{
+						
+			List<UserDeviceMapping> udms=userLoginService.getUserDeviceByOrgId(orgId);
+			List<TblUserInfo> users=userLoginService.getUserByRoleId(usertype);
+			
+			
+			/*if(users!=null && !users.isEmpty()){
+				for(TblUserInfo u : users){
+					 returnVal+="<tr><td>"+udm.getOrgId()+"</td>"+
+							 "<td>"+udm.getTblUserInfo()+"</td>";
+						
+				}
+			}*/
+			
+				
+			
+		}catch(Exception e){
+			logger.error("Error in Ajax/getOrgUserView",e);
+			e.printStackTrace();
+		}
+			
+			
+		return returnVal;
 	}
 
 }

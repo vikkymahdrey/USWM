@@ -39,6 +39,16 @@ public class TblUserInfo implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;
 
+	//bi-directional many-to-one association to Landmark
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="landmarkId")
+	private Landmark landmark;
+
+	//bi-directional many-to-one association to Role
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="role")
+	private Role roleBean;
+
 	//bi-directional many-to-many association to TblDeviceInfo
 	@ManyToMany
 	@JoinTable(
@@ -52,15 +62,9 @@ public class TblUserInfo implements Serializable {
 		)
 	private List<TblDeviceInfo> tblDeviceInfos;
 
-	//bi-directional many-to-one association to Landmark
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="landmarkId")
-	private Landmark landmark;
-
-	//bi-directional many-to-one association to Role
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="role")
-	private Role roleBean;
+	//bi-directional many-to-one association to TblPaymentInfo
+	@OneToMany(mappedBy="tblUserInfo")
+	private List<TblPaymentInfo> tblPaymentInfos;
 
 	//bi-directional many-to-one association to UserDeviceMapping
 	@OneToMany(mappedBy="tblUserInfo")
@@ -141,14 +145,6 @@ public class TblUserInfo implements Serializable {
 		this.updateddt = updateddt;
 	}
 
-	public List<TblDeviceInfo> getTblDeviceInfos() {
-		return this.tblDeviceInfos;
-	}
-
-	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
-		this.tblDeviceInfos = tblDeviceInfos;
-	}
-
 	public Landmark getLandmark() {
 		return this.landmark;
 	}
@@ -163,6 +159,36 @@ public class TblUserInfo implements Serializable {
 
 	public void setRoleBean(Role roleBean) {
 		this.roleBean = roleBean;
+	}
+
+	public List<TblDeviceInfo> getTblDeviceInfos() {
+		return this.tblDeviceInfos;
+	}
+
+	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
+		this.tblDeviceInfos = tblDeviceInfos;
+	}
+
+	public List<TblPaymentInfo> getTblPaymentInfos() {
+		return this.tblPaymentInfos;
+	}
+
+	public void setTblPaymentInfos(List<TblPaymentInfo> tblPaymentInfos) {
+		this.tblPaymentInfos = tblPaymentInfos;
+	}
+
+	public TblPaymentInfo addTblPaymentInfo(TblPaymentInfo tblPaymentInfo) {
+		getTblPaymentInfos().add(tblPaymentInfo);
+		tblPaymentInfo.setTblUserInfo(this);
+
+		return tblPaymentInfo;
+	}
+
+	public TblPaymentInfo removeTblPaymentInfo(TblPaymentInfo tblPaymentInfo) {
+		getTblPaymentInfos().remove(tblPaymentInfo);
+		tblPaymentInfo.setTblUserInfo(null);
+
+		return tblPaymentInfo;
 	}
 
 	public List<UserDeviceMapping> getUserDeviceMappings() {

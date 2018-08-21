@@ -102,7 +102,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  		logger.debug("fport",json.get("fPort").toString());
 				  	  		logger.debug("Data As:",json.get("data").toString());
 				  	  		
-				  	  	frame.setfPort(json.get("fPort").toString().trim());
+				  	  	frame.setFPort(json.get("fPort").toString().trim());
 				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
 				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be

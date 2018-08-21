@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblUserInfo;
+import com.team.app.exception.AtAppException;
 
 /**
  * 
@@ -20,5 +21,7 @@ public interface ConsumerInstrumentService {
 	public List<LoraFrame> getFrames()throws Exception;
 	public String getUserAccountMessage(TblUserInfo u)throws Exception;
 	public List<LoraFrame> getFramesByFrmToDateAndDevEUI(String devEUI, Date d1, Date d2);
+	public Object[] getLoraFrameByDevEUIandAppIdandDates(Date sDt, Date eDt, String appId, String devEUI,String interval) throws AtAppException;
+	
 	
 }

@@ -1,20 +1,12 @@
 package com.team.app.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.team.app.constant.AppConstants;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
 @Controller
@@ -33,6 +26,9 @@ public class LoginController {
 		
 	@Autowired
 	private UserLoginService userLoginService;
+	
+	@Autowired
+	private OrganisationService organisationService;
 		
 	
 	@RequestMapping(value= {"/"})
@@ -88,7 +84,7 @@ public class LoginController {
 		} 
         
         if(userInfo!=null){
-        	if(userInfo.getRoleBean().getType().equalsIgnoreCase("admin")) {
+        	if(userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin) || userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)) {
         	 	return new ModelAndView("redirect:/home");
         	}else if(userInfo.getRoleBean().getType().equalsIgnoreCase("usr")) {
         		return new ModelAndView("redirect:/userHome");
@@ -107,70 +103,12 @@ public class LoginController {
 	}
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
 	 public String home(Map<String,Object> map) throws Exception{
-		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
-		  map.put("userInfos",userInfos);
+		/*List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
+		  map.put("userInfos",userInfos);*/
 		  
-		  String orgName="";
-		  String id="";
-			   
-		 try {
-			 
-		   	String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
+		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+			map.put("organisations", orgMapped);
 	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
 		return "adminDashboard";
 	    	
 	}

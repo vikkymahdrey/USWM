@@ -255,6 +255,7 @@ function getDevEUIByAppID()
   			String orgName=(String)request.getAttribute("name");
   			String orgId=(String)request.getAttribute("id");
   			List<LoraFrame> frames=(List<LoraFrame>)request.getAttribute("frames"); 
+  			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   			%>	
 <div class="wrapper">  
  <%@include file="Header.jsp"%>  
@@ -314,11 +315,26 @@ function getDevEUIByAppID()
 								  		<td>
 								  			<label>Organization</label>
 								  			 <div>
-										          <select name="orgid" class="form-control" id="orgid" onchange="getAppByOrgID()">
-													    <option value="0">Select Organisation</option>	
-													    <option value="<%=orgId%>"><%=orgName%></option>
-												  </select> 
-												   <input type="hidden" id="orgName" name="orgName" value=<%=orgName%>>										            
+										          <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
+										    			<option value="0">Select Organisation</option>	
+													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+														    if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+														    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+														    	<%}
+														    }
+													    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+													    	if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+														    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+														    		   if(udm.getOrgId().equals(map.getKey())){%>
+														    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+														    		   <%}
+														    		} 
+														    	}
+														    }	    
+													    }%>
+													 </select> 									            
 									        </div>										
 										</td>
 										

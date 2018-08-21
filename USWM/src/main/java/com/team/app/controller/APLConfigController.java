@@ -51,7 +51,9 @@ public class APLConfigController {
 	@RequestMapping(value= {"/LandMarkSearch"}, method=RequestMethod.GET)
 	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
 		logger.debug("Inside /LandMarkSearch");		
-		String orgId=request.getParameter("orgId");
+		String orgs=request.getParameter("orgId");
+		String[] orgIdName=orgs.split(":");
+		String orgId=orgIdName[0];
 			logger.debug("printing orgId as: ",orgId);
 		map.put("orgId", orgId);
 			 return "LandMarkSearch1";

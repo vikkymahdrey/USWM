@@ -1,9 +1,5 @@
 package com.team.app.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -12,9 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +18,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.config.MqttIntrf;
-import com.team.app.constant.AppConstants;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
 @Controller
@@ -48,6 +42,9 @@ public class WaterConsumptionController {
 	@Autowired
 	private ConsumerInstrumentService consumerInstrumentServiceImpl;
 	
+	@Autowired
+	private OrganisationService organisationService;
+	
 	
 	@RequestMapping(value= {"/waterConsumption"}, method=RequestMethod.GET)
     public String waterConsumptionHanlder(Map<String,Object> map) {
@@ -57,81 +54,11 @@ public class WaterConsumptionController {
 	 }
 	
 	@RequestMapping(value= {"/waterConsumptionCal"}, method={ RequestMethod.GET, RequestMethod.POST })
-    public String waterConsumptionCalHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
+    public String waterConsumptionCalHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		
-		  String orgName="";
-		   String id="";
-		  
-		/* Map<String, String[]> map1=request.getParameterMap();
-		   for(Map.Entry<String, String[]> entry : map1.entrySet()){
-			   logger.debug("Key",entry.getKey());
-			   if(entry.getKey().equals("frames")){
-				   List<LoraFrame> list= new ArrayList<LoraFrame>();
-			   }
-			   String[] val=entry.getValue();
-			   logger.debug("value",val[0]);
-		   }*/
-				   
-		 try {
-			 
-		   	String url=AppConstants.org_url;
-			logger.debug("URLConn",url);
-			URL obj1 = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setRequestProperty("accept", "application/json");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-			
-			    
-			int responseCode = con.getResponseCode();
-				logger.debug("POST Response Code :: " + responseCode);
-					    				
-			if(responseCode == HttpURLConnection.HTTP_OK) {
-				logger.debug("Token valid,POST Response with 200");
-				
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-				StringBuffer response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				
-				in.close();
-				
-				JSONObject json=null;
-					json=new JSONObject();
-				json=(JSONObject)new JSONParser().parse(response.toString());
-			
-				JSONArray arr=(JSONArray) json.get("result");    					
-				
-				if(arr!=null && arr.size()>0){
-					 for (int i = 0; i < arr.size(); i++) {
-						 JSONObject jsonObj = (JSONObject) arr.get(i);
-						
-						if(jsonObj.get("name").toString().equalsIgnoreCase(AppConstants.Organisation)){
-							logger.debug("Name matching ..");
-							logger.debug("Organisation name ..",jsonObj.get("name").toString());
-							logger.debug("Organisation id ..",jsonObj.get("id").toString());
-							orgName=jsonObj.get("name").toString();
-							id=jsonObj.get("id").toString();
-							
-							
-						}
-					 }
-		        }
-			}
-			
-	   }catch(Exception e){
-			e.printStackTrace();
-	   }
-	   
-	   	map.put("id", id.trim());
-		map.put("name",orgName.trim());
-		
-		return "AdminWaterConsumptionCal";
+		 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+			map.put("organisations", orgMapped);	
+				return "AdminWaterConsumptionCal";
 		 
 	 }
 	
@@ -161,12 +88,23 @@ public class WaterConsumptionController {
 	
 	@RequestMapping(value= {"/waterConsumptionUnits"}, method=RequestMethod.POST)
     public String waterConsumptionUnitsHanlder(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
-		String orgid=request.getParameter("orgid");
-		String name=request.getParameter("orgName");
-		String appId=request.getParameter("appid");
-		String devNode=request.getParameter("devid");
+		String orgs=request.getParameter("orgid");
+		//String name=request.getParameter("orgName");
+		String apps=request.getParameter("appid");
+		String dev=request.getParameter("devid");
 		String fDate=request.getParameter("fromDate");		
 		String tDate=request.getParameter("toDate");
+		
+		String[] orgArr=orgs.split(":");
+		String orgid=orgArr[0];
+		String name=orgArr[1];
+		String[] devArr=dev.split(":");
+		String devNode=devArr[0];
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
+				
+		
+		
 		logger.debug("orgid",orgid);
 		logger.debug("appId",appId);
 		logger.debug("devNode",devNode);
@@ -178,8 +116,8 @@ public class WaterConsumptionController {
 	         Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
 	        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
 	        
-	        map.put("id", orgid);
-        	map.put("name", name);
+	        Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+			map.put("organisations", orgMapped);	
 	            
 	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUI(devNode,fromDate,toDate);
 	       
@@ -201,8 +139,12 @@ public class WaterConsumptionController {
 	/* Ajax calling for /getGraphVal */	
 	@RequestMapping(value= {"/getGraphVal"}, method=RequestMethod.POST)
     public @ResponseBody String getGraphValHandler(HttpServletRequest request) {
-		String orgid=request.getParameter("orgId");
-		String appId=request.getParameter("appId");
+		String orgs=request.getParameter("orgId");
+		String[] orgArr=orgs.split(":");
+		String orgid=orgArr[0];
+		String apps=request.getParameter("appId");
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
 		String devNode=request.getParameter("devId");
 		String fDate=request.getParameter("fromDate");		
 		String tDate=request.getParameter("toDate");

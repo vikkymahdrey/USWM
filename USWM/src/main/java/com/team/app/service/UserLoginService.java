@@ -5,6 +5,8 @@ import java.util.List;
 import com.team.app.domain.Role;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
+import com.team.app.dto.UserLoginDTO;
+import com.team.app.exception.AtAppException;
 
 public interface UserLoginService {
 
@@ -31,6 +33,26 @@ public interface UserLoginService {
 	UserDeviceMapping saveUDM(UserDeviceMapping udm)throws Exception;
 
 	UserDeviceMapping saveNewUDMToUser(UserDeviceMapping udm)throws Exception;
+
+	List<Role> getRoles()throws Exception;
+
+	List<UserDeviceMapping> getUserDeviceByOrgId(String orgId)throws Exception;
+
+	List<TblUserInfo> getUserByRoleId(String usertype) throws Exception;
+
+	UserLoginDTO userLogin(String username, String password, String usertype) throws AtAppException;
+
+	TblUserInfo getUserByUserNameAndEmailId(String uname, String email)throws Exception;
+
+	TblUserInfo getUserByUsername(String uname)throws Exception;
+
+	List<TblUserInfo> getUserListByEmailAndType(String email)throws Exception;
+
+	UserLoginDTO setPassword(String username, String curpwd, String newpwd, String usertype) throws AtAppException;
+
+	TblUserInfo getUserByUserId(String userId)throws AtAppException;
+
+	UserDeviceMapping getUserDeviceByDevEUI(String devEUI)throws AtAppException;
 
 	
 

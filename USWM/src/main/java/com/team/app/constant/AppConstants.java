@@ -28,8 +28,9 @@ public class AppConstants {
 		
 	public static final String TTL_LOGIN_KEY = "app.token.login.ttlmillis";
 	
-	public static final String KEY_ATAPP_MOBILE = "TOSHIBA_MOBILE";
-	public static final String KEY_TOSHIBA_MOBILE_VAL = "UnizenTrustSecret";
+	public static final String KEY_UNIZEN_MOBILE = "UNIZEN_MOBILE";
+	public static final String KEY_UNIZEN_THRIDPARTY = "UNIZEN_THIRDPARTY";
+	public static final String KEY_UNIZEN_MOBILE_VAL = "TrustSecret";
 		
 	public static final String SUBJECT_SECURE = "MOBILE_SECURE";
 	public static final String SUBJECT_NON_SECURE = "MOBILE_NON_SECURE";
@@ -43,8 +44,24 @@ public class AppConstants {
 	public static final String app_url =domain+"/api/applications?limit=100";
 	public static final String user_url=domain+"/api/users?limit=100";
 	public static final String status="Y";
+	public static final String noportdomain ="139.59.14.31";
 	
 	public static final String timeZone="Asia/Kolkata";
+	
+	public static final String superAdmin="su";
+	public static final String admin="admin";
+	public static final String user="usr";
+	
+	// App token Config
+	
+	public static final String DAYS = "DAYS";
+	public static final String HOURS = "HOURS";
+	public static final String MINUTES = "MINUTES";
+	public static final long TIME = 15;
+	
+	
+	
+	
 	
 	
 }

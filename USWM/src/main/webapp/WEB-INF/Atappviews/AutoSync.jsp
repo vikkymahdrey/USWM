@@ -3,6 +3,7 @@
 --%>
 
 
+<%@page import="com.team.app.constant.AppConstants"%>
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
@@ -198,10 +199,7 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<% 
-  			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
-  			/* String orgName=request.getAttribute("name").toString();
-  			String orgId=request.getAttribute("id").toString(); */
-  			
+  				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   			%>
   			
 							 
@@ -240,11 +238,23 @@ function getDevEUIByAppID()
 										<td>
 										 <select name="orgname" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">--Choose Organisation--</option>	
-										    <%if(organisations!=null && !organisations.isEmpty()){
-										    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
-										    	    <option value="<%=map.getKey()%>"><%=map.getValue()%></option>
-										    	<%}
-										    }%>	    
+										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+											    if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+											    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    	<%}
+											    }
+										    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+										    	if(organisations!=null && !organisations.isEmpty()){
+											    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+											    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+											    		   if(udm.getOrgId().equals(map.getKey())){%>
+											    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+											    		   <%}
+											    		} 
+											    	}
+											    }	    
+										    }%>
 										 </select> 
 										</td>
 									</tr>
