@@ -83,6 +83,20 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	
+	public Object[] getLoraFrameByUserIdAndDates(Date sDt, Date eDt, String userId, String intrvl) throws AtAppException {
+		return frameDao.getLoraFrameByUserIdAndDates(sDt,eDt,userId,intrvl);
+	}
+
+	public Object[] getLoraFrameByDateAndDevEUI(Date rDt,String appId, String devEUI) throws AtAppException {
+		return frameDao.getLoraFrameByDateAndDevEUI(rDt,appId,devEUI);
+	}
+
+	
+	public List<LoraFrame> getFramesByFrmToDateAndDevEUIAndAppId(String appId, String devEUI, Date fromDate, Date toDate) {
+		return frameDao.getFramesByFrmToDateAndDevEUIAndAppId(appId,devEUI,fromDate,toDate);
+	}
+
+	
 	
 	
 

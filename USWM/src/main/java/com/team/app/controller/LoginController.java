@@ -1,6 +1,7 @@
 package com.team.app.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -103,8 +104,8 @@ public class LoginController {
 	}
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
 	 public String home(Map<String,Object> map) throws Exception{
-		/*List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
-		  map.put("userInfos",userInfos);*/
+		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
+		  map.put("userInfos",userInfos);
 		  
 		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 			map.put("organisations", orgMapped);

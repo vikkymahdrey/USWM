@@ -90,7 +90,7 @@
           
           <ul class="treeview-menu">
             <li><a href="userMgmt"><i class="fa fa-circle-o"></i><b>User Subscription</b></a></li>
-            <li><a href="orgUserMgmt"><i class="fa fa-circle-o"></i><b>Organisation-User</b></a></li>
+           <!--  <li><a href="orgUserMgmt"><i class="fa fa-circle-o"></i><b>Organisation-User</b></a></li> -->
            
           </ul>
           

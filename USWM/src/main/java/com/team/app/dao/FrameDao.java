@@ -49,6 +49,15 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 	
 	@Query(value = "CALL frames(?1,?2,?3,?4,?5)", nativeQuery = true)
 	Object[] getLoraFrameByDevEUIandAppIdandDates(@Param("startDt") Date startDt, @Param("endDt") Date endDt, @Param("appId") String appId, @Param("devEUI") String devEUI,@Param("interval") String interval);
+
+	@Query(value = "CALL loraframes(?1,?2,?3,?4)", nativeQuery = true)
+	Object[] getLoraFrameByUserIdAndDates(@Param("startDt") Date startDt, @Param("endDt") Date endDt,@Param("userId") String userId,@Param("interval") String interval);
+
+	@Query(value = "CALL graphunits(?1,?2,?3)", nativeQuery = true)
+	Object[] getLoraFrameByDateAndDevEUI(@Param("reqDt") Date reqDt,@Param("appId") String appId,@Param("devEUI") String devEUI);
+
+	@Query("Select f from LoraFrame f where f.applicationID=:appId and f.devEUI=:devEUI and f.createdAt between :fromDate and :toDate")
+	List<LoraFrame> getFramesByFrmToDateAndDevEUIAndAppId(@Param("appId")  String appId, @Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
 	
 	
 	

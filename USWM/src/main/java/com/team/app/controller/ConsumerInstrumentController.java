@@ -311,7 +311,7 @@ public class ConsumerInstrumentController {
 					    JSONObject res=null;
 					    	res=new JSONObject();
 					    
-					   	String devEUI="";
+					  String devEUI="";
 						String appId="";
 						String temp="";
 												
@@ -328,16 +328,21 @@ public class ConsumerInstrumentController {
 									appId=appId+temp+udm.getAppId();
 								}
 							}
+							
+								
 						 }	
 								Date sDt=DateUtil.convertLongToDateIST(startDt, "yyyy-MM-dd");
 								Date eDt=DateUtil.convertLongToDateIST(endDt, "yyyy-MM-dd");
-								logger.debug("Date sDt",DateUtil.changeDateFromatIST(sDt));
+								//logger.debug("Date sDt",DateUtil.changeDateFromatIST(sDt));
 								logger.debug("Date eDt",eDt);
 								logger.debug("DevEUI :",devEUI);
 								logger.debug("AppId :",appId);
+							
 								
 								Object[] ob=consumerInstrumentServiceImpl.getLoraFrameByDevEUIandAppIdandDates(sDt,eDt,appId.trim(),devEUI.trim(),String.valueOf(obj.get("interval")));
+								//Object[] ob=consumerInstrumentServiceImpl.getLoraFrameByUserIdAndDates(sDt,eDt,userInfo.getId(),String.valueOf(obj.get("interval")));
 								logger.debug("Resultant",String.valueOf(ob[0]));								
+													
 								if(String.valueOf(ob[0])!=null && !String.valueOf(ob[0]).isEmpty()){
 									String[] result=String.valueOf(ob[0]).split(",");
 									logger.debug("result length",result.length);
@@ -368,6 +373,92 @@ public class ConsumerInstrumentController {
 			
 		}catch(AtAppException e) {
 			logger.error("Exception in /getWaterConsumptions",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getGraphUnits", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getGraphUnits(@RequestBody String received){
+		logger.info(" /POST /getGraphUnits API ", received);
+		ResponseEntity<String> responseEntity = null;
+		JSONObject obj=null;		
+		try{		
+			obj=new JSONObject();
+			obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Exception in /getGraphUnits", HttpStatus.EXPECTATION_FAILED);
+		}
+		try {
+			
+			if(String.valueOf(obj.get("userId"))!=null && String.valueOf(obj.get("reqDate"))!=null ){
+				long reqDt=0;
+				try{
+					reqDt=Long.parseLong(String.valueOf(obj.get("reqDate")));
+						
+				}catch(Exception e){
+					;
+				}
+				
+				
+				
+				
+				TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
+				if(userInfo!=null){
+					List<UserDeviceMapping> udmList=userInfo.getUserDeviceMappings();
+					if(udmList!=null && !udmList.isEmpty()){
+						JSONArray jsonArr=null;
+							jsonArr=new JSONArray();						
+					    JSONObject res=null;
+					    	res=new JSONObject();
+					   							
+								Date rDt=DateUtil.convertLongToDateIST(reqDt, "yyyy-MM-dd");
+								logger.debug("Date rDt",DateUtil.changeDateFromatIST(rDt));
+								
+								for(UserDeviceMapping udm : udmList){
+									Object[] ob=consumerInstrumentServiceImpl.getLoraFrameByDateAndDevEUI(rDt,udm.getAppId().trim(),udm.getDevEUI().trim());
+									logger.debug("Resultant",String.valueOf(ob[0]));								
+																	
+									if(String.valueOf(ob[0])!=null && !String.valueOf(ob[0]).isEmpty()){
+										String[] result=String.valueOf(ob[0]).split(",");
+										logger.debug("result length",result.length);
+										JSONArray arr=null;
+											arr=new JSONArray();
+										JSONObject js=null;											
+											for(int i=0;i<result.length;i++){
+												String[] jsonVal=result[i].split("&");
+												js=new JSONObject();
+												js.put("date", jsonVal[0]);
+												js.put("units", jsonVal[1]);
+												arr.add(js);
+											}
+										JSONObject json=null;
+											json=new JSONObject();
+											json.put("devEUI", udm.getDevEUI());
+											json.put("devices", arr);
+											jsonArr.add(json);
+									}
+								}	
+						   
+							res.put("result", jsonArr);
+							String response=JsonUtil.objToJson(res);
+							responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
+							
+					   }else{
+						   	responseEntity = new ResponseEntity<String>("User not associated with device", HttpStatus.NOT_FOUND);
+					   }
+					}else{
+							responseEntity = new ResponseEntity<String>("userId not exist", HttpStatus.METHOD_NOT_ALLOWED);
+					}
+			
+			}else{
+				responseEntity = new ResponseEntity<String>("Empty requested body", HttpStatus.BAD_REQUEST);
+			}
+			
+		}catch(AtAppException e) {
+			logger.error("Exception in /getGraphUnits",e);
 			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
 		}
 		return responseEntity;

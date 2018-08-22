@@ -194,7 +194,7 @@
 	 //alert("Value "+graphVal);
 	 
 	 if( typeof this.jsonVal !== 'undefined' ) {
-      JSON = [                   
+      	JSON = [                   
                    {
                      name: 'WaterConsumedUnits',
                      data: [0, 0, 0, 0, 0, 0, 0, graphVal, 0, 0, 0, 0]
@@ -418,6 +418,7 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini" onload="loadScript()">
   		   <% 
   			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+  		 	List<TblUserInfo> userInfo=(List<TblUserInfo>)request.getAttribute("userInfos");
   			%>
 							 
   <div class="wrapper">  
@@ -436,17 +437,15 @@ function getDevEUIByAppID()
 													
 						</div><br/>
 		 		
-						 <!-- row -->
-					      <div class="row">
-					        <div class="col-md-12">
-					          <!-- jQuery Knob -->
+						
+					<div class="row">
+					  <div class="col-md-12">					       
 					    <div class="box box-solid">
 					        <div class="box-header">
 					            <i class="fa fa-user"></i>
-									<h3 class="box-title">
-										<b>User-Device</b>
-									</h3>
-					           
+								<h3 class="box-title">
+									<b>Total Subscribed Users</b>
+								</h3>				           
 					
 					            <div class="box-tools pull-right">
 					                <button type="button" class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -454,50 +453,33 @@ function getDevEUIByAppID()
 					                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
 					            </div>
 					        </div>
-					            <!-- /.box-header -->
-					            <div class="box-body">
-					              <div class="row">
-					               <!--  <div class="col-xs-6 col-md-3 text-center">
-					                  <input type="text" class="knob" value="30" data-width="90" data-height="90" data-fgColor="#3c8dbc">
-					
-					                  <div class="knob-label">Total Users</div>
-					                </div> -->
-					                <!-- ./col -->
-					               <!--  <div class="col-xs-6 col-md-3 text-center">
-					                  <input type="text" class="knob" value="70" data-width="90" data-height="90" data-fgColor="#f56954">
-					
-					                  <div class="knob-label">Total DevEUI</div>
-					                </div> -->
-					                <!-- ./col -->
-					                <div class="col-xs-6 col-md-6 text-center">
-					                  <input type="text" class="knob" value="45" data-min="0" data-max="100" data-width="90" data-height="90" data-fgColor="#00a65a">
-					
-					                  <div class="knob-label">Users</div>
-					                </div>
-					                <!-- ./col -->
-					                
-					                
-					                
-					                <div class="col-xs-6 col-md-6 text-center">
-					                  <input type="text" class="knob" value="40" data-min="0" data-max="100" data-width="90" data-height="90" data-fgColor="#00c0ef">
-					
-					                  <div class="knob-label">Sensors</div>
-					                </div>
-					                <!-- ./col -->
-					              </div>
-					              <!-- /.row -->
-					
-					              
+					           
+					            <div class="box-body">					             
+					              	    							
+									  <div class="info-box col-sm-12 mar-top-25" >											
+										  	<span class="info-box-icon bg-blue"><i class="fa fa-user"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">User Subscription</span>
+											    <span class="info-box-number"><b><%=userInfo.get(0)%></b></span>
+										 	</div>
+									  </div>
+									  
+									  <!-- <div class="info-box col-sm-6 mar-top-25" >										
+										  	<span class="info-box-icon bg-yellow"><i class="fa fa-download"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">WaterMeter<b>1</b></span>
+											    <span class="info-box-number"><b>1</b></span>
+										 	</div>
+							 		  </div> -->											              
+					             			              
 					            </div>
-					            <!-- /.box-body -->
-					          </div>
-					          <!-- /.box -->
+					            				           
+					          </div>					          
 					        </div>
-					        <!-- /.col -->
 					      </div>
-					      <!-- /.row -->
-							 		
-					
+					      
+					      
+					      		
 		 		
 		 			<div class="row">
 						<div class="col-md-12">

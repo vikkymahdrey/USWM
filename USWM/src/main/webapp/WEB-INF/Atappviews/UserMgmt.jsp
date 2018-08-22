@@ -295,7 +295,7 @@ function getDevEUIByAppID()
 					
 		 		<div class="row">
 							<div class="col-sm-12 text-right">
-								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> <a href="logout"><img src="images/logout_icon_header.png" /><b>Log Out</b></a>
+								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> 
 							</div>
 					
 				</div>

@@ -161,7 +161,7 @@ public class WaterConsumptionController {
 	         Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
 	        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
 	                   
-	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUI(devNode,fromDate,toDate);
+	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUIAndAppId(appId,devNode,fromDate,toDate);
 	      
 	       int sum=0;
 	        if(frames!=null && !frames.isEmpty()){
@@ -172,7 +172,7 @@ public class WaterConsumptionController {
 	        }
 	        JSONObject json=null;
 	        		json=new JSONObject();
-	        	json.put("value", sum);
+	        		json.put("value", sum);
 	        	
 	         returnVal=json.toString();
 	         logger.debug("Resultant JSON String ",returnVal);
