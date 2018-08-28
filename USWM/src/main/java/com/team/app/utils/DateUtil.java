@@ -48,6 +48,22 @@ public class DateUtil {
 		    return date;
 		  }
 		
+		public static Date getCurrentDateTimeIST(String format) {
+			Date date= null;
+		    try {
+		    	Calendar calendar = Calendar.getInstance();
+		    	long currentDateTime = calendar.getTimeInMillis();
+				DateFormat formatter = new SimpleDateFormat(format);
+				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			//	String dateStr = formatter.format(currentDateTime);
+			//	System.out.println("dateStr = "+dateStr);
+				date = formatter.parse(formatter.format(currentDateTime));
+			} catch (Exception e) {
+				logger.error("error in  convertStringToTimestamp",e);
+			}
+		    return date;
+		  }
+		
 		public static String changeDateFromat(Date sqlFormat) {
 			// System.out.println("Got Here");
 			try {

@@ -24,7 +24,8 @@ public interface ConsumerInstrumentService {
 	public Object[] getLoraFrameByDevEUIandAppIdandDates(Date sDt, Date eDt, String appId, String devEUI,String interval) throws AtAppException;
 	public Object[] getLoraFrameByUserIdAndDates(Date sDt, Date eDt, String id, String valueOf)throws AtAppException;
 	public Object[] getLoraFrameByDateAndDevEUI(Date rDt,String appId, String devEUI)throws AtAppException;
-	public List<LoraFrame> getFramesByFrmToDateAndDevEUIAndAppId(String appId, String devEUI, Date d1, Date d2);
+	public Object[] getFramesByFrmToDateAndDevEUIAndAppId(String appId, String devEUI, Date d1, Date d2, String type);
+	
 	
 	
 }

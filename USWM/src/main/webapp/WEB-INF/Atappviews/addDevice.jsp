@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Add Device</title>
+    <title>Add Water Meter</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -53,22 +53,22 @@
  		
 	   	   
 	   if(orgid=="0"){
-		   alert("Please select organisation!");
+		   alert("Please select Apartment!");
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select application!");
+		   alert("Please select Block!");
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select devEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }else if ($("input[name=uname]").val() == "") {
-			alert("Please select uname");
+			alert("Please select Username");
 			return false;
 	   }else if ($("input[name=email]").val() == "") {
-			alert("Please select email");
+			alert("Please select Email ID");
 			return false;
 	   }else if ($("input[name=contact]").val() == "") {
-			alert("Please select contact");
+			alert("Please select Mobile Number");
 			return false;
 	   }		
    }
@@ -82,8 +82,8 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >--Choose Application--</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >--Choose Block--</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Water Meter--</option></select>';
                 		return;
                 	}
                 else
@@ -111,7 +111,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Water Meter--</option></select>';
     	return;
     	}
     else
@@ -167,7 +167,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Application--</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Block--</Option>'+returnText+'</select>';                                             
                 }
             }
             
@@ -177,7 +177,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Water Meter--</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -230,13 +230,13 @@ function getDevEUIByAppID()
 					
 		 		<div class="row">
 							<div class="col-sm-12 text-right">
-								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> <a href="logout"><img src="images/logout_icon_header.png" /><b>Log Out</b></a>
+								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b>
 							</div>
 					
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-user-plus"></span><b>Add Device</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-user-plus"></span><b> Add Water Meter</b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -270,14 +270,14 @@ function getDevEUIByAppID()
 										
 								  <table class="table">
 								  	<tr>
-								  		<td align="right"><b>Organization:</b></td>
+								  		<td align="right"><b>Apartments:</b></td>
 								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
 										
 										
 										
 										<td>
 										 <select name="orgid" id="orgid" onchange="getAppByOrgID()">
-										    <option value="0">--Choose Organisation--</option>	
+										    <option value="0">--Choose Apartment--</option>	
 										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 											    if(organisations!=null && !organisations.isEmpty()){
 											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -299,21 +299,21 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									<tr>	
-									   <td align="right"><b>Application:</b></td>
+									   <td align="right"><b>Blocks:</b></td>
 									   
 										 <td>
 										 	<select name="appid" id="appid" onchange="getDevEUIByAppID()">
-										    	<option value="0">--Choose Application--</option>	
+										    	<option value="0">--Choose Block--</option>	
 										    </select> 
 										</td>
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Device EUI:</b></td>
+									   <td align="right"><b>Water Meters:</b></td>
 									   
 										 <td>
 										 	<select name="devid" id="devid" >
-										    	<option value="0">--Choose Device EUI--</option>	
+										    	<option value="0">--Choose Water Meter--</option>	
 										    </select> 
 										</td>
 									</tr>
@@ -327,7 +327,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>LoginId:</b></td>
+									   <td align="right"><b>Username:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="uname" id="uname" readonly/>
@@ -335,14 +335,14 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									<tr>	
-									   <td align="right"><b>EmailId:</b></td>
+									   <td align="right"><b>Email ID:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="email" id="email" readonly/>
 										</td>
 									</tr>
 									<tr>	
-									   <td align="right"><b>Contact:</b></td>
+									   <td align="right"><b>Mobile Number:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="contact" id="contact" readonly/>
@@ -354,7 +354,7 @@ function getDevEUIByAppID()
 									
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Add Device"/></td>
+											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Add Water Meter"/></td>
 										 
 									</tr>	
 								</table>	

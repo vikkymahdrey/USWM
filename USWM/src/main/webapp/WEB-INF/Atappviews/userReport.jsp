@@ -77,7 +77,7 @@
 					
 						<div class="row">
 								<div class="col-sm-8 page-heading mar-top-20">
-								<h5 class="text-blue text-left "><span class="fa fa-files-o"></span><b>User Subscription Report</b></h5>
+								<h5 class="text-blue text-left "><span class="fa fa-files-o"></span><b> User Subscription Report</b></h5>
 						</div>
 						
 						
@@ -114,9 +114,9 @@
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 							
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-							<display:column  property="uname" title="UserName" sortable="true"  />
-							<display:column  property="emailId" title="EmailAddress" sortable="true"  />
-							<display:column  property="contactnumber" title="ContactNumber" sortable="true"  />
+							<display:column  property="uname" title="Username" sortable="true"  />
+							<display:column  property="emailId" title="EmailID" sortable="true"  />
+							<display:column  property="contactnumber" title="MobileNumber" sortable="true"  />
 							<display:column   title="UserType" sortable="true"  >
 							<%=subscribedUsers.get(i).getRoleBean().getType()%>
 							<%i++; %>

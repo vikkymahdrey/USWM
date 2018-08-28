@@ -13,6 +13,7 @@ import com.team.app.domain.TblUserInfo;
 import com.team.app.exception.AtAppException;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.utils.DateUtil;
 
 /**
  * 
@@ -92,9 +93,12 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	
-	public List<LoraFrame> getFramesByFrmToDateAndDevEUIAndAppId(String appId, String devEUI, Date fromDate, Date toDate) {
-		return frameDao.getFramesByFrmToDateAndDevEUIAndAppId(appId,devEUI,fromDate,toDate);
+	public Object[] getFramesByFrmToDateAndDevEUIAndAppId(String appId, String devEUI, Date fromDate, Date toDate, String type) {
+		return frameDao.getFramesByFrmToDateAndDevEUIAndAppId(appId,devEUI,fromDate,toDate,type);
 	}
+
+	
+	
 
 	
 	

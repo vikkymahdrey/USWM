@@ -91,13 +91,13 @@
  	  	var devid=document.getElementById("devid").value;
  	  		   	   
 	   if(orgid=="0"){
-		   alert("Please select Organisation!");
+		   alert("Please select Apartment!");
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select Application!");
+		   alert("Please select Block!");
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select DevEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }else if ($("input[name=fromDate]").val() == "") {
 			alert("Please specify FromDate");
@@ -117,8 +117,8 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Applicatoin</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Block</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
                 		return;
                 	}
                 else
@@ -146,7 +146,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
     	return;
     	}
     else
@@ -202,7 +202,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Application</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Block</Option>'+returnText+'</select>';                                             
                 }
             }
             
@@ -212,7 +212,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Device EUI</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Water Meter</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -277,7 +277,7 @@ function getDevEUIByAppID()
 													
 						
 						<div class="box-header with-border">
-  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b>Water Consumption In Litre</b></h5>
+  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b> Water Consumption In Litre</b></h5>
           				</div><!-- /.box-header -->
           				
           				
@@ -291,10 +291,10 @@ function getDevEUIByAppID()
 								  <table class="table">
 								  <tr>								  		
 								  		<td>
-								  			<label>Organization</label>
+								  			<label>Apartments</label>
 								  			 <div>
 										           <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
-										    			<option value="0">Select Organisation</option>	
+										    			<option value="0">Select Apartment</option>	
 													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 														    if(organisations!=null && !organisations.isEmpty()){
 														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -318,10 +318,10 @@ function getDevEUIByAppID()
 										</td>
 																														
 									    <td> 
-									   		<label>Application</label>
+									   		<label>Blocks</label>
 									   		<div>
 											 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
-											    	<option value="0">Select Application</option>	
+											    	<option value="0">Select Block</option>	
 											    </select> 
 										    </div>
 										</td>
@@ -329,10 +329,10 @@ function getDevEUIByAppID()
 									
 									
 									    <td>
-									   		<label>DevEUI</label>
+									   		<label>Water Meters</label>
 										  	<div>
 									          <select name="devid" id="devid" class="form-control">
-										    	<option value="0">Select DevEUI</option>	
+										    	<option value="0">Select Water Meter</option>	
 										      </select> 
 									            
 									        </div>

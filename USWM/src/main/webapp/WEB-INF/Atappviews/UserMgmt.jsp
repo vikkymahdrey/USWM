@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>User Config</title>
+    <title>Create User</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -53,22 +53,22 @@
  		
 	   	   
  	   if(orgid=="0"){
-		   alert("Please select organisation!");
+		   alert("Please select Apartment!");
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select application!");
+		   alert("Please select Block!");
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select devEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }else if(usertype == "0") {
-			alert("Please select usertype");
+			alert("Please select User Type");
 			return false;
 	   }else if ($("input[name=uname]").val() == "") {
-			alert("Please specify LoginId");
+			alert("Please specify Username");
 			return false;
 	   }else if ($("input[name=email]").val() == "") {
-			alert("Please specify EmailAddress");
+			alert("Please specify Email ID");
 			return false;
 	   }else if (isNaN($("input[name=contact]").val())
 				|| ($("input[name=contact]").val()).length != 10) {
@@ -146,8 +146,8 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >--Choose Application--</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >--Choose Block--</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Water Meter--</option></select>';
                 		return;
                 	}
                 else
@@ -175,7 +175,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Water Meter--</option></select>';
     	return;
     	}
     else
@@ -231,7 +231,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Application--</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Block--</Option>'+returnText+'</select>';                                             
                 }
             }
             
@@ -241,7 +241,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Water Meter--</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -260,7 +260,7 @@ function getDevEUIByAppID()
 					
 					if(orgId=="0")
 					{
-					alert("Choose Organisation");
+					alert("Choose Apartment");
 					return false;
 					}
 					url+="?orgId="+orgId;
@@ -301,7 +301,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-user"></span><b>Add User</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-user"></span><b> Create User</b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -337,11 +337,11 @@ function getDevEUIByAppID()
 								  	
 								  
 								  	<tr>
-								  		<td align="right"><b>Organization:</b></td>
+								  		<td align="right"><b>Apartments:</b></td>
 								  			
 										<td>
 										 <select name="orgid" id="orgid" onchange="getAppByOrgID()">
-										    <option value="0">--Choose Organisation--</option>	
+										    <option value="0">--Choose Apartment--</option>	
 										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 											    if(organisations!=null && !organisations.isEmpty()){
 											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -364,31 +364,31 @@ function getDevEUIByAppID()
 										
 									</tr>
 									<tr>	
-									   <td align="right"><b>Application:</b></td>
+									   <td align="right"><b>Blocks:</b></td>
 									   
 										 <td>
 										 	<select name="appid" id="appid" onchange="getDevEUIByAppID()">
-										    	<option value="0">--Choose Application--</option>	
+										    	<option value="0">--Choose Block--</option>	
 										    </select> 
 										</td>
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Device EUI:</b></td>
+									   <td align="right"><b>Water Meters:</b></td>
 									   
 										 <td>
 										 	<select name="devid" id="devid" >
-										    	<option value="0">--Choose Device EUI--</option>	
+										    	<option value="0">--Choose Water Meter--</option>	
 										    </select> 
 										</td>
 									</tr>
 									
 									<tr>
-								  		<td align="right"><b>UserType:</b></td>
+								  		<td align="right"><b>User Type:</b></td>
 								  													
 										<td>
 										 <select name="usertype" id="usertype">
-										    <option value="0">--Choose UserType--</option>	
+										    <option value="0">--Choose User Type--</option>	
 										    <%if(roles!=null && !roles.isEmpty()){
 										    	for(Role r: roles){
 											    	if(r.getType().equalsIgnoreCase(AppConstants.user)){%>
@@ -401,7 +401,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>LoginID:</b></td>
+									   <td align="right"><b>Username:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="uname" id="uname" onchange="checkUsername()">
@@ -409,7 +409,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>EmailId:</b></td>
+									   <td align="right"><b>Email ID:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="email" id="email" onchange="checkEmail()" >
@@ -417,7 +417,7 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Contact#:</b></td>
+									   <td align="right"><b>Mobile Number:</b></td>
 									   
 										 <td>
 										 	<input type="text"  name="contact" id="contact" >
@@ -429,7 +429,7 @@ function getDevEUIByAppID()
 									<tr>
 										<td align="right">
 											<input style="margin-left: 130%; background-color:#3c8dbc;"
-												type="button" value="Select APL" class="formbutton"
+												type="button" value="Add Location" class="formbutton"
 													onclick="showPopup('LandMarkSearch') " />
 										</td>
 				
@@ -460,7 +460,7 @@ function getDevEUIByAppID()
 									
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Add user"/></td>
+											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Create user"/></td>
 										 
 									</tr>	
 								</table>	

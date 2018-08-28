@@ -76,7 +76,7 @@
 					
 						
 						<div class="box-header with-border">
-  					 		 <h5 class="text-blue text-left "><span class="fa fa-user"></span><b>User Device Mapping</b></h5>
+  					 		 <h5 class="text-blue text-left "><span class="fa fa-user"></span><b> User Device Mapping</b></h5>
           				</div><!-- /.box-header -->
 						
 						
@@ -112,22 +112,22 @@
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 							
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-							<display:column  property="devNode" title="DevNode" sortable="true"  />
-							<display:column  property="devEUI" title="DevEUI" sortable="true"  />
-							<display:column  property="createddt" title="Device_CreatedDt" sortable="true"  />
-							<display:column  title="UserName" sortable="true">
+							<display:column  property="devNode" title="WaterMeterName" sortable="true"  />
+							<display:column  property="devEUI" title="WaterMeter" sortable="true"  />
+							<display:column  property="createddt" title="Meter_CreatedDt" sortable="true"  />
+							<display:column  title="Username" sortable="true">
 								<%=userSession.getUname()%>							
 							</display:column>
-							<display:column  title="EmailAddress" sortable="true">
+							<display:column  title="EmailID" sortable="true">
 								<%=userSession.getEmailId()%>							
 							</display:column>
 							<display:column   title="UserType" sortable="true">
 								<%=userSession.getRoleBean().getType()%>						
 							</display:column>
-							<display:column  title="ContactNumber" sortable="true">
+							<display:column  title="MobileNumber" sortable="true">
 							<%=userSession.getContactnumber()%>						
 							</display:column>
-							<display:column title="User_createdDt"  sortable="true">
+							<display:column title="User_CreatedDt"  sortable="true">
 							<%=userSession.getCreateddt()%>						
 							</display:column>			
 							

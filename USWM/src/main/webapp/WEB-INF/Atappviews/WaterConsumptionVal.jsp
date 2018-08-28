@@ -91,13 +91,13 @@
  	  	var devid=document.getElementById("devid").value;
  	  		   	   
 	   if(orgid=="0"){
-		   alert("Please select Organisation!");
+		   alert("Please select Apartment!");
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select Application!");
+		   alert("Please select Block!");
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select DevEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }else if ($("input[name=fromDate]").val() == "") {
 			alert("Please specify FromDate");
@@ -117,8 +117,8 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Applicatoin</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Block</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
                 		return;
                 	}
                 else
@@ -146,7 +146,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
     	return;
     	}
     else
@@ -202,7 +202,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Application</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Block</Option>'+returnText+'</select>';                                             
                 }
             }
             
@@ -212,7 +212,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Device EUI</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Water Meter</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -231,7 +231,7 @@ function getDevEUIByAppID()
 					
 					if(orgId=="0")
 					{
-					alert("Select Organisation");
+					alert("Select Apartment");
 					return false;
 					}
 					url+="?orgId="+orgId;
@@ -277,7 +277,7 @@ function getDevEUIByAppID()
 													
 						
 						<div class="box-header with-border">
-  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b>Water Consumption In Liter</b></h5>
+  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b> Water Consumption In Liter</b></h5>
           				</div><!-- /.box-header -->
           				
           				
@@ -309,14 +309,14 @@ function getDevEUIByAppID()
     				    	<div class="col-sm-12">	
     				    	
     				    	<form name="form1" action="waterConsumptionUnits" onsubmit="return confirmValidate();" method="post">
-										
+								<%if(frames!=null && !frames.isEmpty()){%>		
 								  <table class="table">
 								  <tr>								  		
 								  		<td>
-								  			<label>Organization</label>
+								  			<label>Apartments</label>
 								  			 <div>
 										          <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
-										    			<option value="0">Select Organisation</option>	
+										    			<option value="0">Select Apartment</option>	
 													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 														    if(organisations!=null && !organisations.isEmpty()){
 														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -339,10 +339,10 @@ function getDevEUIByAppID()
 										</td>
 										
 									    <td> 
-									   		<label>Application</label>
+									   		<label>Blocks</label>
 									   		<div>
 											 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
-											    	<option value="0">Select Application</option>	
+											    	<option value="0">Select Block</option>	
 											    </select> 
 										    </div>
 										</td>
@@ -350,10 +350,10 @@ function getDevEUIByAppID()
 									
 									
 									    <td>
-									   		<label>DevEUI</label>
+									   		<label>Water Meters</label>
 										  	<div>
 									          <select name="devid" id="devid" class="form-control">
-										    	<option value="0">Select DevEUI</option>	
+										    	<option value="0">Water Meter</option>	
 										      </select> 
 									            
 									        </div>
@@ -394,7 +394,94 @@ function getDevEUIByAppID()
         							</tr>
 									
 									
-								</table>	
+								</table>
+								<% }else {%>
+									<table class="table">
+								  <tr>								  		
+								  		<td>
+								  			<label>Apartments</label>
+								  			 <div>
+										          <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
+										    			<option value="0">Select Apartment</option>	
+													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
+														    if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
+														    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+														    	<%}
+														    }
+													    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
+													    	if(organisations!=null && !organisations.isEmpty()){
+														    	for(Map.Entry<String,Object> map :organisations.entrySet()){
+														    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
+														    		   if(udm.getOrgId().equals(map.getKey())){%>
+														    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
+														    		   <%}
+														    		} 
+														    	}
+														    }	    
+													    }%>
+													 </select> 									            
+									        </div>										
+										</td>
+										
+									    <td> 
+									   		<label>Blocks</label>
+									   		<div>
+											 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
+											    	<option value="0">Select Block</option>	
+											    </select> 
+										    </div>
+										</td>
+									
+									
+									
+									    <td>
+									   		<label>Water Meters</label>
+										  	<div>
+									          <select name="devid" id="devid" class="form-control">
+										    	<option value="0">Water Meter</option>	
+										      </select> 
+									            
+									        </div>
+										</td>
+									</tr>
+									
+								  <tr>      
+								      <td>
+								        <label>From Date</label>
+								        <div class='input-group date' id='datetimepicker1'>
+								          <input type='text' name="fromDate" class="form-control" placeholder="Select FromDate"/>
+								            <span class="input-group-addon">
+								            	<span class="glyphicon glyphicon-calendar"></span>    
+								            </span>
+								         </div>
+								      </td>
+								      
+							           <td>
+							       		 <label>To Date</label>
+									        <div class='input-group date' id='datetimepicker2'>
+									          <input type='text' name="toDate" class="form-control" placeholder="Select ToDate" />
+									            <span class="input-group-addon">
+									            	<span class="glyphicon glyphicon-calendar"></span>
+									            </span>
+									        </div>
+							            </td>
+							           							           
+							            
+							            <td>
+							       		 <label>Action</label>
+									        <div>
+									         <input type="submit"  class="form-control" style="background-color:#3c8dbc;" value="Submit"/>
+									            
+									        </div>
+							            </td>
+							            
+							            
+        							</tr>
+									
+									
+								</table>
+								<% }%>
 							 </form> 
 							</div>	
 											 
@@ -408,9 +495,9 @@ function getDevEUIByAppID()
 								<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
 										export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 									<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-									<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
-									<display:column  property="applicationName" title="ApplicationName" sortable="true"  />
-									<display:column  property="devEUI" title="DevEUI" sortable="true"  />
+									<display:column  property="applicationID" title="Block_ID" sortable="true"  />
+									<display:column  property="applicationName" title="BlockName" sortable="true"  />
+									<display:column  property="devEUI" title="WaterMeter" sortable="true"  />
 									<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
 									<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 									<display:column  property="gatewayName" title="GatewayName" sortable="true"  />

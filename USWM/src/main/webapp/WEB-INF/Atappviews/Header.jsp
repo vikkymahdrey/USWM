@@ -112,8 +112,8 @@
            
           </ul> -->
            <ul class="treeview-menu">
-            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Delete DevEUI</b></a></li>
-             <li><a href="addDevice"><i class="fa fa-user-plus"></i><b>Add Device</b></a></li>
+            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Remove Water Meter</b></a></li>
+             <li><a href="addDevice"><i class="fa fa-user-plus"></i><b>Add Water Meter</b></a></li>
            
           </ul>
           
@@ -128,8 +128,9 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li>
-             <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney-JSP</b></a></li>
+            <!-- <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li> -->
+             <!-- <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney</b></a></li> -->
+             <li><a href="#"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
                        
           </ul>
           
@@ -141,7 +142,7 @@
             <i class="fa fa-arrow-right"></i>
             <span><b>Reports</b></span>
             <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
+              <span class="label label-primary pull-right">2</span>
             </span>
           </a>
           
@@ -149,8 +150,8 @@
           <ul class="treeview-menu">
             <li><a href="waterConsumptionCal"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
              <li><a href="userReport"><i class="fa fa-circle-o"></i><b>User</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i><b>User-Device-Mapped</b></a></li>
-             <li><a href="#"><i class="fa fa-circle-o"></i><b>Payment-Info</b></a></li>
+             <!-- <li><a href="#"><i class="fa fa-circle-o"></i><b>User-Device-Mapped</b></a></li>
+             <li><a href="#"><i class="fa fa-circle-o"></i><b>Payment-Info</b></a></li> -->
            
           </ul>
           
@@ -184,7 +185,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="sync"><i class="fa fa-circle-o"></i><b>Node Sync</b></a></li>
+            <li><a href="sync"><i class="fa fa-circle-o"></i><b>Sync-Water Meter </b></a></li>
            
           </ul>
         </li>
@@ -222,7 +223,7 @@
           
         </li>
         
-        <li class="treeview">
+        <!-- <li class="treeview">
           <a href="#">
             <i class="fa fa-cog"></i>
             <span><b>Device Information</b></span>
@@ -232,7 +233,7 @@
           </a>
           
                    
-        </li>
+        </li> -->
         
         
         
@@ -248,7 +249,7 @@
           
           <ul class="treeview-menu">
             <li><a href="endUserWaterConsumption"><i class="fa fa-circle-o"></i><b>Water Consumption</b></a></li>
-            <li><a href="userDeviceMapped"><i class="fa fa-circle-o"></i><b>User-Device-Mapped</b></a></li>
+            <li><a href="userDeviceMapped"><i class="fa fa-circle-o"></i><b>User-Device Mapping</b></a></li>
                        
           </ul>
           

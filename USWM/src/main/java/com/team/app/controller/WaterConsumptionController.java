@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
+import com.team.app.utils.JsonUtil;
 
 @Controller
 @SessionAttributes({"status"})
@@ -137,6 +139,7 @@ public class WaterConsumptionController {
 	
 	
 	/* Ajax calling for /getGraphVal */	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value= {"/getGraphVal"}, method=RequestMethod.POST)
     public @ResponseBody String getGraphValHandler(HttpServletRequest request) {
 		String orgs=request.getParameter("orgId");
@@ -148,34 +151,60 @@ public class WaterConsumptionController {
 		String devNode=request.getParameter("devId");
 		String fDate=request.getParameter("fromDate");		
 		String tDate=request.getParameter("toDate");
+		String type=request.getParameter("type");
 		logger.debug("orgid",orgid);
 		logger.debug("appId",appId);
 		logger.debug("devNode",devNode);
 		logger.debug("fromDate",fDate);
 		logger.debug("toDate",fDate);
+		logger.debug("type",type);
 		
 		String returnVal="";
 		try{
-		
+			
+			JSONArray dateUnitArr=null;
+				dateUnitArr=new JSONArray();
+				
+			JSONObject json=null;	
+				json=new JSONObject();	
+			
+			
+			
 			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	         Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
+	        Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
 	        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
-	                   
-	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUIAndAppId(appId,devNode,fromDate,toDate);
-	      
-	       int sum=0;
-	        if(frames!=null && !frames.isEmpty()){
-	        	logger.debug("Size List",frames.size());
-	        	for(LoraFrame f: frames){
-	        		sum=sum+Integer.parseInt(f.getWaterltr());
-	        	}
+	        if (fDate.compareTo(tDate) > 0) {
+	        	logger.debug("Greater");
+	        	json.put("result",dateUnitArr);
+				returnVal=JsonUtil.objToJson(json);
+				   return returnVal;
 	        }
-	        JSONObject json=null;
-	        		json=new JSONObject();
-	        		json.put("value", sum);
-	        	
-	         returnVal=json.toString();
-	         logger.debug("Resultant JSON String ",returnVal);
+	        
+	        
+	        
+	        Object[] frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUIAndAppId(appId,devNode,fromDate,toDate,type);
+	        logger.debug("resultant",frames[0]);
+	      
+	       if(String.valueOf(frames[0])!=null && !String.valueOf(frames[0]).isEmpty()){
+				String[] result=String.valueOf(frames[0]).split(",");
+				logger.debug("result length",result.length);				
+				
+							
+					for(int i=0;i<result.length;i++){							
+						String[] jsonVal=result[i].split("&");
+						JSONObject js=null;
+							js=new JSONObject();
+							js.put("xaxis", jsonVal[0]);
+							js.put("units", Integer.parseInt(jsonVal[1]));
+							dateUnitArr.add(js);
+																		
+					}
+												
+					json.put("result",dateUnitArr);
+					returnVal=JsonUtil.objToJson(json);
+				
+				    logger.debug("Resultant JSON String ",returnVal);
+	       }	         
 		}catch(Exception e){
 			e.printStackTrace();
 		}

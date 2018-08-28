@@ -44,14 +44,14 @@
    function confirmValidate(){
 		   	   
 	   if ($("input[name=uname]").val() == "") {
-			alert("Please specify LoginId");
+			alert("Please specify Username");
 			return false;
 	   }else if ($("input[name=email]").val() == "") {
-			alert("Please specify EmailAddress");
+			alert("Please specify Email ID");
 			return false;
 	   }else if (isNaN($("input[name=contact]").val())
 				|| ($("input[name=contact]").val()).length != 10) {
-			alert("Please specify 10 digit contact number");
+			alert("Please specify 10 digit mobile number");
 			return false;
 	   }else if ($("input[name=area]").val() == "") {
 			alert("Please select area");
@@ -84,13 +84,13 @@
 					
 		 		<div class="row">
 							<div class="col-sm-12 text-right">
-								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> <a href="logout"><img src="images/logout_icon_header.png" /><b>Log Out</b></a>
+								<img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> 
 							</div>
 					
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-edit"></span><b>Edit User</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-edit"></span><b> Edit Info</b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -127,7 +127,7 @@
 																	
 									
 									<tr>	
-									   <td align="right"><b>LoginID:</b></td>
+									   <td align="right"><b>Username:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="uname" id="uname" value="<%=user.getUname()%>" readonly>
@@ -136,7 +136,7 @@
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>EmailId:</b></td>
+									   <td align="right"><b>Email ID:</b></td>
 									   
 										 <td>
 										 	<input type="text" name="email" id="email" value="<%=user.getEmailId()%>">
@@ -146,7 +146,7 @@
 																									
 									
 									<tr>	
-									   <td align="right"><b>Contact#:</b></td>
+									   <td align="right"><b>Mobile Number:</b></td>
 									   
 										 <td>
 										 	<input type="text"  name="contact" id="contact" value="<%=user.getContactnumber()%>">
@@ -180,7 +180,7 @@
 									
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Update User"/></td>
+											<td> <input type="submit"  class="formbutton" style="background-color:#3c8dbc;" value="Update Info"/></td>
 										 
 									</tr>	
 								</table>	

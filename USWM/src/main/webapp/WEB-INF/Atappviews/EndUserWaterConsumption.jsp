@@ -95,7 +95,7 @@
 			alert("Please specify ToDate");
 			return false;
 	   }else if(devid=="0"){
-		   alert("Please select DevEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }
    }
@@ -134,7 +134,7 @@
 													
 						
 						<div class="box-header with-border">
-  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b>Water Consumption In Litre</b></h5>
+  					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b> Water Consumption In Litre</b></h5>
           				</div><!-- /.box-header -->
           				
           				<div class="row">
@@ -190,10 +190,10 @@
 							            </td>
 							            
 							            <td>
-									   		<label>DevEUI</label>
+									   		<label>Water Meters</label>
 										  	<div>
 									          <select name="devid" id="devid" class="form-control">
-										    	<option value="0">Select DevEUI</option>	
+										    	<option value="0">Select Water Meter</option>	
 										    	<%if(udmList!=null && !udmList.isEmpty()){
 											    	for(UserDeviceMapping udm: udmList) {%>
 											    	<option value="<%=udm.getDevEUI()%>"><%=udm.getDevNode()+"-"+udm.getDevEUI()%></option>
@@ -231,9 +231,9 @@
 								<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
 										export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 									<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-									<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
-									<display:column  property="applicationName" title="ApplicationName" sortable="true"  />
-									<display:column  property="devEUI" title="DevEUI" sortable="true"  />
+									<display:column  property="applicationID" title="BlockID" sortable="true"  />
+									<display:column  property="applicationName" title="BlockName" sortable="true"  />
+									<display:column  property="devEUI" title="WaterMeter" sortable="true"  />
 									<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
 									<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 									<display:column  property="gatewayName" title="GatewayName" sortable="true"  />

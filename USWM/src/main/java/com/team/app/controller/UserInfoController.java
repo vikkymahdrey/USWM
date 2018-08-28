@@ -578,12 +578,12 @@ public class UserInfoController {
 		
 		try{
 			consumerInstrumentServiceImpl.deleteDevEUI(appId.trim(), devId.trim());
-			returnVal="DeviceEUI '"+devId+"'"+" has deleted successfully! Thanks ";
+			returnVal="Water Meter '"+devId+"'"+" has removed successfully! Thanks ";
 			
 		}catch(Exception e){
 			logger.error("Error in Ajax/deleteDev",e);
 			e.printStackTrace();
-			returnVal="DeviceEUI '"+devId+"'"+" deletion has failed! Thanks ";
+			returnVal="Water Meter '"+devId+"'"+" removable has failed! Thanks ";
 		}
 			
 			
@@ -612,12 +612,12 @@ public class UserInfoController {
 		try{
 		
 			mqttIntrf.doDemo(appId,devId);	
-			returnVal="Lora Node Syncing has completed! Thank you";
+			returnVal="Water Meter syncing has completed! Thank you";
 				
 		}catch(Exception e){
 			logger.error("Error in Ajax/syncDev",e);
 			e.printStackTrace();
-			returnVal="Lora Node Syncing has failed! Thank you";
+			returnVal="Water Meter syncing has failed! Thank you";
 		}
 			
 		return returnVal;
@@ -695,7 +695,7 @@ public class UserInfoController {
 			if(user!=null){
 				
 				redirectAttributes.addFlashAttribute("status",
-						"<div class=\"failure\" > Email alrady exist!</div>");
+						"<div class=\"failure\" > Email already registered!</div>");
 				
 			}else{
 				TblUserInfo newUser=null;
@@ -895,7 +895,7 @@ public class UserInfoController {
 			try {
 				TblUserInfo userInfo=userLoginService.getUserByUsername(uname);
 					if(userInfo!=null){
-						response="LoginId already exists";
+						response="Username already exists";
 					}				
 			}catch(Exception e){
 				logger.debug("Error during AJAX calling for validateUserName",e);	
@@ -914,7 +914,7 @@ public class UserInfoController {
 			try {
 				TblUserInfo userInfo=userLoginService.getUserByEmailId(email);
 					if(userInfo!=null){
-						response="EmailId already exists";
+						response="Email already registered";
 					}				
 			}catch(Exception e){
 				logger.debug("Error during AJAX calling for validateEmail",e);	
@@ -992,7 +992,7 @@ public class UserInfoController {
 			logger.error("Error in userSubscription",e.getMessage());
 			if(e.getMessage().equals("Device already exist")){
 				redirectAttributes.addFlashAttribute("status",
-						"<div class=\"failure\" >Device already exist!</div>");
+						"<div class=\"failure\" >Water Meter is already mapped to user!</div>");
 			}else{
 				 redirectAttributes.addFlashAttribute("status",
 							"<div class=\"failure\" > System Exception..result failed !</div>");

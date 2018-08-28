@@ -11,7 +11,7 @@
   <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>WaterConsumption |  Liter</title>
+  <title>WaterConsumption |  Litre</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
  <!--  Bootstrap 3.3.6 -->
@@ -72,64 +72,13 @@
   
   $(function () {
 	  
-	     $('#datetimepicker1').datetimepicker();
-		  $('#datetimepicker2').datetimepicker();
-	    /* jQueryKnob */
-	      $(".knob").knob({
-	      /*change : function (value) {
-	       //console.log("change : " + value);
-	       },
-	       release : function (value) {
-	       console.log("release : " + value);
-	       },
-	       cancel : function () {
-	       console.log("cancel : " + this.value);
-	       },*/
-	      draw: function () {
-
-	        // "tron" case
-	        if (this.$.data('skin') == 'tron') {
-
-	          var a = this.angle(this.cv)  // Angle
-	              , sa = this.startAngle          // Previous start angle
-	              , sat = this.startAngle         // Start angle
-	              , ea                            // Previous end angle
-	              , eat = sat + a                 // End angle
-	              , r = true;
-
-	          this.g.lineWidth = this.lineWidth;
-
-	          this.o.cursor
-	          && (sat = eat - 0.3)
-	          && (eat = eat + 0.3);
-
-	          if (this.o.displayPrevious) {
-	            ea = this.startAngle + this.angle(this.value);
-	            this.o.cursor
-	            && (sa = ea - 0.3)
-	            && (ea = ea + 0.3);
-	            this.g.beginPath();
-	            this.g.strokeStyle = this.previousColor;
-	            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-	            this.g.stroke();
-	          }
-
-	          this.g.beginPath();
-	          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-	          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-	          this.g.stroke();
-
-	          this.g.lineWidth = 2;
-	          this.g.beginPath();
-	          this.g.strokeStyle = this.o.fgColor;
-	          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-	          this.g.stroke();
-
-	          return false;
-	        }
-	      }
-	    });
-	    /* END JQUERY KNOB */
+	   /*   $('#datetimepicker1').datetimepicker({maxDate: moment()});
+		  $('#datetimepicker2').datetimepicker({maxDate: moment()}); */
+	  $('#datetimepicker1').datetimepicker();
+	  $('#datetimepicker2').datetimepicker();
+		  
+		  
+	   
 	     	   
 	  });
   
@@ -142,15 +91,16 @@
 	  	var devid=document.getElementById("devid").value;
 	  	var fromDate=document.getElementById("fromDate").value;
 	  	var toDate=document.getElementById("toDate").value;
+	  	var filter=document.getElementById("filter").value;
 	  		   	   
 	   if(orgid=="0"){
-		   alert("Please select Organisation!");
+		   alert("Please select Apartment!");
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select Application!");
+		   alert("Please select Block!");
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select DevEUI!");
+		   alert("Please select Water Meter!");
 		   return false;
 	   }else if ($("input[name=fromDate]").val() == "") {
 			alert("Please specify FromDate");
@@ -158,14 +108,26 @@
 	   }else if ($("input[name=toDate]").val() == "") {
 			alert("Please specify ToDate");
 			return false;
+	   }else if ($("input[name=filter]").val() == "") {
+			alert("Please specify filter");
+			return false;
 	   }else{
 		   
 		   $.ajax({
                url: 'getGraphVal',
                type: 'POST',
-               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,fromDate : fromDate, toDate:toDate }) ,
+               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,fromDate : fromDate, toDate:toDate,type:filter }) ,
                success: function (data) {
-               jsonVal=data;
+            	   var obj=eval("(function(){return " + data + ";})()");
+          		   var resultant=obj.result;
+          		 
+            	   if(resultant.length==0){
+            		   alert("FromDate is after ToDate! ' Incorrect dates '");            		
+            	   }
+            	   jsonVal=data;
+            		  
+            	
+              
                    //$(".success").html(data);
                //window.location.reload();
                loadScript();
@@ -183,28 +145,47 @@
   }
   
   /*Calling for graph*/
+  
+ 
   function loadScript() {
-	 var graphVal;
+	 var resultant;
 	 var JSON;
+	 var dateVal;
+	 var unitsVal;
+	 
 	 if( typeof this.jsonVal !== 'undefined' ) {
 		 //var obj=JSON.parse(jsonVal);
 		 var obj=eval("(function(){return " + jsonVal + ";})()");
-		 graphVal=obj.value;
+		 resultant=obj.result;
+		 
+		 dateVal=new Array(resultant.length);
+		 unitsVal=new Array(resultant.length);
+		 
+		 for (var i = 0; i <resultant.length; i++) {
+			dateVal[i]=resultant[i].xaxis;
+		    unitsVal[i]=resultant[i].units;
+		    
+		}	
+		 //alert('DateArr'+dateVal);
+		 //alert('UnitArr'+unitsVal);
+	 }else{
+		 dateVal=['FromDate..','ToDate']; 
 	 }
-	 //alert("Value "+graphVal);
 	 
+	 
+			 
 	 if( typeof this.jsonVal !== 'undefined' ) {
       	JSON = [                   
                    {
                      name: 'WaterConsumedUnits',
-                     data: [0, 0, 0, 0, 0, 0, 0, graphVal, 0, 0, 0, 0]
+                     data: unitsVal
                    }
                  ];
 	 }else{
 		 JSON = [                   
              {
                name: 'WaterConsumedUnits',
-               data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+               data: [0, 0]
              }
            ];
 	 } 
@@ -217,7 +198,7 @@
                               text: 'Water Consumption Units Graph'
                             },
                      xAxis: {
-                              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                              categories: dateVal
                               //type: 'datetime'
                             },
                      yAxis: {
@@ -248,6 +229,8 @@
                      var chart = new Highcharts.Chart(options);
       }
   
+ 
+  
   
 function getAppByOrgID()
 {    
@@ -258,8 +241,8 @@ function getAppByOrgID()
            	
                	var appid=document.getElementById("appid");
                	var devid=document.getElementById("devid");
-               		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Applicatoin</option></select>';
-               		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+               		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Block</option></select>';
+               		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
                		return;
                	}
                else
@@ -287,7 +270,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
    	{                	
    	var devid=document.getElementById("devid");
-   		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Device EUI</option></select>';
+   		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
    	return;
    	}
    else
@@ -343,7 +326,7 @@ function getDevEUIByAppID()
                { 
                    var returnText=xmlHttp.responseText;
                    var appid=document.getElementById("appid");
-                   appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Application</Option>'+returnText+'</select>';                                             
+                   appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Block</Option>'+returnText+'</select>';                                             
                }
            }
            
@@ -353,7 +336,7 @@ function getDevEUIByAppID()
                { 
                    var returnText=xmlHttp.responseText;
                    var devid=document.getElementById("devid");
-                   devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Device EUI</Option>'+returnText+'</select>';                                             
+                   devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Water Meter</Option>'+returnText+'</select>';                                             
                }
            }
 	   
@@ -487,7 +470,7 @@ function getDevEUIByAppID()
 								<div class="box-header with-border">
 								<i class="fa fa-area-chart"></i>
 									<h3 class="box-title">
-										<b>Water consumption in litres</b>
+										<b>Water Consumption in Litres</b>
 									</h3>
 									
 									<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
@@ -495,11 +478,11 @@ function getDevEUIByAppID()
 								  <table class="table">
 								  <tr>
 								  		<td>
-								  			<label>Organization</label>
+								  			<label>Apartments</label>
 								  			 <div>
 										          												  
 												  <select name="orgid" class="form-control" id="orgid" onchange="getAppByOrgID()">
-										    			<option value="0">Select Organisation</option>	
+										    			<option value="0">Select Apartment</option>	
 													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 														    if(organisations!=null && !organisations.isEmpty()){
 														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -525,10 +508,10 @@ function getDevEUIByAppID()
 										</td>
 										
 									    <td> 
-									   		<label>Application</label>
+									   		<label>Blocks</label>
 									   		<div>
 											 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
-											    	<option value="0">Select Application</option>	
+											    	<option value="0">Select Block</option>	
 											    </select> 
 										    </div>
 										</td>
@@ -536,10 +519,10 @@ function getDevEUIByAppID()
 									
 									
 									    <td>
-									   		<label>DevEUI</label>
+									   		<label>Water Meters</label>
 										  	<div>
 									          <select name="devid" id="devid" class="form-control">
-										    	<option value="0">Select DevEUI</option>	
+										    	<option value="0">Select Water Meter</option>	
 										      </select> 
 									            
 									        </div>
@@ -573,7 +556,7 @@ function getDevEUIByAppID()
 									        <div>
 									          <select name="filter" id="filter" class="form-control">
 									            <!-- <option value="0">Select Filter</option> -->
-										    	<option value="Monthly">Monthly</option>
+										    	<option value="days">Per Day</option>
 										    	<!-- <option value="Hours">Hourly</option>	
 										    	<option value="Minutes">Minutes</option> -->	
 										      </select> 
@@ -618,7 +601,7 @@ function getDevEUIByAppID()
 																						
    												<p class="text-right">
 													<strong>X-axis Date</strong><br /> <strong>Y-axis
-														water units</strong><br />
+														Water Units</strong><br />
 												</p>
 											</div>
 											<!-- /.chart-responsive -->

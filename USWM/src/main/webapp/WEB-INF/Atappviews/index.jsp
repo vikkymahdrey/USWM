@@ -75,11 +75,11 @@ function validate() {
 	
 	
 	 if (uname.length < 1) {
-		document.getElementById("namevalid").innerHTML = "Please enter user name!";
+		document.getElementById("namevalid").innerHTML = "Please enter Username!";
 		document.getElementById("uname").focus(); 
 		return false;
 	}else if (password.length < 1) {
-		document.getElementById("passvalid").innerHTML = "Please enter password!";
+		document.getElementById("passvalid").innerHTML = "Please enter Password!";
 		document.getElementById("pass").focus(); 
 		return false;
 	} 

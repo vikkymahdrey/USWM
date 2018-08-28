@@ -23,7 +23,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>Frame</title>
+<title>Water Meter Frames</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom_siemens.css" rel="stylesheet">
@@ -77,7 +77,7 @@
 						<div class="row">
 								<div class="col-sm-8 page-heading mar-top-20">
 								<i class="fa fa-files-o"></i>
-								<h5 class="text-blue text-semi-bold"><b>Frames</b></h5>
+								<h5 class="text-blue text-semi-bold"><b> Water Meter Frames</b></h5>
 								</div>
 													
 						</div><br/>
@@ -89,9 +89,9 @@
 							<display:table  class="table table-hover  text-center"  name="<%=frames%>" id="row"
 									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-							<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
-							<display:column  property="applicationName" title="ApplicationName" sortable="true"  />
-							<display:column  property="devEUI" title="DevEUI" sortable="true"  />
+							<display:column  property="applicationID" title="BlockID" sortable="true"  />
+							<display:column  property="applicationName" title="BlockName" sortable="true"  />
+							<display:column  property="devEUI" title="WaterMeter" sortable="true"  />
 							<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
 							<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 							<display:column  property="gatewayName" title="GatewayName" sortable="true"  />

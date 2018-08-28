@@ -52,7 +52,7 @@ public class LoginController {
 		
         if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
         	redirectAttributes.addFlashAttribute("status",
-					"<div class='failure'>Enter User Name/Password!!</div");
+					"<div class='failure'>Enter Username/Password!</div");
 			return new ModelAndView("redirect:/");
 		} else {			
 			userInfo=userLoginService.getUserByUserAndPwd(username,password);
@@ -96,7 +96,7 @@ public class LoginController {
         	}
         }else{
         	session.setAttribute("userInfo", "");
-        	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid User Name/Password !</div");
+        	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid Username/Password !</div");
         	return new ModelAndView("redirect:/");
         }
 		
@@ -163,11 +163,11 @@ public class LoginController {
 					user.setPwdChangeDt(new Date(System.currentTimeMillis()));
 					userLoginService.updateUserInfo(user);
 					redirectAttributes.addFlashAttribute("status",
-							"<div class='success'>New password updated successfully!</div");
+							"<div class='success'>New Password set, Please Sign-In!</div");
 					
 				}else{
 					redirectAttributes.addFlashAttribute("status",
-							"<div class='failure'>Old password didn't match!</div");
+							"<div class='failure'>Old Password didn't match!</div");
 				}				
 				
 		        
