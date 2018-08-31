@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team.app.constant.AppConstants;
 import com.team.app.dao.FrameDao;
 import com.team.app.dao.UserInfoDao;
 import com.team.app.domain.LoraFrame;
@@ -62,7 +63,7 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 				+"<br/><br/>Please use the below credential to access your account."
 				+"<br/><br/>LoginID : "+u.getUname()
 				+"<br/>Password : "+u.getPassword()
-				+"<br/>URL : http://139.59.14.31:8081/USWM"
+				+"<br/>URL : <a href='"+AppConstants.appURL+"'>"+AppConstants.appURL+"</a>"
 				+"<br/><br/>If you have any questions about anything related to USWM, please email the USWM team at vikky@unizentechnologies.com"
 				+"<br/><br/>Much love,"
 				+"<br/>The USWM Robot"

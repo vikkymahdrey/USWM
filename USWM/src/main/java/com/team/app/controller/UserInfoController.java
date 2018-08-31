@@ -29,6 +29,7 @@ import com.team.app.constant.PasswordGenerator;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.Role;
+import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
 import com.team.app.dto.ApplicationDto;
@@ -37,6 +38,7 @@ import com.team.app.dto.UserDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
@@ -61,6 +63,9 @@ public class UserInfoController {
 	
 	@Autowired
 	private OrganisationService organisationService;
+	
+	@Autowired
+	private KeywordService keywordService;
 	
 	@RequestMapping(value= {"/userInfoHistory"}, method=RequestMethod.GET)
     public String userInfoHistoryHandler(Map<String,Object> map) {		
@@ -96,6 +101,7 @@ public class UserInfoController {
 				
 				if(frames!=null && !frames.isEmpty()){
 					logger.debug("size is ",frames.size());
+					logger.debug("Date is is ",frames.get(0).getCreatedAt());
 					map.put("frames", frames);
 				}
 			
@@ -134,6 +140,8 @@ public class UserInfoController {
 		   logger.debug(" IN /userMgmt ");		  		   
 			   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 					map.put("organisations", orgMapped);	
+			   List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+					map.put("keyTypes",keyTypes);
 			   List<Role> roles=userLoginService.getRoles();
 					map.put("roles", roles);
 						return "UserMgmt";
@@ -156,6 +164,8 @@ public class UserInfoController {
 		   logger.debug("/inside sync");
 		   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 				map.put("organisations", orgMapped);
+		   List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);		
 		   return "AutoSync";
 	}
 	
@@ -641,6 +651,9 @@ public class UserInfoController {
 		   logger.debug("/inside delDevEUI");
 			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 	   			map.put("organisations", orgMapped);
+	   			
+	   		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);	
 	   				return "deleteAllNode";
 	}
 	
@@ -824,7 +837,10 @@ public class UserInfoController {
 			logger.debug("/inside addDevice");
 				  		   
 			 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-				map.put("organisations", orgMapped);						
+				map.put("organisations", orgMapped);
+				
+			 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+					map.put("keyTypes",keyTypes);	
 				      return "addDevice";
 		 
 	 }

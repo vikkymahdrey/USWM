@@ -39,15 +39,9 @@ public class TblUserInfo implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;
 
-	//bi-directional many-to-one association to Landmark
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="landmarkId")
-	private Landmark landmark;
-
-	//bi-directional many-to-one association to Role
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="role")
-	private Role roleBean;
+	//bi-directional many-to-one association to TblPaymentInfo
+	@OneToMany(mappedBy="tblUserInfo")
+	private List<TblPaymentInfo> tblPaymentInfos;
 
 	//bi-directional many-to-many association to TblDeviceInfo
 	@ManyToMany
@@ -62,9 +56,15 @@ public class TblUserInfo implements Serializable {
 		)
 	private List<TblDeviceInfo> tblDeviceInfos;
 
-	//bi-directional many-to-one association to TblPaymentInfo
-	@OneToMany(mappedBy="tblUserInfo")
-	private List<TblPaymentInfo> tblPaymentInfos;
+	//bi-directional many-to-one association to Landmark
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="landmarkId")
+	private Landmark landmark;
+
+	//bi-directional many-to-one association to Role
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="role")
+	private Role roleBean;
 
 	//bi-directional many-to-one association to UserDeviceMapping
 	@OneToMany(mappedBy="tblUserInfo")
@@ -145,30 +145,6 @@ public class TblUserInfo implements Serializable {
 		this.updateddt = updateddt;
 	}
 
-	public Landmark getLandmark() {
-		return this.landmark;
-	}
-
-	public void setLandmark(Landmark landmark) {
-		this.landmark = landmark;
-	}
-
-	public Role getRoleBean() {
-		return this.roleBean;
-	}
-
-	public void setRoleBean(Role roleBean) {
-		this.roleBean = roleBean;
-	}
-
-	public List<TblDeviceInfo> getTblDeviceInfos() {
-		return this.tblDeviceInfos;
-	}
-
-	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
-		this.tblDeviceInfos = tblDeviceInfos;
-	}
-
 	public List<TblPaymentInfo> getTblPaymentInfos() {
 		return this.tblPaymentInfos;
 	}
@@ -189,6 +165,30 @@ public class TblUserInfo implements Serializable {
 		tblPaymentInfo.setTblUserInfo(null);
 
 		return tblPaymentInfo;
+	}
+
+	public List<TblDeviceInfo> getTblDeviceInfos() {
+		return this.tblDeviceInfos;
+	}
+
+	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
+		this.tblDeviceInfos = tblDeviceInfos;
+	}
+
+	public Landmark getLandmark() {
+		return this.landmark;
+	}
+
+	public void setLandmark(Landmark landmark) {
+		this.landmark = landmark;
+	}
+
+	public Role getRoleBean() {
+		return this.roleBean;
+	}
+
+	public void setRoleBean(Role roleBean) {
+		this.roleBean = roleBean;
 	}
 
 	public List<UserDeviceMapping> getUserDeviceMappings() {

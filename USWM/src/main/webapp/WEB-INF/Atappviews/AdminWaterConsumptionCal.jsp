@@ -89,24 +89,72 @@
 	   var orgid=document.getElementById("orgid").value;
  	  	var appid=document.getElementById("appid").value;
  	  	var devid=document.getElementById("devid").value;
+ 	   var orgDesc=document.getElementById("orgN").value;
+	  	var appDesc=document.getElementById("appN").value;
+	  	var devDesc=document.getElementById("devN").value;
  	  		   	   
 	   if(orgid=="0"){
-		   alert("Please select Apartment!");
+		   alert(orgDesc);
+		   document.getElementById("orgid").focus();
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select Block!");
+		   alert(appDesc);
+		   document.getElementById("appid").focus();
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select Water Meter!");
+		   alert(devDesc);
+		   document.getElementById("devid").focus();
+		  
 		   return false;
 	   }else if ($("input[name=fromDate]").val() == "") {
-			alert("Please specify FromDate");
+			alert("Choose FromDate");
+			document.getElementById("fromDate").focus();
 			return false;
 	   }else if ($("input[name=toDate]").val() == "") {
-			alert("Please specify ToDate");
+			alert("Choose ToDate");
+			document.getElementById("toDate").focus();
 			return false;
 	   }
    }
+   
+   
+   function getKeywords(){	  
+	   var typeId=document.getElementById("typeId").value;
+	     
+	   $.ajax({
+           url: 'getKeywordByTypeId',
+           type: 'POST',
+           data: jQuery.param({ typeId: typeId }) ,
+           success: function (data) {
+        	       var obj=eval("(function(){return " + data + ";})()");
+      		       var resultant=obj.result;        		
+	        	   if(resultant.length==0){
+	        		   alert("Data not found!");            		
+	        	   }else{
+	        		   for (var i = 0; i <resultant.length; i++) {
+	        			    if(resultant[i].organisation!==undefined){
+	        			    	
+	        				     document.getElementById("oId").innerHTML=resultant[i].organisation;  
+	        				     document.getElementById("orgN").value=resultant[i].desc; 
+	        				}else if(resultant[i].application!==undefined){
+								 document.getElementById("aId").innerHTML=resultant[i].application; 
+								 document.getElementById("appN").value=resultant[i].desc; 
+							}else if(resultant[i].device!==undefined){
+								 document.getElementById("dId").innerHTML=resultant[i].device;
+								 document.getElementById("devN").value=resultant[i].desc; 
+							}       			    
+	        			}	  
+	        	   }
+        	
+               },
+		 		error: function(e){
+	     			        alert('Error: ' + e);
+	     		 }
+
+              
+           }); 
+	   
+  }  
    
 function getAppByOrgID()
 {    
@@ -117,8 +165,8 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Select Block</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
                 		return;
                 	}
                 else
@@ -146,7 +194,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Select Water Meter</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
     	return;
     	}
     else
@@ -202,7 +250,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Select Block</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                 }
             }
             
@@ -212,7 +260,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Select Water Meter</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -254,6 +302,7 @@ function getDevEUIByAppID()
 			
 			 
 				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+				List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
 			
   			
   			%>	
@@ -289,12 +338,42 @@ function getDevEUIByAppID()
     				    	<form name="form1" action="waterConsumptionUnits" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
-								  <tr>								  		
+								  <tr>	
+								  		<td> 
+									   		<label>Housing Type</label>
+									   		<div>
+											 	<select name="typeId" class="form-control" id="typeId" onchange="getKeywords()">
+											    	<!-- <option value="0">Select Housing Type</option> -->
+											    	<%if(keyTypes!=null && !keyTypes.isEmpty()){
+											    		for(TblKeywordType type :keyTypes){%>	
+											    			<option value="<%=type.getId()%>"><%=type.getType()%></option>
+											    		<%} 
+											    	}%>
+											    </select> 
+											    <%
+											    for(TblKeyword key : keyTypes.get(0).getTblKeywords()){
+											    	if(key.getKey().equalsIgnoreCase(AppConstants.orgName)){
+											    	   	request.setAttribute("orgN", key.getValue());%>											    	
+											    	     <input type="hidden" name="orgN" id="orgN" value="<%=key.getDesc()%>"/> 
+											    	     
+				 									<%}else if(key.getKey().equalsIgnoreCase(AppConstants.appName)){ 
+				 										request.setAttribute("appN", key.getValue());%>
+				 										<input type="hidden" name="appN" id="appN" value="<%=key.getDesc()%>"/>
+				 										
+				 									<%}else if(key.getKey().equalsIgnoreCase(AppConstants.devName)){
+				 										request.setAttribute("devN", key.getValue());%>
+				 										<input type="hidden" name="devN" id="devN" value="<%=key.getDesc()%>"/>
+				 										
+				 									<%}%>	
+				 								<%} %>	
+			 									
+										    </div>
+										</td>							  		
 								  		<td>
-								  			<label>Apartments</label>
+								  			<label id="oId"><%=(String)request.getAttribute("orgN")%></label>
 								  			 <div>
 										           <select name="orgid" id="orgid" class="form-control" onchange="getAppByOrgID()">
-										    			<option value="0">Select Apartment</option>	
+										    			<option value="0">Please Choose</option>	
 													    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 														    if(organisations!=null && !organisations.isEmpty()){
 														    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
@@ -318,10 +397,10 @@ function getDevEUIByAppID()
 										</td>
 																														
 									    <td> 
-									   		<label>Blocks</label>
+									   		<label id="aId"><%=(String)request.getAttribute("appN")%></label>
 									   		<div>
 											 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
-											    	<option value="0">Select Block</option>	
+											    	<option value="0">Please Choose</option>	
 											    </select> 
 										    </div>
 										</td>
@@ -329,10 +408,10 @@ function getDevEUIByAppID()
 									
 									
 									    <td>
-									   		<label>Water Meters</label>
+									   		<label id="dId"><%=(String)request.getAttribute("devN")%></label>
 										  	<div>
 									          <select name="devid" id="devid" class="form-control">
-										    	<option value="0">Select Water Meter</option>	
+										    	<option value="0">Please Choose</option>	
 										      </select> 
 									            
 									        </div>
@@ -343,7 +422,7 @@ function getDevEUIByAppID()
 								      <td>
 								        <label>From Date</label>
 								        <div class='input-group date' id='datetimepicker1'>
-								          <input type='text' name="fromDate" class="form-control" placeholder="Select FromDate"/>
+								          <input type='text' name="fromDate" id="fromDate" class="form-control" placeholder="Please Choose"/>
 								            <span class="input-group-addon">
 								            	<span class="glyphicon glyphicon-calendar"></span>    
 								            </span>
@@ -353,7 +432,7 @@ function getDevEUIByAppID()
 							           <td>
 							       		 <label>To Date</label>
 									        <div class='input-group date' id='datetimepicker2'>
-									          <input type='text' name="toDate" class="form-control" placeholder="Select ToDate" />
+									          <input type='text' name="toDate" id="toDate" class="form-control" placeholder="Please Choose" />
 									            <span class="input-group-addon">
 									            	<span class="glyphicon glyphicon-calendar"></span>
 									            </span>
@@ -364,7 +443,7 @@ function getDevEUIByAppID()
 							            <td>
 							       		 <label>Action</label>
 									        <div>
-									         <input type="submit"  class="form-control" style="background-color:#3c8dbc;" value="Submit"/>
+									         <input type="submit"  class="form-control" style="background-color:#3c8dbc;color:white" value="Submit"/>
 									            
 									        </div>
 							            </td>

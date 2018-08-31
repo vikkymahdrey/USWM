@@ -20,10 +20,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.config.MqttIntrf;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 import com.team.app.utils.JsonUtil;
@@ -47,6 +49,9 @@ public class WaterConsumptionController {
 	@Autowired
 	private OrganisationService organisationService;
 	
+	@Autowired
+	private KeywordService keywordService;
+	
 	
 	@RequestMapping(value= {"/waterConsumption"}, method=RequestMethod.GET)
     public String waterConsumptionHanlder(Map<String,Object> map) {
@@ -59,7 +64,9 @@ public class WaterConsumptionController {
     public String waterConsumptionCalHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		
 		 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);	
+			map.put("organisations", orgMapped);
+		 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+			map.put("keyTypes",keyTypes);
 				return "AdminWaterConsumptionCal";
 		 
 	 }
@@ -119,7 +126,10 @@ public class WaterConsumptionController {
 	        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
 	        
 	        Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);	
+			map.put("organisations", orgMapped);
+			
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);
 	            
 	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUI(devNode,fromDate,toDate);
 	       

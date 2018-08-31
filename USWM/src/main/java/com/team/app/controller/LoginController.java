@@ -16,8 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
@@ -30,6 +32,9 @@ public class LoginController {
 	
 	@Autowired
 	private OrganisationService organisationService;
+	
+	@Autowired
+	private KeywordService keywordService;
 		
 	
 	@RequestMapping(value= {"/"})
@@ -107,6 +112,9 @@ public class LoginController {
 		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
 		  map.put("userInfos",userInfos);
 		  
+		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+			map.put("keyTypes",keyTypes);
+		  
 		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 			map.put("organisations", orgMapped);
 	   
@@ -118,6 +126,8 @@ public class LoginController {
 	public String inValidCredentials(){
 		return "index";
 	}
+	
+	
 	
 	@RequestMapping(value= {"/forgotPassword"})
 	public String forgetPasswordHandler(){
@@ -172,6 +182,11 @@ public class LoginController {
 				
 		        
 				return "redirect:/";
+			}
+			
+			@RequestMapping(value= {"/test"})
+			public String test(){
+				return "test";
 			}
 
 			

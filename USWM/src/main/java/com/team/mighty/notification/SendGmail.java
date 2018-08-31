@@ -31,6 +31,9 @@ public class SendGmail implements Runnable, SendMail {
 	public static String sourceMail = "robotunizen@gmail.com";
 	public static String password = "robot@123";
 	
+	/*public static String sourceMail = "heyo@bemighty.com";
+	public static String password = "grodt2016";*/
+	
 
 	private String protocol = "smtp";
 	private String host = "smtp.gmail.com";
