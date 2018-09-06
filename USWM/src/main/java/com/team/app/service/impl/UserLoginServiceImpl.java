@@ -85,8 +85,13 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 
 	@Transactional
-	public TblUserInfo saveUser(TblUserInfo user, UserDeviceMapping udm) throws Exception  {
-		validateDeviceEUI(udm.getDevEUI(),udm.getOrgId());		
+	public String saveUser(TblUserInfo user, UserDeviceMapping udm) throws Exception  {
+		//validateDeviceEUI(udm.getDevEUI(),udm.getOrgId());
+		UserDeviceMapping dEUI=userDeviceMappingDao.getDeviceByEUIAndOrgId(udm.getDevEUI(),udm.getOrgId());
+		if(dEUI!=null){
+			return "exist";
+		}
+		
 		TblUserInfo u=userInfoDao.save(user);
 		if(u!=null){						
 			udm.setTblUserInfo(u);
@@ -103,15 +108,15 @@ public class UserLoginServiceImpl implements UserLoginService {
 				
 				}catch(Exception e){
 					logger.error("Exception in mail ",e);
-					throw new Exception("System Exception while registering user!");
+					
 				}
 				
-				return u;
+				return "success";
 			}else{
-				return null;
+				return "failed";
 			}
 		}else{
-			return null;
+			return "failed";
 		}
 		
 		

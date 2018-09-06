@@ -50,9 +50,18 @@
  	  	var appid=document.getElementById("appid").value;
  	  	var devid=document.getElementById("devid").value;
  	  	var usertype=document.getElementById("usertype").value;
- 	   var orgDesc=document.getElementById("orgN").value;
+ 	    var orgDesc=document.getElementById("orgN").value;
 	  	var appDesc=document.getElementById("appN").value;
 	  	var devDesc=document.getElementById("devN").value;
+	  	
+	  	var email=document.getElementById("email").value;
+	  	var contact=document.getElementById("contact").value;
+		var uname=document.getElementById("uname").value;landMarkID
+		var landMarkID=document.getElementById("landMarkID").value;
+	  	
+	  	var emailRegx = /^((([a-z]|\d|[!#\$%&\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/;
+	  	var nameRegx = /^[A-Za-z][A-Za-z0-9 ]*$/;
+	  	var phoneRegx = /^\+?\d?\d?\d{10}$/;
  		
 	   	   
  	   if(orgid=="0"){
@@ -71,20 +80,34 @@
 			alert("Choose User Type");
 			document.getElementById("usertype").focus();
 			return false;
-	   }else if ($("input[name=uname]").val() == "") {
+	   }else if(nameRegx.test(uname)==false) {
+			alert("Invalid Username !");
+			document.getElementById("uname").focus();
+			return false;
+	   }
+ 	   /* else if ($("input[name=uname]").val() == "") {
 			alert("Choose Username");
 			document.getElementById("uname").focus();
 			return false;
-	   }else if ($("input[name=email]").val() == "") {
-			alert("Choose Email ID");
+	   } */else if(emailRegx.test(email)==false) {
+			alert("Invalid Email ID !");
 			document.getElementById("email").focus();
 			return false;
-	   }else if (isNaN($("input[name=contact]").val())
+	   }else if (contact==""){
+		   alert("Please Specify Phone Number");
+			document.getElementById("contact").focus();
+			return false;
+	   }else if (phoneRegx.test(contact)==false){
+		   alert("Invalid Mobile Number !");
+			document.getElementById("contact").focus();
+			return false;
+	   }
+ 	   /* else if (isNaN($("input[name=contact]").val())
 				|| ($("input[name=contact]").val()).length != 10) {
 			alert("Choose 10 digit Mobile Number");
 			document.getElementById("contact").focus();
 			return false;
-	   }else if ($("input[name=area]").val() == "") {
+	   } */else if ($("input[name=area]").val() == "") {
 			alert("Please Add Location");
 			document.getElementById("area").focus();
 			return false;
@@ -96,6 +119,33 @@
 			alert("Choose Add Location");
 			document.getElementById("landmark").focus();
 			return false;
+	   }else{
+		   $.ajax({
+	           url: 'subscription',
+	           type: 'POST',
+	           data: jQuery.param({orgid: orgid,appid:appid,devid:devid,uname:uname,email:email,contact:contact,usertype:usertype,landMarkID:landMarkID }) ,
+	           success: function (data) {	        	          		
+		        	   if(data=='success'){
+		        		   alert("User registered successfully.Please check your email notification for activation!");
+		        		   window.location="http://139.59.14.31:8081/USWM/userReport";
+		        		
+		        	   }else if(data=='exist') {
+		        		   alert("Device already exist!");  
+		        		   document.getElementById("devid").focus();
+		        	   }else if(data=='failed') {
+		        		   alert("System Error! User registration failed!"); 
+		        		   location.reload();
+		        	   }    		   
+	        	
+	               },
+			 		error: function(e){
+		     			        alert('Error: ' + e);
+		     		 }
+
+	              
+	           }); 
+		   
+		   return false;
 	   }				
    }
    
@@ -196,9 +246,10 @@ function getAppByOrgID()
                 	{      
             	
                 	var appid=document.getElementById("appid");
+                	     	
+                		appid.innerHTML='<select name="appid" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+                		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
                 		return;
                 	}
                 else
@@ -226,7 +277,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+    		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
     	return;
     	}
     else
@@ -282,7 +333,9 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appid" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    var devid=document.getElementById("devid");
+                    devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';                
                 }
             }
             
@@ -292,7 +345,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devid" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      
@@ -384,7 +437,7 @@ function getDevEUIByAppID()
    						  <div class="row" >
     				    	<div class="col-sm-6">	
     				    	
-    				    	<form name="form1" action="userSubscription" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" >
 										
 								  <table class="table" >
 								   	<tr>								  		

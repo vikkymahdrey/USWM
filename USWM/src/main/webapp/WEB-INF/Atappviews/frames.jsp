@@ -11,6 +11,7 @@
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
  <%@ page buffer = "900kb" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
@@ -60,7 +61,7 @@
  <%@include file="Header.jsp"%>  
  
 	<div class="content-wrapper">
-		
+		<c:set var="timeZone" value="IST"/>
 			<section class="content">
 		 		<div class="content-wrap box box-primary">
 		 			
@@ -74,13 +75,10 @@
 						</div><br/>
 					
 					
-						<div class="row">
-								<div class="col-sm-8 page-heading mar-top-20">
-								<i class="fa fa-files-o"></i>
-								<h5 class="text-blue text-semi-bold"><b>Frames</b></h5>
-								</div>
-													
-						</div><br/>
+						
+						<div class="box-header with-border">
+  					  			<h5 class="text-blue text-left "><span class="fa fa-files-o"></span><b> Frames</b></h5>
+       					</div><!-- /.box-header -->
 						
 						<div class="row" style="overflow-y: auto;">
 							<div class="col-sm-12 ">	
@@ -89,13 +87,18 @@
 							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
 							<display:column  property="applicationID" title="BlockID" sortable="true"  />
 							<display:column  property="applicationName" title="BlockName" sortable="true"  />
+							<display:column  property="nodeName" title="WaterMeterName" sortable="true"  />
 							<display:column  property="devEUI" title="WaterMeter" sortable="true"  />
-							<%-- <display:column  property="fPort" title="fPort" sortable="true"  /> --%>
+							<display:column  property="devMapId" title="DevID" sortable="true"  />
 							<display:column  property="gatewayMac" title="GatewayMac" sortable="true"  />
 							<display:column  property="gatewayName" title="GatewayName" sortable="true"  />
 							<display:column  property="waterltr" title="Water_Val_In_Ltr"  sortable="true"  />
-							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
-													     		   
+							<display:column  property="createdAt" title="CreatedDt"  sortable="true" format="{0,date,yyyy-MM-dd HH:mm:ss}" /> 
+                            <%-- <display:column   title="CreatedDt" >
+								 <fmt:timeZone value="${timeZone}">	    								
+	          									<fmt:formatDate value="${createdAt}" timeZone="${timeZone}" type="both" />	        							
+	    						</fmt:timeZone>	
+    						</display:column> --%>				     		   
 						 	<display:setProperty name="export.csv.filename" value="<%=fname1%>" />
 							<display:setProperty name="export.excel.filename" value="<%=fname2%>" />
 							<display:setProperty name="export.xml.filename" value="<%=fname3%>" /> 

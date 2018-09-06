@@ -659,7 +659,7 @@ public class UserInfoController {
 	
 	
 	
-	@RequestMapping(value= {"/userSubscription"}, method=RequestMethod.POST)
+	/*@RequestMapping(value= {"/userSubscription"}, method=RequestMethod.POST)
     public String userSubscriptionHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("/inside userSubscription");
 		String orgIdName=request.getParameter("orgid").trim();
@@ -754,6 +754,88 @@ public class UserInfoController {
 		}
 			
 		return "redirect:/userReport";
+		 
+	 }*/
+	
+	/*Ajax Calling on subscription*/
+	@RequestMapping(value= {"/subscription"}, method=RequestMethod.POST)
+    public @ResponseBody String userSubscriptionHandler(HttpServletRequest request) {
+		logger.debug("/inside subscription");
+		String orgIdName=request.getParameter("orgid").trim();
+		String appIdName=request.getParameter("appid").trim();
+		String devNode=request.getParameter("devid").trim();
+		String uname=request.getParameter("uname").trim();
+		String email=request.getParameter("email").trim();
+		String contact=request.getParameter("contact").trim();
+		String roleId=request.getParameter("usertype").trim();
+		String landMarkID=request.getParameter("landMarkID").trim();
+		String[] devArr=devNode.split(":");
+		String[] appArr=appIdName.split(":");
+		String[] orgArr=orgIdName.split(":");		
+		String devId=devArr[0].trim();
+		String devNodeName=devArr[1].trim();
+		String appId=appArr[0].trim();
+		String appName=appArr[1].trim();
+		String orgId=orgArr[0].trim();
+		String orgName=orgArr[1].trim();
+		String returnVal="";
+		
+		
+		
+		logger.debug("OrgId....",orgId);
+		logger.debug("appId....",appId);
+		logger.debug("devId....",devId);
+		logger.debug("uname....",uname);
+		logger.debug("email....",email);
+		logger.debug("contact....",contact);
+		logger.debug("usertype....",roleId);		
+		logger.debug("landMarkID....",landMarkID);
+		
+		try{
+			
+			UserDeviceMapping udm=null;
+			 	udm=new UserDeviceMapping();
+			 	udm.setOrgId(orgId);
+				udm.setOrgName(orgName);
+				udm.setAppId(appId);
+				udm.setAppName(appName);
+				udm.setDevEUI(devId);
+				udm.setDevNode(devNodeName);
+				udm.setStatus(AppConstants.IND_A);
+				udm.setCreateddt(new Date(System.currentTimeMillis()));
+				udm.setUpdateddt(new Date(System.currentTimeMillis()));
+			
+			
+				TblUserInfo newUser=null;
+					newUser=new TblUserInfo();					
+					
+					Role r=userLoginService.getRoleByRoleId(roleId);
+					Landmark l=aplService.getLandMarkById(landMarkID);
+					String password = new PasswordGenerator().randomString(6);
+					newUser.setUname(uname);
+					newUser.setPassword(password);
+					newUser.setEmailId(email);
+					newUser.setContactnumber(contact);
+					newUser.setRoleBean(r);
+					newUser.setLandmark(l);
+					newUser.setCreateddt(new Date(System.currentTimeMillis()));
+					newUser.setUpdateddt(new Date(System.currentTimeMillis()));
+					newUser.setStatus(AppConstants.status);				
+					
+					String result=userLoginService.saveUser(newUser,udm);
+					if(result.equals("exist")){
+						returnVal="exist";
+					}else if(result.equals("success")){
+						returnVal="success";
+					}else if(result.equals("failed")){
+						returnVal="failed";
+					}
+										
+		}catch(Exception e){
+			logger.error("Error in subscription",e.getMessage());
+		}
+			
+		return returnVal;
 		 
 	 }
 	
@@ -1005,7 +1087,7 @@ public class UserInfoController {
 				
 										
 		}catch(Exception e){
-			logger.error("Error in userSubscription",e.getMessage());
+			logger.error("Error in addDeviceToUser",e.getMessage());
 			if(e.getMessage().equals("Device already exist")){
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"failure\" >Water Meter is already mapped to user!</div>");

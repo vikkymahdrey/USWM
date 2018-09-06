@@ -28,6 +28,18 @@ public class LoraFrame implements Serializable {
 	private Date createdAt;
 
 	private String devEUI;
+	
+	@Column(name="devMapId")
+	private String devMapId;
+	
+
+	public String getDevMapId() {
+		return devMapId;
+	}
+
+	public void setDevMapId(String devMapId) {
+		this.devMapId = devMapId;
+	}
 
 	private String fPort;
 

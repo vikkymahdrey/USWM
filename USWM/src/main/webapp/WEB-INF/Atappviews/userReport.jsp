@@ -76,10 +76,9 @@
 					
 					
 						<div class="row">
-								<div class="col-sm-8 page-heading mar-top-20">
+								<div class="box-header with-border">
 								<h5 class="text-blue text-left "><span class="fa fa-files-o"></span><b> User Subscription Report</b></h5>
-						</div>
-						
+						</div> 
 						
 													
 						</div>

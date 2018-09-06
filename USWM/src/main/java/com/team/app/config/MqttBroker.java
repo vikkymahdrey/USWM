@@ -3,6 +3,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +20,6 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.team.app.constant.AppConstants;
 import com.team.app.dao.FrameDao;
 import com.team.app.domain.LoraFrame;
 import com.team.app.logger.AtLogger;
@@ -106,6 +106,207 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
 				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be
+				  	  /*formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
+				  	  	frame.setCreatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
+				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));*/
+				  	  	
+				  	  	
+				  	  	
+				  	  	if(json.get("data")!=null){	
+				  	  		 logger.debug("Data not empty");
+				     		 byte[] decoded=Base64.decodeBase64(json.get("data").toString());
+				     		 
+				     		 	if(decoded!=null && decoded.length>0){
+				     		 		
+				     		 		int i=0;				     		 	
+				     		 		String packetType="";
+				     		 		int temp=0;
+				     		 		String devMapId="";
+				     		 		String waterLtr="";				     		 		
+				     		 		int hourly=-1;
+				     		 		int n=0;
+				     		 		int packetLength=0;
+				     		 		long millseconds=System.currentTimeMillis();
+				     		 		LoraFrame frm=null;
+				     		 			frm=new LoraFrame();
+				     		 			for(Byte b : decoded){
+				     		 				if(n>0){
+				     		 					frm=new LoraFrame();
+				     		 					n=0;	
+			     		 		   				temp=0;
+			     		 		   				waterLtr="";
+			     		 		   			}
+				     		 			  if(i==0){
+					     		 			 String decodeBinary = Integer.toBinaryString(b);
+					     		 			 logger.debug("decodeBinary i=0 :",decodeBinary);
+						     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+						     		 				if(decodeBinary.equals("0")){
+						     		 					packetType="0";
+						     		 					devMapId="0";
+						     		 				}else{
+						     		 					if(decodeBinary.length()>4){
+						     		 						packetType=String.format("%02X ",decodeBinary.substring(0,decodeBinary.length()-4));
+						     		 						devMapId=String.format("%02X ",decodeBinary.substring(3,decodeBinary.length()));
+						     		 					}else{
+						     		 						packetType="0";
+						     		 						devMapId=String.format("%02X ", decodeBinary);
+						     		 					}
+						     		 					
+						     		 				}						     		 				
+						     		 			 	logger.debug("packetType :",packetType);
+						     		 			 	logger.debug("devMapId :",devMapId);
+						     		 			//} 	
+					     		 			   i++;					     		 			 
+						     		 		  }else if(i==1){
+						     		 			 String decodeBinary = Integer.toBinaryString(b);
+						     		 			 logger.debug("decodeBinary i=1 :",decodeBinary);
+							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+							     		 				int devMapCombination=Integer.parseInt(devMapId)+Integer.parseInt(decodeBinary,2);
+							     		 				devMapId=String.valueOf(devMapCombination);
+							     		 			//}
+							     		 		i++;	
+						     		 		  }else if(i==2){
+						     		 			String decodeBinary = Integer.toBinaryString(b);
+						     		 			 logger.debug("decodeBinary i=2 :",decodeBinary);
+							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+							     		 				//Packet Length logic here
+							     		 				hourly=hourly+Integer.parseInt(decodeBinary,2);
+							     		 					logger.debug("Total hourly :",hourly);
+							     		 					logger.debug("Actual millseconds :",millseconds);
+							     		 					millseconds=millseconds-TimeUnit.HOURS.toMillis(hourly);
+							     		 					logger.debug("Sub millseconds :",millseconds);
+							     		 					logger.debug("Date as :",formatter.parse(formatter.format(new Date(millseconds))));
+							     		 			//}
+							     		 		i++;	
+						     		 		  }else if(i==3){
+							     		 			String decodeBinary = Integer.toBinaryString(b);
+							     		 			 logger.debug("decodeBinary i=3 :",decodeBinary);
+								     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+								     		 				//Date Length logic here
+								     		 				packetLength=Integer.parseInt(decodeBinary,2);
+								     		 			//}
+								     		 		i++;
+						     		 		  }else if(i>3){
+						     		 			 String decodeBinary =String.format("%x", b);
+						     		 			logger.debug("decodeBinary i>3 :",decodeBinary);						     		 			
+							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+							     		 				if(packetType.equals("0")){
+							     		 					//Bussiness logic here	
+							     		 					logger.debug("i Value : ",i);
+							     		 					logger.debug("Packet Type ===0: ");
+							     		 					logger.debug("Packet Length : ",packetLength);
+							     		 					logger.debug("Temp Length : ",temp);
+							     		 					logger.debug("waterLtr Length : ",waterLtr);
+							     		 												     		 					
+							     		 					if(temp<packetLength){
+							     		 						if(String.valueOf(decodeBinary).length()==1){
+							     		 							waterLtr=waterLtr+"0"+decodeBinary;
+							     		 						}else{
+							     		 							waterLtr=waterLtr+decodeBinary;
+							     		 						}
+							     		 						
+							     		 						temp++;
+							     		 						if(temp!=packetLength){
+							     		 							i++;
+								     		 						continue;
+							     		 						}
+							     		 						 
+							     		 					}
+							     		 					
+							     		 					logger.debug("waterLtr Length final ===0",waterLtr);							     		 				
+							     		 					logger.debug("resultant: packetType : ",packetType);
+							     		 					logger.debug("devMapId: AS : ",devMapId);
+							     		 					/*String res=Integer.toBinaryString(Integer.parseUnsignedInt(waterLtr));
+							     		 					String resultant=String.valueOf(Integer.parseUnsignedInt(res,2));*/
+									     		 		 	
+									     		 		 	
+									     		 		 	
+									     		 		 	frm.setCreatedAt(formatter.parse(formatter.format(new Date(millseconds))));
+									     		 		 	frm.setUpdatedAt(formatter.parse(formatter.format(new Date(millseconds))));						     		 					
+									     		 		 	frm.setDevMapId(devMapId);
+									     		 		 	//frm.setWaterltr(String.format("%02X ", Integer.toBinaryString(Integer.parseInt(waterLtr))));
+									     		 		 	frm.setWaterltr(String.valueOf(Integer.parseInt(waterLtr,16)));
+									     		 		 	frm.setApplicationID(frame.getApplicationID());
+									     		 		 	frm.setApplicationName(frame.getApplicationName());
+									     		 		 	frm.setNodeName(frame.getNodeName());
+									     		 		 	frm.setDevEUI(frame.getDevEUI());
+									     		 		 	frm.setGatewayMac(frame.getGatewayMac());
+									     		 		 	frm.setGatewayName(frame.getGatewayName());
+									     		 		 	frm.setFPort(frame.getFPort());
+									     		 		    frameDao.save(frm);
+							     		 					
+									     		 		    millseconds=millseconds+TimeUnit.HOURS.toMillis(1);									     		 		    
+							     		 					n++;							     		 					
+									     		 		    
+							     		 				}else{
+							     		 					logger.debug("Packet Type !=0");
+							     		 				}
+							     		 			//}
+							     		 		i++;							     		 			  
+						     		 		  }
+				     		 			
+				     		 		}
+				     		 		
+				     		 		 
+				     		 		 	
+				     		 		
+				     		 	}
+					
+				  	  	}				  		
+				  		
+		}
+		
+		}catch(Exception e){
+			logger.error("Error",e);
+			e.printStackTrace();
+		}
+	}
+	
+	
+/*	@Transactional
+	public void messageArrived(String topic, MqttMessage message) throws Exception {
+		logger.debug("Inside messageArrived");
+		try{
+			LoraFrame frame=null;
+			if(!message.toString().isEmpty()){
+				 
+				  JSONObject json=null;
+				  		json=new JSONObject();
+				  		json=(JSONObject)new JSONParser().parse(message.toString());
+				  		logger.debug("REsultant json",json);
+				  		
+				  		 frame=new LoraFrame();
+				  		
+				  		 frame.setApplicationID(json.get("applicationID").toString());
+				  		 frame.setApplicationName(json.get("applicationName").toString());
+				  		 frame.setNodeName(json.get("nodeName").toString());
+				  		 frame.setDevEUI(json.get("devEUI").toString());
+				  		logger.debug("applicationID",json.get("applicationID").toString());
+							logger.debug("applicationName",json.get("applicationName").toString());
+								logger.debug("nodeName",json.get("nodeName").toString());
+									logger.debug("devEUI",json.get("devEUI").toString());
+				  		 
+				  		 JSONArray arr=(JSONArray) json.get("rxInfo");
+				  		 
+				  		 if(arr!=null && arr.size()>0){
+	   						 for (int i = 0; i < arr.size(); i++) {
+	   							 JSONObject jsonObj = (JSONObject) arr.get(i);
+	   							 frame.setGatewayMac(jsonObj.get("mac").toString());
+	   							 frame.setGatewayName(jsonObj.get("name").toString());
+	   							 
+		   							logger.debug("mac",jsonObj.get("mac").toString());
+		   								logger.debug("name",jsonObj.get("name").toString());
+	   						 }
+				  		 }
+				  		 
+				  		
+				  		logger.debug("fport",json.get("fPort").toString());
+				  	  		logger.debug("Data As:",json.get("data").toString());
+				  	  		
+				  	  	frame.setFPort(json.get("fPort").toString().trim());
+				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
+				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be
 				  	  	formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
 				  	  	frame.setCreatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
 				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
@@ -142,7 +343,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 
 

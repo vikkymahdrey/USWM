@@ -25,7 +25,7 @@ public class test6 {
 		System.out.println("Value led3"+led3);
 		System.out.println("Value led4"+led4);*/
 		
-		List<String> li=new ArrayList<String>();
+		/*List<String> li=new ArrayList<String>();
 		
 		li.add("Sizy");
 		li.add("Vikky");
@@ -36,8 +36,10 @@ public class test6 {
 		Object[] s=li.toArray();
 		for (Object i: s){
 		System.out.println(i.toString());
-		}
-		}
+		}*/
+		
+	}
+		
 		
 	
 }

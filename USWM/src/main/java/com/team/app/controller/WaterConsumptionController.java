@@ -214,7 +214,10 @@ public class WaterConsumptionController {
 					returnVal=JsonUtil.objToJson(json);
 				
 				    logger.debug("Resultant JSON String ",returnVal);
-	       }	         
+	       }else{
+	    	   json.put("result","No Content");
+	    	   returnVal=JsonUtil.objToJson(json);
+	       }
 		}catch(Exception e){
 			e.printStackTrace();
 		}

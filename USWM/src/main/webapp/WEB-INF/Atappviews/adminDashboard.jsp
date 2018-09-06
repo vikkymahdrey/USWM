@@ -204,6 +204,10 @@
 		 //var obj=JSON.parse(jsonVal);
 		 var obj=eval("(function(){return " + jsonVal + ";})()");
 		 resultant=obj.result;
+		if(resultant==='No Content'){
+			alert('No Data Found!'); 
+			return;
+		 };
 		 
 		 dateVal=new Array(resultant.length);
 		 unitsVal=new Array(resultant.length);
@@ -286,10 +290,11 @@ function getAppByOrgID()
              	if(orgid=="0")
                	{      
            	
-               	var appid=document.getElementById("appid");
+               	var appid=document.getElementById("appid");               	
+               		appid.innerHTML='<select name="appid" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
+               	
                	var devid=document.getElementById("devid");
-               		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
-               		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+               		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
                		return;
                	}
                else
@@ -317,7 +322,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
    	{                	
    	var devid=document.getElementById("devid");
-   		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+   		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
    	return;
    	}
    else
@@ -373,7 +378,9 @@ function getDevEUIByAppID()
                { 
                    var returnText=xmlHttp.responseText;
                    var appid=document.getElementById("appid");
-                   appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                   	appid.innerHTML='<select  name="appid" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';
+                   var devid=document.getElementById("devid");
+              		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
                }
            }
            
@@ -383,7 +390,7 @@ function getDevEUIByAppID()
                { 
                    var returnText=xmlHttp.responseText;
                    var devid=document.getElementById("devid");
-                   devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                   devid.innerHTML='<select  name="devid" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                }
            }
 	   
@@ -637,6 +644,7 @@ function getDevEUIByAppID()
 									          <select name="filter" id="filter" class="form-control">
 									            <!-- <option value="0">Select Filter</option> -->
 										    	<option value="days">Per Day</option>
+										    	<option value="hourly">Per Hour</option>
 										    	<!-- <option value="Hours">Hourly</option>	
 										    	<option value="Minutes">Minutes</option> -->	
 										      </select> 

@@ -165,8 +165,9 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+                		appid.innerHTML='<select name="appid" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
+                	var devid=document.getElementById("devid");
+                		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
                 		return;
                 	}
                 else
@@ -194,7 +195,7 @@ function getDevEUIByAppID()
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+    		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
     	return;
     	}
     else
@@ -250,7 +251,9 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    appid.innerHTML='<select  name="appid" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';
+                    var devid=document.getElementById("devid");
+            		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
                 }
             }
             
@@ -260,7 +263,7 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devid" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                 }
             }
      </script>      

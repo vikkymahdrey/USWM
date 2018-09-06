@@ -128,8 +128,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <!-- <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li> -->
-             <!-- <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney</b></a></li> -->
+            <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li> 
+              <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney</b></a></li> 
              <li><a href="#"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
                        
           </ul>

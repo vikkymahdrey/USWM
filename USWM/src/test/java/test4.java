@@ -32,7 +32,7 @@ public class test4 {
         //decoding byte array into base64
         //byte[] decoded = Base64.decodeBase64(encoded);
 		try{
-        byte[] decoded=Base64.decodeBase64("DAECAwQ=");
+        byte[] decoded=Base64.decodeBase64("AAUMBAAAAP8AAAEAAAABAQAAAQIAAAEDAAABBAAAAQUAAAEGAAABBwAAAQgAAAEJAAABCg==");
         //System.out.println("decoded val : " +decoded[0]);
         
         //System.out.println("Base 64 Decoded  String : " + new String(decoded));
