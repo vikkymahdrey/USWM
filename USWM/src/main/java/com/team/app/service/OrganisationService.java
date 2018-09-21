@@ -8,4 +8,18 @@ public interface OrganisationService {
 
 	long getLoraServerUsers()throws Exception;
 
+	String getLoraServerApplicationByOrgId(String orgId)throws Exception;
+
+	String getLoraServerDevEUIByAppId(String appId)throws Exception;
+
+	String getLoraServerDevEUIByAppIdForSync(String appId)throws Exception;
+
+	String getLoraServerDevEUIByAppIdCall(String appId) throws Exception;
+
+	String getLoraServerDevEUIByAppIdModal(String appId)throws Exception;
+
+	String getLoraServerApplicationByOrgIdModal(String orgId)throws Exception;
+
+	String getLoraServerUsersByOrgIdModal(String orgId)throws Exception;
+
 }

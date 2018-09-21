@@ -1,9 +1,5 @@
 package com.team.app.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,9 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +25,6 @@ import com.team.app.domain.Role;
 import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
-import com.team.app.dto.ApplicationDto;
 import com.team.app.dto.UserDeviceDto;
 import com.team.app.dto.UserDto;
 import com.team.app.logger.AtLogger;
@@ -181,270 +173,60 @@ public class UserInfoController {
 		String[] orgIdName=orgs.split(":");
 		String orgId=orgIdName[0];
 		logger.debug("Organisation Id as ",orgId);
+		
+		
 		String returnVal="";
-		
-		
-		try{
-						
-			   String url=AppConstants.app_url;
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();
-							
-							if(jsonObj.get("organizationID").toString().equalsIgnoreCase(orgId)){
-								logger.debug("organizationID matching ..");
-								logger.debug("Application name ..",jsonObj.get("name").toString());
-								logger.debug("Application id ..",jsonObj.get("id").toString());
-								
-								dto.setAppId(jsonObj.get("id").toString());
-								dto.setAppName(jsonObj.get("name").toString());
-								dtos.add(dto);							
-							}
-						 }
-			        }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							returnVal+="<option value="+a.getAppId()+":"+a.getAppName()+">"+ a.getAppName() + "</option>";
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getApplications",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
+			returnVal=organisationService.getLoraServerApplicationByOrgId(orgId);
+		    	return returnVal;
 
 	}
 	
 	
-	/* Ajax calling for /getApplications */	
-	@RequestMapping(value= {"/getAppByOrgID"}, method=RequestMethod.POST)
+	/* Ajax calling for /getAppByOrgIDModal */	
+	@RequestMapping(value= {"/getAppByOrgIDModal"}, method=RequestMethod.POST)
 	public @ResponseBody String getAppByOrgIDHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
-		logger.debug("/*Ajax getting getAppByOrgID */");
+		logger.debug("/*Ajax getting getAppByOrgIDModal */");
 		
-		String orgs = request.getParameter("orgId");
-		String[] orgIdName=orgs.split(":");
-		String orgId=orgIdName[0];
+		String orgId = request.getParameter("orgId");
 		logger.debug("Organisation Id as ",orgId);
 		String returnVal="";
+			returnVal=organisationService.getLoraServerApplicationByOrgIdModal(orgId);
+				return returnVal;
 		
-		
-		try{
-						
-			   String url=AppConstants.app_url;
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();
-							
-							if(jsonObj.get("organizationID").toString().equalsIgnoreCase(orgId)){
-								logger.debug("organizationID matching ..");
-								logger.debug("Application name ..",jsonObj.get("name").toString());
-								logger.debug("Application id ..",jsonObj.get("id").toString());
-								
-								dto.setAppId(jsonObj.get("id").toString());
-								dto.setAppName(jsonObj.get("name").toString());
-								dto.setOrgId(jsonObj.get("organizationID").toString());
-								dtos.add(dto);							
-							}
-						 }
-			        }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							//returnVal+="<tr><td><a href=\"#\" class=\"devModal\"><span class=\"info-box-number\"><b>"+a.getAppId()+"</b></span></a></td><td>"+a.getAppName()+"</td><td>"+a.getOrgId()+"</td></tr>";
-							returnVal+="<tr><td><a href=\"#\" class=\"devModal\"><span class=\"info-box-number\"><b>"+a.getAppId()+"</b></span></a></td><td>"+a.getAppName()+"</td><td>"+a.getOrgId()+"</td></tr>";
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getApplications",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
 
 	}
 	
 	
-/* Ajax calling for /getDevEUI */
+	/* Ajax calling for /getUserByOrgID */	
+	@RequestMapping(value= {"/getUserByOrgIDModal"}, method=RequestMethod.POST)
+	public @ResponseBody String getUserByOrgIDModalHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
+		logger.debug("/*Ajax getting getUserByOrgIDModal */");
+		
+		String orgId = request.getParameter("orgId");
+		logger.debug("Organisation Id as ",orgId);
+		String returnVal="";
+			returnVal=organisationService.getLoraServerUsersByOrgIdModal(orgId);
+				return returnVal;
+		
+
+	}
 	
+	
+	
+	
+	
+	
+	/* Ajax calling for /getDevEUIByAppId */	
 	@RequestMapping(value= {"/getDevEUI"}, method=RequestMethod.GET)
 	public @ResponseBody String getDevEUIHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUI */");
 		
 		String appId = request.getParameter("appId").trim();
 		logger.debug("Application Id as ",appId);
+		
 		String returnVal="";
-		
-		
-		try{
-			
-			
-			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();						
-							
-								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
-													
-								dto.setDevEUI(jsonObj.get("devEUI").toString());
-								dto.setDevName(jsonObj.get("name").toString());
-								dtos.add(dto);							
-							
-						  }
-			         }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							logger.debug("DevEUI DevEUI..",a.getDevEUI());
-							List<LoraFrame> frms=consumerInstrumentServiceImpl.getDeviceIdByDevEUI(a.getDevEUI());
-							if(frms!=null && !frms.isEmpty()){
-								logger.debug("Size Size..",frms.size());
-								returnVal+="<option value="+a.getDevEUI()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
-							}	
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getApplications",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
+			returnVal=organisationService.getLoraServerDevEUIByAppId(appId);
+				return returnVal;
 
 	}
 	
@@ -456,84 +238,10 @@ public class UserInfoController {
 		String[] appIdName=apps.split(":");
 		String appId=appIdName[0];
 		logger.debug("Application Id as ",appId);
+		
 		String returnVal="";
-		
-		
-		try{
-			
-			
-			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();						
-							
-								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
-													
-								dto.setDevEUI(jsonObj.get("devEUI").toString());
-								dto.setDevName(jsonObj.get("name").toString());
-								dtos.add(dto);							
-							
-						  }
-			         }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							 returnVal+="<option value="+a.getDevEUI()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
-								
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getApplications",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
-
+			returnVal=organisationService.getLoraServerDevEUIByAppIdForSync(appId);
+				return returnVal;
 	}
 	
 	
@@ -550,171 +258,23 @@ public class UserInfoController {
 		String[] appIdName=apps.split(":");
 		String appId=appIdName[0];
 		logger.debug("Application Id as ",appId);
+		
 		String returnVal="";
-		
-		
-		try{
-			
-			
-			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();						
-							
-								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
-													
-								dto.setDevEUI(jsonObj.get("devEUI").toString());
-								dto.setDevName(jsonObj.get("name").toString());
-								dtos.add(dto);							
-							
-						  }
-			         }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							 returnVal+="<option value="+a.getDevEUI()+":"+a.getDevName()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
-								
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getDevEUIByAppId",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
-
+			returnVal=organisationService.getLoraServerDevEUIByAppIdCall(appId);
+				return returnVal;
 	}
 	
 	
 	@RequestMapping(value= {"/getDevByAppID"}, method=RequestMethod.POST)
 	public @ResponseBody String getDevByAppIDHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
-		logger.debug("/*Ajax getting getDevByAppID */");
+		logger.debug("/*Ajax getting getDevByAppIDModal */");
 		
 		String appId = request.getParameter("appId").trim();
-		logger.debug("Application.. as ",appId);		
-		String returnVal="";
+		logger.debug("Application.. as ",appId);
 		
-		
-		try{
-			
-			
-			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
-				logger.debug("URLConn",url);
-				URL obj1 = new URL(url);
-				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-				con.setDoOutput(true);
-				con.setRequestMethod("GET");
-				con.setRequestProperty("accept", "application/json");
-				con.setRequestProperty("Content-Type", "application/json");
-				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-				
-				    
-				int responseCode = con.getResponseCode();
-					logger.debug("POST Response Code :: " + responseCode);
-					
-				
-						    				
-				if(responseCode == HttpURLConnection.HTTP_OK) {
-					logger.debug("Token valid,POST Response with 200");
-					
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuffer response = new StringBuffer();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					
-					in.close();
-					
-					JSONObject json=null;
-						json=new JSONObject();
-					json=(JSONObject)new JSONParser().parse(response.toString());
-				
-					JSONArray arr=(JSONArray) json.get("result");
-					
-					List<ApplicationDto> dtos=null;	
-					
-					if(arr!=null && arr.size()>0){
-						logger.debug("Inside Array not null");
-							dtos=new ArrayList<ApplicationDto>();
-						 for (int i = 0; i < arr.size(); i++) {
-							 JSONObject jsonObj = (JSONObject) arr.get(i);
-							 ApplicationDto dto=null;
-							 		dto=new ApplicationDto();						
-							
-								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
-													
-								dto.setDevEUI(jsonObj.get("devEUI").toString());
-								dto.setDevName(jsonObj.get("name").toString());
-								dto.setAppId(jsonObj.get("applicationID").toString());
-								dtos.add(dto);							
-							
-						  }
-			         }
-					
-					if(dtos!=null && !dtos.isEmpty()){
-						for(ApplicationDto a : dtos){
-							returnVal+="<tr><td><a href=\"#\" class=\"usrModal\"><span class=\"info-box-number\"><b>"+a.getDevEUI()+"</b></span></a></td><td>"+a.getDevName()+"</td><td>"+a.getAppId()+"</td></tr>";
-								
-						}
-					}
-				}
-			
-				
-			
-		}catch(Exception e){
-			logger.error("Error in Ajax/getDevEUIByAppId",e);
-			e.printStackTrace();
-		}
-			
-			
-		return returnVal;
+		String returnVal="";		
+			returnVal=organisationService.getLoraServerDevEUIByAppIdModal(appId);
+				return returnVal;
 
 	}
 	

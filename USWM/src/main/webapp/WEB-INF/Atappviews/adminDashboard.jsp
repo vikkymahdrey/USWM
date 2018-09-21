@@ -88,21 +88,39 @@
 	    });  
 	  
 	  $('.orgCountModal').click(function(){
-	        $("#orgModal").modal();
+	        $("#orgModal").modal();     	  
 	    });
 	  
+	  
+	  $('.usrModal').click(function(){
+  		var orgid=this.getAttribute("ajaxid");
+  		
+			  $.ajax({
+              url: 'getUserByOrgIDModal',
+              type: 'POST',
+              data: jQuery.param({ orgId: orgid}),
+              success: function (data) {
+            	 document.getElementById("users").innerHTML=data; 	           	  		
+              },
+              error: function(e){
+ 	     			        alert('Error: ' + e);
+ 	     	  }                 
+              }); 
+		  
+		  $("#uModal").modal(); 
+  		}); 
+	  
 	  $('.appModal').click(function(){
-		  //var org=document.getElementsByClassName("appModal");
-		  //alert(org.valueOf);
-	    var orgid="11";
-		  $.ajax({
-              url: 'getAppByOrgID',
+		   var orgid=this.getAttribute("ajaxid");
+		   $.ajax({
+              url: 'getAppByOrgIDModal',
               type: 'POST',
               data: jQuery.param({ orgId: orgid}) ,
               success: function (data) {
-            	 document.getElementById("applications").innerHTML=data; 
-            	$('.devModal').click(function(){
-          		    var appid="30";
+            	 document.getElementById("applications").innerHTML=data;
+            	 
+            	  $('.devModal').click(function(){
+            		var appid=this.getAttribute("ajaxid");
           			  $.ajax({
           	              url: 'getDevByAppID',
           	              type: 'POST',
@@ -116,7 +134,9 @@
           	              }); 
           			  
           			  $("#devModalId").modal(); 
-          	  		});          	
+          	  		}); 
+            	  
+            	          	  
               },
               error: function(e){
  	     			        alert('Error: ' + e);
@@ -561,7 +581,7 @@ function getDevEUIByAppID()
 									   <div class="info-box col-sm-6 mar-top-25" >											
 										  	<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
 										  	<div class="info-box-content">
-											    <span class="info-box-text">Lora Server Organisation</span>
+											    <span class="info-box-text">Lora Server Information</span>
 											    <a href="#" class="orgCountModal"><span class="info-box-number"><b><%=orgCount%></b></span></a>
 											    <%-- <span class="info-box-number"><b><a href="getOrgansiation"><%=orgCount%></a></b></span> --%>
 										 	</div>
@@ -646,10 +666,10 @@ function getDevEUIByAppID()
 															if(organisations!=null && !organisations.isEmpty()){
 																for(Map.Entry<String,Object> map :organisations.entrySet()){%>					
 																		  <tr>
-																	        <td><a href="#<%=map.getKey()%>" class="appModal"><span class="info-box-number"><b><%=map.getKey()%></b></span></a>
+																	        <td><a ajaxid="<%=map.getKey()%>" href="#" class="appModal"><span class="info-box-number"><b><%=map.getKey()%></b></span></a>
 																	        </td>
 																	        <td><%=map.getValue()%></td>
-																	        <td>Processing</td>
+																	        <td><a ajaxid="<%=map.getKey()%>" href="#" class="usrModal"><span class="info-box-number">view user</span></a></td>
 																	        																	     
 																	      </tr>
 																	     
@@ -752,7 +772,49 @@ function getDevEUIByAppID()
                          					  	  
 				      					  </div><!-- content close here -->
 			                           </div><!-- modal dialog close here -->					             			              
-					               </div><!-- modal close here -->													              
+					               </div><!-- modal close here -->		
+					               
+					               
+					               <!-- Modal -->
+                                      <div class="modal fade" id="uModal" role="dialog">
+                                      	<div class="modal-dialog ">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-building-o"></span> Organisation-Users </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                      <div class="row" style="overflow-y: auto;">		                                      			
+															<div class="col-sm-12 ">
+																	<table class="table">
+																	    <thead>
+																	      <tr>
+																	        <th>Id</th>
+																	        <th>UserName</th>
+																	        <th>isAdmin</th>
+																	        <th>organisationID</th>
+																	        																	        																        
+																	      </tr>
+																	    </thead>
+																	    <tbody id="users">																																														 
+																	    </tbody>
+																	</table>
+															
+														   </div>
+														</div>
+					  								
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->												              
 					             			              
 					            </div>
 					            				           

@@ -14,7 +14,35 @@ public class ApplicationDto implements Serializable{
 	private String devEUI;
 	private String devName;
 	private String orgId;
+	private String userId;
+	private String username;
+	private String isAdmin;
 	
+	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 
 	public String getDevName() {
 		return devName;

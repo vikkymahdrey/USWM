@@ -41,9 +41,10 @@ public class AppConstants {
 	public static final String jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJhdWQiOiJsb3JhLWFwcC1zZXJ2ZXIiLCJuYmYiOjE1MDk5NjE1NzIsInN1YiI6InVzZXIiLCJ1c2VybmFtZSI6ImFkbWluIn0.NDZGFGPDQNs7AgmGRzQk1WL5Y1tLjyRbw-n_TwHPZsY";
 	public static final String domain ="https://139.59.14.31:8080";
 	public static final String appURL ="http://139.59.14.31:8081/USWM";
-	public static final String org_url = domain+"/api/organizations?limit=100";
-	public static final String app_url =domain+"/api/applications?limit=100";
-	public static final String user_url=domain+"/api/users?limit=100";
+	public static final String org = domain+"/api/organizations/";
+	public static final String org_url = domain+"/api/organizations?limit=500";
+	public static final String app_url =domain+"/api/applications?limit=500";
+	public static final String user_url=domain+"/api/users?limit=500";
 	public static final String status="Y";
 	public static final String noportdomain ="139.59.14.31";
 	
