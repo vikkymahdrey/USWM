@@ -16,6 +16,7 @@ public interface UserInfoDao extends JpaRepository<TblUserInfo, Serializable> {
 
 	@Query("Select count(u.id) From TblUserInfo u")
 	List<TblUserInfo> getUserInfosCount();
+	
 
 	@Query("Select u From TblUserInfo u")
 	List<TblUserInfo> getUserInfos();

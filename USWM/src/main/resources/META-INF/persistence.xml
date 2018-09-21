@@ -34,6 +34,8 @@
 		<class>com.team.app.domain.User</class>
 		<class>com.team.app.domain.UserDeviceMapping</class>
 		<class>com.team.app.domain.TblSchedularTask</class>
+		<class>com.team.app.domain.TblDownlinkHoulyConfig</class>
+		<class>com.team.app.domain.TblDownlinkPacketConfig</class>
 		
 
 		<properties>

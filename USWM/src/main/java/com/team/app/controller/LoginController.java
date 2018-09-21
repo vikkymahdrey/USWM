@@ -26,7 +26,6 @@ import com.team.app.service.UserLoginService;
 @Controller
 public class LoginController {
 	private static final AtLogger logger = AtLogger.getLogger(LoginController.class);
-		
 	@Autowired
 	private UserLoginService userLoginService;
 	
@@ -109,15 +108,24 @@ public class LoginController {
 	}
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
 	 public String home(Map<String,Object> map) throws Exception{
-		List<TblUserInfo> userInfos= userLoginService.getUserInfosCount();
-		  map.put("userInfos",userInfos);
-		  
+			  
+		List<TblUserInfo> userInfoList = userLoginService.getUserInfos();
+		 map.put("userInfoList",userInfoList);
+		 map.put("appUserCount",String.valueOf(userInfoList.size()));
+		 
 		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 			map.put("keyTypes",keyTypes);
 		  
 		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 			map.put("organisations", orgMapped);
-	   
+			map.put("orgCount",String.valueOf(orgMapped.size()));
+			
+			logger.debug("orgCount as: ",String.valueOf(orgMapped.size()));
+			
+		/*long userCount=organisationService.getLoraServerUsers();	
+			map.put("userCount", String.valueOf(userCount));
+				logger.debug("userCount as: ",userCount);*/
+			
 		return "adminDashboard";
 	    	
 	}
@@ -138,6 +146,8 @@ public class LoginController {
 	public String userHome(Map<String,Object> map){
 		return "userHome";
 	}
+	
+	
 	
 		 
 		

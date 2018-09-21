@@ -242,7 +242,7 @@ function getDevEUIByAppID()
                     
                     devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';      
                    }else{
-                	   alert("No DevEUI Found!");
+                	   alert("No Water Meters Found!");
                 	    devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>'
                    }	
                 }

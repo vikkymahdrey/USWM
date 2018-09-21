@@ -7,6 +7,7 @@
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 <html lang="en">
   <head>
   <meta charset="utf-8">
@@ -25,6 +26,7 @@
  <!--  AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="css/modal.css">
   
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -66,9 +68,13 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
-
  	
-  <script type="text/javascript">
+<script type="text/javascript">
+/* $(document).ready(function(){ 
+	 $('.userCountModal').click(function(){
+	        $("#userModal").modal();
+	    });  
+}); */
   
   $(function () {
 	  
@@ -76,11 +82,55 @@
 		  $('#datetimepicker2').datetimepicker({maxDate: moment()}); */
 	  $('#datetimepicker1').datetimepicker();
 	  $('#datetimepicker2').datetimepicker();
+	  
+	   $('.userCountModal').click(function(){
+	        $("#userModal").modal();
+	    });  
+	  
+	  $('.orgCountModal').click(function(){
+	        $("#orgModal").modal();
+	    });
+	  
+	  $('.appModal').click(function(){
+		  //var org=document.getElementsByClassName("appModal");
+		  //alert(org.valueOf);
+	    var orgid="11";
+		  $.ajax({
+              url: 'getAppByOrgID',
+              type: 'POST',
+              data: jQuery.param({ orgId: orgid}) ,
+              success: function (data) {
+            	 document.getElementById("applications").innerHTML=data; 
+            	$('.devModal').click(function(){
+          		    var appid="30";
+          			  $.ajax({
+          	              url: 'getDevByAppID',
+          	              type: 'POST',
+          	              data: jQuery.param({ appId: appid}) ,
+          	              success: function (data) {
+          	            	 document.getElementById("devices").innerHTML=data; 	           	  		
+          	              },
+          	              error: function(e){
+          	 	     			        alert('Error: ' + e);
+          	 	     	  }                 
+          	              }); 
+          			  
+          			  $("#devModalId").modal(); 
+          	  		});          	
+              },
+              error: function(e){
+ 	     			        alert('Error: ' + e);
+ 	     	  }                 
+              }); 
 		  
-		  
-	   
+		  $("#appModalId").modal();
+  		});
+	  
+	  
+	 
+	  
 	     	   
-	  });
+  });
   
   var jsonVal;
   
@@ -455,8 +505,11 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini" onload="loadScript()">
   		   <% 
   			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
-  		 	List<TblUserInfo> userInfo=(List<TblUserInfo>)request.getAttribute("userInfos");
-  		 	List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
+  		  	List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
+  		 	List<TblKeywordType> userInfoList=(List<TblKeywordType>)request.getAttribute("userInfoList");
+  		 	String appUser=(String)request.getAttribute("appUserCount");
+  		 	//String loraServerUser=(String)request.getAttribute("userCount");
+  		 	String orgCount=(String)request.getAttribute("orgCount"); 
   			%>
 							 
   <div class="wrapper">  
@@ -495,21 +548,211 @@ function getDevEUIByAppID()
 					           
 					            <div class="box-body">					             
 					              	    							
-									  <div class="info-box col-sm-12 mar-top-25" >											
+									  <div class="info-box col-sm-6 mar-top-25" >											
 										  	<span class="info-box-icon bg-blue"><i class="fa fa-user"></i></span>
 										  	<div class="info-box-content">
-											    <span class="info-box-text">User Subscription</span>
-											    <span class="info-box-number"><b><%=userInfo.get(0)%></b></span>
+											    <span class="info-box-text">Enterprise User Subscription</span>
+											    <%-- <span class="info-box-number"><b><%=userInfo.get(0)%></b></span> --%>
+											    <a href="#" class="userCountModal"><span class="info-box-number"><b><%=appUser%></b></span></a>
 										 	</div>
-									  </div>
+									  </div> 
 									  
-									  <!-- <div class="info-box col-sm-6 mar-top-25" >										
-										  	<span class="info-box-icon bg-yellow"><i class="fa fa-download"></i></span>
+									  									  
+									   <div class="info-box col-sm-6 mar-top-25" >											
+										  	<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
 										  	<div class="info-box-content">
-											    <span class="info-box-text">WaterMeter<b>1</b></span>
-											    <span class="info-box-number"><b>1</b></span>
+											    <span class="info-box-text">Lora Server Organisation</span>
+											    <a href="#" class="orgCountModal"><span class="info-box-number"><b><%=orgCount%></b></span></a>
+											    <%-- <span class="info-box-number"><b><a href="getOrgansiation"><%=orgCount%></a></b></span> --%>
 										 	</div>
-							 		  </div> -->											              
+									   </div>
+									   
+									   
+									   <%-- <div class="info-box col-sm-4 mar-top-25" >											
+										  	<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">Lora Server Users</span>
+											     <span class="info-box-number"><b><%=loraServerUser%></b></span> 											    
+										 	</div>
+									   </div> --%>
+									  
+									  <!-- Modal -->
+                                      <div class="modal fade" id="userModal" role="dialog">
+                                      	<div class="modal-dialog modal-lg">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-user"></span> Enterprise User Subscription </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                     <form name="userList" >
+		                                      			<div class="row" style="overflow-y: auto;">
+		                                      			
+															<div class="col-sm-12 ">
+									
+														     <display:table  class="table table-hover  text-center"  name="<%=userInfoList%>" id="row"
+																		 requestURI="" defaultsort="1" defaultorder="descending" pagesize="50">
+																<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
+																<display:column  property="uname" title="UserName" sortable="true"  />
+																<display:column  property="emailId" title="EmailID" sortable="true"  />
+																<display:column  property="contactnumber" title="MobileNo." sortable="true"  />
+																<display:column  property="status" title="Status" sortable="true"  />
+																<display:column  property="createddt" title="CreatedDate" format="{0,date,dd-MM-yyyy HH:mm:ss}" sortable="true"  />
+																		 
+															</display:table> 
+															
+														   </div>
+														</div>
+					  								 </form>	
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->	
+					               
+					               
+					               
+					                <!-- Modal -->
+                                      <div class="modal fade" id="orgModal" role="dialog">
+                                      	<div class="modal-dialog ">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-building"></span> Lora Server Organisation </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                      <div class="row" style="overflow-y: auto;">		                                      			
+															<div class="col-sm-12 ">
+																	<table class="table">
+																	    <thead>
+																	      <tr>
+																	        <th>Id</th>
+																	        <th>Organisation_Name</th>
+																	        <th>User_Info</th>
+																	        
+																	      </tr>
+																	    </thead>
+																	    <tbody>
+															<% int i=1;
+															if(organisations!=null && !organisations.isEmpty()){
+																for(Map.Entry<String,Object> map :organisations.entrySet()){%>					
+																		  <tr>
+																	        <td><a href="#<%=map.getKey()%>" class="appModal"><span class="info-box-number"><b><%=map.getKey()%></b></span></a>
+																	        </td>
+																	        <td><%=map.getValue()%></td>
+																	        <td>Processing</td>
+																	        																	     
+																	      </tr>
+																	     
+																	<% i++;
+																	}
+																}%>  
+																
+																 
+																	    </tbody>
+																	</table>
+															
+														   </div>
+														</div>
+					  								
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->		
+					               
+					               
+					                <!-- Modal -->
+                                      <div class="modal fade" id="appModalId" role="dialog">
+                                      	<div class="modal-dialog ">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-building-o"></span> Organisation-Applications </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                      <div class="row" style="overflow-y: auto;">		                                      			
+															<div class="col-sm-12 ">
+																	<table class="table">
+																	    <thead>
+																	      <tr>
+																	        <th>Id</th>
+																	        <th>Application_Name</th>
+																	        <th>OrganisationID</th>																	        
+																	      </tr>
+																	    </thead>
+																	    <tbody id="applications">																																														 
+																	    </tbody>
+																	</table>
+															
+														   </div>
+														</div>
+					  								
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->				
+					               
+					               <!-- Modal -->
+                                      <div class="modal fade" id="devModalId" role="dialog">
+                                      	<div class="modal-dialog ">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-building-o"></span> Application-Nodes </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                      <div class="row" style="overflow-y: auto;">		                                      			
+															<div class="col-sm-12 ">
+																	<table class="table">
+																	    <thead>
+																	      <tr>
+																	        <th>DeviceEUI</th>
+																	        <th>DeviceName</th>
+																	        <th>ApplicationID</th>																	        
+																	      </tr>
+																	    </thead>
+																	    <tbody id="devices">																																														 
+																	    </tbody>
+																	</table>
+															
+														   </div>
+														</div>
+					  								
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->													              
 					             			              
 					            </div>
 					            				           

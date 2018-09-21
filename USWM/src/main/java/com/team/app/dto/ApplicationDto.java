@@ -13,6 +13,7 @@ public class ApplicationDto implements Serializable{
 	private String appName;
 	private String devEUI;
 	private String devName;
+	private String orgId;
 	
 
 	public String getDevName() {
@@ -29,6 +30,14 @@ public class ApplicationDto implements Serializable{
 
 	public void setDevEUI(String devEUI) {
 		this.devEUI = devEUI;
+	}
+	
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 
 	public String getAppId() {

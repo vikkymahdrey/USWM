@@ -71,7 +71,8 @@
           
           
           <ul class="treeview-menu">
-            <li><a href="aplConfig"><i class="fa fa-circle-o"></i><b>APL config</b></a></li>
+          	<li><a href="downlinkConfig"><i class="fa fa-circle-o"></i><b>Downlink Config</b></a></li>
+            <li><a href="aplConfig"><i class="fa fa-circle-o"></i><b>APL Config</b></a></li>
             <li><a href="#"><i class="fa fa-paypal"></i><b>Payment-CutOff</b></a></li>
            
           </ul>
@@ -169,7 +170,7 @@
           <ul class="treeview-menu">
             <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
             <li><a href="frameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
-           <!--   <li><a href="downlinkQueue"><i class="fa fa-circle-o"></i> <b>Downlink Log</b></a></li> -->
+            <li><a href="downlinkQueue"><i class="fa fa-circle-o"></i> <b>Downlink Log</b></a></li> 
           </ul>
           
              
@@ -267,7 +268,7 @@
           <ul class="treeview-menu">
             <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
             <li><a href="userFrameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
-           
+                   
           </ul>
           
              

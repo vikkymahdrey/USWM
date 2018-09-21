@@ -6,4 +6,6 @@ public interface OrganisationService {
 
 	Map<String, Object> getLoraServerOrganisation() throws Exception;
 
+	long getLoraServerUsers()throws Exception;
+
 }

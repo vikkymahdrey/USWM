@@ -3,6 +3,7 @@
 --%>
 
 
+<%@page import="com.team.app.constant.AppConstants"%>
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
@@ -12,11 +13,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Create User</title>
+    <title>Downlink Setting</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
 	  <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,8 +31,7 @@
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.css">
-	  <link rel="stylesheet" href="css/skins/_all-skins.min.css"> 
-	  <link href="css/style.css" rel="stylesheet" type="text/css" />
+	  <link rel="stylesheet" href="css/skins/_all-skins.min.css">
 	 
 
 	<script src="js/app.min.js"></script>
@@ -49,22 +48,14 @@
 	   var orgid=document.getElementById("orgid").value;
  	  	var appid=document.getElementById("appid").value;
  	  	var devid=document.getElementById("devid").value;
- 	  	var usertype=document.getElementById("usertype").value;
- 	    var orgDesc=document.getElementById("orgN").value;
+ 	  	var orgDesc=document.getElementById("orgN").value;
 	  	var appDesc=document.getElementById("appN").value;
 	  	var devDesc=document.getElementById("devN").value;
-	  	
-	  	var email=document.getElementById("email").value;
-	  	var contact=document.getElementById("contact").value;
-		var uname=document.getElementById("uname").value;landMarkID
-		var landMarkID=document.getElementById("landMarkID").value;
-	  	
-	  	var emailRegx = /^((([a-z]|\d|[!#\$%&\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/;
-	  	var nameRegx = /^[A-Za-z][A-Za-z0-9 ]*$/;
-	  	var phoneRegx = /^\+?\d?\d?\d{10}$/;
+	  	var hourly=document.getElementById("hourly").value;
+	  	var packet=document.getElementById("packet").value;
  		
 	   	   
- 	   if(orgid=="0"){
+	   if(orgid=="0"){
 		   alert(orgDesc);
 		   document.getElementById("orgid").focus();
 		   return false;
@@ -76,78 +67,41 @@
 		   alert(devDesc);
 		   document.getElementById("devid").focus();
 		   return false;
-	   }else if(usertype == "0") {
-			alert("Choose User Type");
-			document.getElementById("usertype").focus();
-			return false;
-	   }else if(nameRegx.test(uname)==false) {
-			alert("Invalid Username Format!! Spaces and Special characters are not allowed");
-			document.getElementById("uname").focus();
-			return false;
-	   }
- 	   /* else if ($("input[name=uname]").val() == "") {
-			alert("Choose Username");
-			document.getElementById("uname").focus();
-			return false;
-	   } */else if(emailRegx.test(email)==false) {
-			alert("Invalid Email ID Format!");
-			document.getElementById("email").focus();
-			return false;
-	   }else if (contact==""){
-		   alert("Please Specify Phone Number");
-			document.getElementById("contact").focus();
-			return false;
-	   }else if (phoneRegx.test(contact)==false){
-		   alert("Invalid Mobile Number !");
-			document.getElementById("contact").focus();
-			return false;
-	   }
- 	   /* else if (isNaN($("input[name=contact]").val())
-				|| ($("input[name=contact]").val()).length != 10) {
-			alert("Choose 10 digit Mobile Number");
-			document.getElementById("contact").focus();
-			return false;
-	   } */else if ($("input[name=area]").val() == "") {
-			alert("Please Add Location");
-			document.getElementById("area").focus();
-			return false;
-	   }else if ($("input[name=place]").val() == "") {
-			alert("Choose Add Location");
-			document.getElementById("place").focus();
-			return false;
-	   }else if ($("input[name=landmark]").val() == "") {
-			alert("Choose Add Location");
-			document.getElementById("landmark").focus();
-			return false;
-	   }else{
-		   $.ajax({
-	           url: 'subscription',
-	           type: 'POST',
-	           data: jQuery.param({orgid: orgid,appid:appid,devid:devid,uname:uname,email:email,contact:contact,usertype:usertype,landMarkID:landMarkID }) ,
-	           success: function (data) {	        	          		
-		        	   if(data=='success'){
-		        		   alert("User registered successfully.Please check your email notification for activation!");
-		        		   window.location="http://139.59.14.31:8081/USWM/userReport";
-		        		
-		        	   }else if(data=='exist') {
-		        		   alert("Selected Water Meter is already mapped to an existing user!");  
-		        		   document.getElementById("devid").focus();
-		        	   }else if(data=='failed') {
-		        		   alert("System Error! User registration failed!"); 
-		        		   location.reload();
-		        	   }    		   
-	        	
-	               },
-			 		error: function(e){
-		     			        alert('Error: ' + e);
-		     		 }
-
-	              
-	           }); 
-		   
+	   }else if(hourly=="0"){
+		   alert("Choose Packets per day!");
+		   document.getElementById("hourly").focus();
 		   return false;
-	   }				
+	   }else if(packet=="0"){
+		   alert("Choose Packet length");
+		   document.getElementById("packet").focus();
+		   return false;
+	   }else{		   
+			   $.ajax({
+	               url: 'downlinkSetting',
+	               type: 'POST',
+	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
+	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,hourly:hourly,packet:packet}) ,
+	               success: function (data) {
+	               alert(data);
+	               if(data=='success'){
+	            	   alert("Work In Progress!"); 
+	               }
+	               //window.location.reload();
+	            	   //$(".success").html(data);
+	                   	
+	                   },
+	  		 		error: function(e){
+	  	     			        alert('Error: ' + e);
+	  	     		 }
+	
+	                  
+	               });
+			   
+			  return false;
+	   		} 
+	   		
    }
+   
    
    function getKeywords(){	  
 	   var typeId=document.getElementById("typeId").value;
@@ -185,57 +139,39 @@
               
            }); 
 	   
-  }  
+  } 
    
    
-   function checkUsername(){
-		var uname=document.getElementById("uname").value;
-	   if(uname!=''){
-	   $.ajax({
-           url: 'validateUserName',
-           type: 'POST',
-           //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
-           data: jQuery.param({uname: uname}) ,
-           success: function (data) {
-        	   if(data!=''){
-        	  		alert(data); 
-        	  		document.getElementById("uname").value = "";
-        	  		document.getElementById("uname").focus();
-        	  		
-        	   }
-               },
-		 		error: function(e){
-	     			        alert('Error: ' + e);
-	     		 }
-
-              
-           });
-	   }  
-	  //return false;
-   }
-   
-   function checkEmail(){
-	   var email=document.getElementById("email").value;
-	   if(email!=''){
+   function getPacketByHourly(){
+	   
+	   var hourly=document.getElementById("hourly").value;
+	   if(hourly=="0")
+   		{    
+	   		var packet=document.getElementById("packet");
+	   			packet.innerHTML='<select name="packet" class="form-control" id="packet"> <option value="0" >Please Choose</option></select>';
+	   			return;
+   		}else{
 		   $.ajax({
-	           url: 'validateEmail',
+	           url: 'getPacketByHourly',
 	           type: 'POST',
-	           data: jQuery.param({email: email}) ,
+	           data: jQuery.param({ hourly: hourly }) ,
 	           success: function (data) {
-	        	   if(data!=''){
-	        	  		alert(data);
-	        	  		document.getElementById("email").value = ""; 
-	        	  		document.getElementById("email").focus();
-	        	  		
-	        	   }
+	        	   
+		        	   if(data.length==0){
+		        		   alert("Packet size not associated on this hour config!");            		
+		        	   }else{
+		        		   var packet=document.getElementById("packet"); 
+		        		   packet.innerHTML='<select  name="packet" class="form-control" id="packet" >'+data+'</select>';
+		        	   }
+	        	
 	               },
 			 		error: function(e){
 		     			        alert('Error: ' + e);
 		     		 }
-
+	
 	              
-	           });
-		   }  
+	           }); 
+   		} 
    }
    
 function getAppByOrgID()
@@ -246,10 +182,9 @@ function getAppByOrgID()
                 	{      
             	
                 	var appid=document.getElementById("appid");
-                	     	
-                		appid.innerHTML='<select name="appid" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
                 	var devid=document.getElementById("devid");
-                		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
                 		return;
                 	}
                 else
@@ -273,16 +208,16 @@ function getAppByOrgID()
 function getDevEUIByAppID()
 {     
 	var appid=document.getElementById("appid").value;
-		
+	
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
     	return;
     	}
     else
     	{
-    var url="getDevEUIByAppId?appId="+appid;                                    
+    var url="getDevEUISync?appId="+appid;                                    
     xmlHttp=GetXmlHttpObj()
     if (xmlHttp==null)
     {
@@ -333,9 +268,9 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appid" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select name="devid" id="devid"> <option value="0" >Please Choose</option></select>';                
+                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';  
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option></select>';
                 }
             }
             
@@ -345,39 +280,10 @@ function getDevEUIByAppID()
                 { 
                     var returnText=xmlHttp.responseText;
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devid" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';                                             
                 }
             }
-     </script>      
-     
-     
-     <script type="text/javascript">
-			function showPopup(url) {
-				var params = "toolbars=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
-				size = "height=450,width=520,top=200,left=300," + params;
-				if (url == "LandMarkSearch") {
-					size = "height=450,width=600,top=200,left=300," + params;
-				}
-				
-				var orgId=document.getElementById("orgid").value;
-				var orgDesc=document.getElementById("orgN").value;
-				if (url == "LandMarkSearch") {
-					
-					if(orgId=="0")
-					{
-					alert(orgDesc);
-					return false;
-					}
-					url+="?orgId="+orgId;
-				}
-				
-				newwindow = window.open(url, 'name', size);
-		
-				if (window.focus) {
-					newwindow.focus();
-				}
-			}
-</script> 
+     </script>       
      
   </head>
   
@@ -385,8 +291,8 @@ function getDevEUIByAppID()
   
   			<% 
   				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
-  		  		List<Role> roles=(List<Role>)request.getAttribute("roles");
-  		  		List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
+  				List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
+  				List<TblDownlinkHoulyConfig> configs=(List<TblDownlinkHoulyConfig>)request.getAttribute("configs");
   			%>
   			
 							 
@@ -407,40 +313,18 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-user"></span><b> Create User</b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-gear"></span>&nbsp;&nbsp;<b>Downlink Setting </b></h5>
        
    				</div><!-- /.box-header -->
 		 							
-		 					<div class="row">
-									<div class="col-sm-12 text-center">
-									<%String message="";
-						
-										try{
-											message=request.getParameter("message");
-											if(message!=null&&!message.equals("")){
-												
-											}else{						
-													message = "";
-													message = request.getAttribute("status").toString();
-													session.setAttribute("status", "");
-											}
-				
-										}catch(Exception e)
-										{
-											;
-										}	%>
-				 						<span style="color: red;" ><%=message %></span>	
-				 									
-		   						</div>
-		   				  </div>		
    						
    						  <div class="row" >
     				    	<div class="col-sm-6">	
     				    	
-    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" >
+    				    	<form name="form1" action="syncDev" onsubmit="return confirmValidate();" method="post">
 										
-								  <table class="table" >
-								   	<tr>								  		
+								  <table class="table">
+								  <tr>								  		
 										<td align="right"><b>Housing Type</b></td>
 										<td>	
 											 	<select name="typeId" class="form-control" id="typeId" onchange="getKeywords()">
@@ -472,9 +356,11 @@ function getDevEUIByAppID()
 																	  		
 								    </tr>
 								  	<tr>
-								  		<td id="oId" align="right"><b><%=(String)request.getAttribute("orgN")%></b></td>								  			
+								  		<td id="oId" align="right"><b><%=(String)request.getAttribute("orgN")%></b></td>
+								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
+										
 										<td>
-										 <select name="orgid" class="form-control" id="orgid" onchange="getAppByOrgID()">
+										 <select name="orgname" class="form-control" id="orgid" onchange="getAppByOrgID()">
 										    <option value="0">Please Choose</option>	
 										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 											    if(organisations!=null && !organisations.isEmpty()){
@@ -495,13 +381,12 @@ function getDevEUIByAppID()
 										    }%>
 										 </select> 
 										</td>
-										
 									</tr>
 									<tr>	
 									   <td id="aId" align="right"><b><%=(String)request.getAttribute("appN")%></b></td>
 									   
 										 <td>
-										 	<select name="appid" class="form-control" id="appid" onchange="getDevEUIByAppID()">
+										 	<select name="appname" class="form-control" id="appid" onchange="getDevEUIByAppID()">
 										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
@@ -511,89 +396,43 @@ function getDevEUIByAppID()
 									   <td id="dId" align="right"><b><%=(String)request.getAttribute("devN")%></b></td>
 									   
 										 <td>
-										 	<select name="devid" id="devid" class="form-control">
+										 	<select name="devname" class="form-control" id="devid" >
 										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
 									</tr>
 									
-									<tr>
-								  		<td align="right"><b>User Type</b></td>
-								  													
-										<td>
-										 <select name="usertype" id="usertype" class="form-control">
-										    <option value="0">Please Choose</option>	
-										    <%if(roles!=null && !roles.isEmpty()){
-										    	for(Role r: roles){
-											    	if(r.getType().equalsIgnoreCase(AppConstants.user)){%>
-											    		<option value="<%=r.getId()%>" ><%=r.getName()%></option> 
-											   		<%}
-										    	}	
-										     }%> 
-										 </select> 
+									
+									<tr>	
+									   <td align="right"><b>Packets per day</b></td>
+									   
+										 <td>
+										 	<select name="hourly" class="form-control" id="hourly" onchange="getPacketByHourly()" >
+										    	<option value="0">Please Choose</option>
+										    	<% if(configs!=null && !configs.isEmpty()){
+													for(TblDownlinkHoulyConfig d : configs){ %>
+										    			<option value="<%=d.getId()%>"><%=d.getPerday()%></option>	
+										    		<%}
+												}%>
+										
+										    </select> 
 										</td>
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Username</b></td>
+									   <td align="right"><b>Packet length</b></td>
 									   
 										 <td>
-										 	<input type="text" name="uname" class="form-control" id="uname" onchange="checkUsername()" placeholder="Enter Username">
+										 	<select name="packet" class="form-control" id="packet" >
+										    	<option value="0">Please Choose</option>										    	
+										    </select> 
 										</td>
 									</tr>
-									
-									<tr>	
-									   <td align="right"><b>Email ID</b></td>
-									   
-										 <td>
-										 	<input type="text" name="email" class="form-control" id="email" onchange="checkEmail()" placeholder="Enter Email ID">
-										</td>
-									</tr>
-									
-									<tr align="right">	
-									   <td><b>Mobile Number</b></td>
-									   
-										 <td>
-										 	<input type="text" class="form-control" name="contact" id="contact" placeholder="Enter Mobile Number" >
-										</td>
-									</tr>
-									
-									
-									
-									<tr >
-										<td align="right">
-											 <input style="margin-left: 220%; background-color:#3c8dbc;color:white;" type="button" class="form-control"  value="Add Location" 
-													onclick="showPopup('LandMarkSearch')" />											
-										</td>
-				
-									</tr>
-									
-									<tr>	
-									   <td align="right"><b>Area</b></td>
-									   
-										 <td>
-										 	<input type="text" class="form-control" name="area" id="area" readonly/>
-										 	<input type="hidden" id="landMarkID" name="landMarkID" />
-										</td>
-									</tr>
-									<tr>	
-									   <td align="right"><b>Place</b></td>
-									   
-										 <td>
-										 	<input type="text" class="form-control" name="place" id="place" readonly/>
-										</td>
-									</tr>
-									<tr>	
-									   <td align="right"><b>Landmark</b></td>
-									   
-										 <td>
-										 	<input type="text" class="form-control" name="landmark" id="landmark" readonly/>
-										</td>
-									</tr>
-									
+										
+										
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="form-control"  style="background-color:#3c8dbc;color:white;" value="Create user"/></td>
+											<td> <input type="submit"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Done"/></td>
 										 
 									</tr>	
 								</table>	

@@ -59,7 +59,8 @@ public class OrganisationServiceImpl implements OrganisationService {
 							json=new JSONObject();
 						json=(JSONObject)new JSONParser().parse(response.toString());
 					
-						JSONArray arr=(JSONArray) json.get("result");    					
+						JSONArray arr=(JSONArray) json.get("result"); 
+						//long orgCount=(long) json.get("totalCount");
 						
 						if(arr!=null && arr.size()>0){
 							logger.debug("Inside Array not null");
@@ -69,8 +70,11 @@ public class OrganisationServiceImpl implements OrganisationService {
 									logger.debug("Organisation name ..",jsonObj.get("name").toString());
 									logger.debug("Organisation id ..",jsonObj.get("id").toString());
 									organisations.put(jsonObj.get("id").toString(), jsonObj.get("name"));
-						}
+									
+							 }
 				        }
+						
+						//organisations.put("orgCount", orgCount);
 					}
 					
 			   }catch(Exception e){
@@ -78,6 +82,57 @@ public class OrganisationServiceImpl implements OrganisationService {
 			   }
 	   
 			 return organisations;
+	}
+
+
+	
+	public long getLoraServerUsers() throws Exception {
+		long userCount=0;
+		
+		 try {
+			 	
+			   String url=AppConstants.user_url;
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					userCount=(long) json.get("totalCount");   
+					//JSONArray arr=(JSONArray) json.get("result");
+					
+			  }
+				
+				
+		   }catch(Exception e){
+				e.printStackTrace();
+		   }
+  
+		 return userCount;
 	}
 
 }

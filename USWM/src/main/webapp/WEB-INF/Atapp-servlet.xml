@@ -4,6 +4,7 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" 
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
@@ -16,11 +17,14 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
         http://www.springframework.org/schema/data/jpa 
-        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<context:component-scan base-package="com.team.app" />
 
 	<mvc:annotation-driven />
+	<task:annotation-driven />
 	
 	  <mvc:interceptors> 
 	 <bean class="com.team.app.interceptor.RequestProcessingInterceptor" />

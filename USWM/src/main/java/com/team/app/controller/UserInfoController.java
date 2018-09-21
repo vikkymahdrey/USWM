@@ -263,6 +263,99 @@ public class UserInfoController {
 	}
 	
 	
+	/* Ajax calling for /getApplications */	
+	@RequestMapping(value= {"/getAppByOrgID"}, method=RequestMethod.POST)
+	public @ResponseBody String getAppByOrgIDHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
+		logger.debug("/*Ajax getting getAppByOrgID */");
+		
+		String orgs = request.getParameter("orgId");
+		String[] orgIdName=orgs.split(":");
+		String orgId=orgIdName[0];
+		logger.debug("Organisation Id as ",orgId);
+		String returnVal="";
+		
+		
+		try{
+						
+			   String url=AppConstants.app_url;
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+					
+				
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");
+					
+					List<ApplicationDto> dtos=null;	
+					
+					if(arr!=null && arr.size()>0){
+						logger.debug("Inside Array not null");
+							dtos=new ArrayList<ApplicationDto>();
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);
+							 ApplicationDto dto=null;
+							 		dto=new ApplicationDto();
+							
+							if(jsonObj.get("organizationID").toString().equalsIgnoreCase(orgId)){
+								logger.debug("organizationID matching ..");
+								logger.debug("Application name ..",jsonObj.get("name").toString());
+								logger.debug("Application id ..",jsonObj.get("id").toString());
+								
+								dto.setAppId(jsonObj.get("id").toString());
+								dto.setAppName(jsonObj.get("name").toString());
+								dto.setOrgId(jsonObj.get("organizationID").toString());
+								dtos.add(dto);							
+							}
+						 }
+			        }
+					
+					if(dtos!=null && !dtos.isEmpty()){
+						for(ApplicationDto a : dtos){
+							//returnVal+="<tr><td><a href=\"#\" class=\"devModal\"><span class=\"info-box-number\"><b>"+a.getAppId()+"</b></span></a></td><td>"+a.getAppName()+"</td><td>"+a.getOrgId()+"</td></tr>";
+							returnVal+="<tr><td><a href=\"#\" class=\"devModal\"><span class=\"info-box-number\"><b>"+a.getAppId()+"</b></span></a></td><td>"+a.getAppName()+"</td><td>"+a.getOrgId()+"</td></tr>";
+						}
+					}
+				}
+			
+				
+			
+		}catch(Exception e){
+			logger.error("Error in Ajax/getApplications",e);
+			e.printStackTrace();
+		}
+			
+			
+		return returnVal;
+
+	}
+	
+	
 /* Ajax calling for /getDevEUI */
 	
 	@RequestMapping(value= {"/getDevEUI"}, method=RequestMethod.GET)
@@ -444,6 +537,10 @@ public class UserInfoController {
 	}
 	
 	
+	
+	
+	
+	
 	@RequestMapping(value= {"/getDevEUIByAppId"}, method=RequestMethod.GET)
 	public @ResponseBody String getDevEUIByAppIdHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUIByAppId */");
@@ -516,6 +613,94 @@ public class UserInfoController {
 					if(dtos!=null && !dtos.isEmpty()){
 						for(ApplicationDto a : dtos){
 							 returnVal+="<option value="+a.getDevEUI()+":"+a.getDevName()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
+								
+						}
+					}
+				}
+			
+				
+			
+		}catch(Exception e){
+			logger.error("Error in Ajax/getDevEUIByAppId",e);
+			e.printStackTrace();
+		}
+			
+			
+		return returnVal;
+
+	}
+	
+	
+	@RequestMapping(value= {"/getDevByAppID"}, method=RequestMethod.POST)
+	public @ResponseBody String getDevByAppIDHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
+		logger.debug("/*Ajax getting getDevByAppID */");
+		
+		String appId = request.getParameter("appId").trim();
+		logger.debug("Application.. as ",appId);		
+		String returnVal="";
+		
+		
+		try{
+			
+			
+			   String url=AppConstants.domain+"/api/applications/"+appId+"/nodes?limit=100";
+				logger.debug("URLConn",url);
+				URL obj1 = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
+				con.setDoOutput(true);
+				con.setRequestMethod("GET");
+				con.setRequestProperty("accept", "application/json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
+				
+				    
+				int responseCode = con.getResponseCode();
+					logger.debug("POST Response Code :: " + responseCode);
+					
+				
+						    				
+				if(responseCode == HttpURLConnection.HTTP_OK) {
+					logger.debug("Token valid,POST Response with 200");
+					
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					
+					in.close();
+					
+					JSONObject json=null;
+						json=new JSONObject();
+					json=(JSONObject)new JSONParser().parse(response.toString());
+				
+					JSONArray arr=(JSONArray) json.get("result");
+					
+					List<ApplicationDto> dtos=null;	
+					
+					if(arr!=null && arr.size()>0){
+						logger.debug("Inside Array not null");
+							dtos=new ArrayList<ApplicationDto>();
+						 for (int i = 0; i < arr.size(); i++) {
+							 JSONObject jsonObj = (JSONObject) arr.get(i);
+							 ApplicationDto dto=null;
+							 		dto=new ApplicationDto();						
+							
+								logger.debug("DevEUI name ..",jsonObj.get("devEUI").toString());
+													
+								dto.setDevEUI(jsonObj.get("devEUI").toString());
+								dto.setDevName(jsonObj.get("name").toString());
+								dto.setAppId(jsonObj.get("applicationID").toString());
+								dtos.add(dto);							
+							
+						  }
+			         }
+					
+					if(dtos!=null && !dtos.isEmpty()){
+						for(ApplicationDto a : dtos){
+							returnVal+="<tr><td><a href=\"#\" class=\"usrModal\"><span class=\"info-box-number\"><b>"+a.getDevEUI()+"</b></span></a></td><td>"+a.getDevName()+"</td><td>"+a.getAppId()+"</td></tr>";
 								
 						}
 					}
@@ -1146,6 +1331,10 @@ public class UserInfoController {
 			
 		return returnVal;
 	}
+	
+	
+	
+
 
 }
 

@@ -62,7 +62,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	
 	
 
-	@Transactional
+	/*@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -106,9 +106,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
 				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be
-				  	  /*formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
+				  	  formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
 				  	  	frame.setCreatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
-				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));*/
+				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
 				  	  	
 				  	  	
 				  	  	
@@ -137,19 +137,20 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			     		 		   				waterLtr="";
 			     		 		   			}
 				     		 			  if(i==0){
-					     		 			 String decodeBinary = Integer.toBinaryString(b);
+					     		 			String decodeBinary =String.format("%x", b);
 					     		 			 logger.debug("decodeBinary i=0 :",decodeBinary);
 						     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
 						     		 				if(decodeBinary.equals("0")){
 						     		 					packetType="0";
 						     		 					devMapId="0";
 						     		 				}else{
-						     		 					if(decodeBinary.length()>4){
-						     		 						packetType=String.format("%02X ",decodeBinary.substring(0,decodeBinary.length()-4));
-						     		 						devMapId=String.format("%02X ",decodeBinary.substring(3,decodeBinary.length()));
+						     		 					if(decodeBinary.length()>1){
+						     		 						//packetType=String.format("%02X ",decodeBinary.substring(0,decodeBinary.length()-4));
+						     		 						packetType=String.valueOf(Integer.parseInt(decodeBinary.substring(0,decodeBinary.length()-1),16));
+						     		 						devMapId=decodeBinary.substring(1);
 						     		 					}else{
 						     		 						packetType="0";
-						     		 						devMapId=String.format("%02X ", decodeBinary);
+						     		 						devMapId=decodeBinary;
 						     		 					}
 						     		 					
 						     		 				}						     		 				
@@ -158,40 +159,70 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			//} 	
 					     		 			   i++;					     		 			 
 						     		 		  }else if(i==1){
-						     		 			 String decodeBinary = Integer.toBinaryString(b);
+						     		 			String decodeBinary =String.format("%x", b);
 						     		 			 logger.debug("decodeBinary i=1 :",decodeBinary);
 							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
-							     		 				int devMapCombination=Integer.parseInt(devMapId)+Integer.parseInt(decodeBinary,2);
-							     		 				devMapId=String.valueOf(devMapCombination);
+						     		 			 		if(packetType.equals("0")){
+						     		 			 			logger.debug("Packet Type 0 in i=1");
+						     		 			 			int devMapCombination=0;
+						     		 			 			if(decodeBinary.length()>1){
+						     		 			 				devMapCombination=Integer.parseInt(devMapId+decodeBinary,16);
+						     		 			 			}else{
+						     		 			 				devMapCombination=Integer.parseInt(devMapId+"0"+decodeBinary,16);
+						     		 			 			}
+						     		 			 			devMapId=String.valueOf(devMapCombination);
+						     		 			 		}else if(packetType.equals("1")){
+						     		 			 		 logger.debug("Packet Type as " ,packetType);
+						     		 			 		}
 							     		 			//}
 							     		 		i++;	
 						     		 		  }else if(i==2){
-						     		 			String decodeBinary = Integer.toBinaryString(b);
+						     		 			//String decodeBinary = Integer.toBinaryString(b);
+						     		 			String decodeBinary =String.format("%x", b);
 						     		 			 logger.debug("decodeBinary i=2 :",decodeBinary);
-							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
-							     		 				//Packet Length logic here
-							     		 				hourly=hourly+Integer.parseInt(decodeBinary,2);
+						     		 				if(packetType.equals("0")){
+				     		 			 			   logger.debug("Packet Type 0 in i==2");
+				     		 			 			   //Calculating hourly
+					     		 			 			hourly=hourly+Integer.parseInt(decodeBinary.substring(0,decodeBinary.length()-1),16);
+						     		 					logger.debug("Total hourly :",hourly);
+						     		 					logger.debug("Actual millseconds :",millseconds);
+						     		 					millseconds=millseconds-TimeUnit.HOURS.toMillis(hourly);
+						     		 					logger.debug("Sub millseconds :",millseconds);
+						     		 					logger.debug("Date as :",formatter.parse(formatter.format(new Date(millseconds))));
+						     		 				   
+						     		 					//Calculating Packet Length						     		 					
+						     		 					packetLength=Integer.parseInt(decodeBinary.substring(1),16);
+						     		 				}else{
+						     		 					logger.debug("Packet Type as ",packetType);	
+						     		 				}
+				     		 			 			
+				     		 			 			
+						     		 			
+						     		 			  		String decodeBinary =String.format("%x", b);
+						     		 			 		logger.debug("decodeBinary i=2 :",decodeBinary);
+							     		 				if(packetType.equals("0")){
+						     		 			 			logger.debug("Packet Type 0 in i==2");				     		 			 			
+							     		 				    hourly=hourly+Integer.parseInt(decodeBinary,16);
 							     		 					logger.debug("Total hourly :",hourly);
 							     		 					logger.debug("Actual millseconds :",millseconds);
 							     		 					millseconds=millseconds-TimeUnit.HOURS.toMillis(hourly);
 							     		 					logger.debug("Sub millseconds :",millseconds);
 							     		 					logger.debug("Date as :",formatter.parse(formatter.format(new Date(millseconds))));
-							     		 			//}
+						     		 			 		}else{
+						     		 			 			logger.debug("Packet Type as ",packetType);	
+						     		 			 		}
+							     		 			
 							     		 		i++;	
-						     		 		  }else if(i==3){
-							     		 			String decodeBinary = Integer.toBinaryString(b);
-							     		 			 logger.debug("decodeBinary i=3 :",decodeBinary);
-								     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
-								     		 				//Date Length logic here
-								     		 				packetLength=Integer.parseInt(decodeBinary,2);
-								     		 			//}
-								     		 		i++;
-						     		 		  }else if(i>3){
+						     		 		  }else if(i>2){
 						     		 			 String decodeBinary =String.format("%x", b);
-						     		 			logger.debug("decodeBinary i>3 :",decodeBinary);						     		 			
+						     		 			logger.debug("decodeBinary i>2 :",decodeBinary);						     		 			
 							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
+						     		 			
+						     		 			
+					     		 			 			
 							     		 				if(packetType.equals("0")){
 							     		 					//Bussiness logic here	
+							     		 					logger.debug("Packet Type 0 in i>2");
 							     		 					logger.debug("i Value : ",i);
 							     		 					logger.debug("Packet Type ===0: ");
 							     		 					logger.debug("Packet Length : ",packetLength);
@@ -216,10 +247,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 							     		 					logger.debug("waterLtr Length final ===0",waterLtr);							     		 				
 							     		 					logger.debug("resultant: packetType : ",packetType);
 							     		 					logger.debug("devMapId: AS : ",devMapId);
-							     		 					/*String res=Integer.toBinaryString(Integer.parseUnsignedInt(waterLtr));
-							     		 					String resultant=String.valueOf(Integer.parseUnsignedInt(res,2));*/
-									     		 		 	
-									     		 		 	
+							     		 						     		 		 	
 									     		 		 	
 									     		 		 	frm.setCreatedAt(formatter.parse(formatter.format(new Date(millseconds))));
 									     		 		 	frm.setUpdatedAt(formatter.parse(formatter.format(new Date(millseconds))));						     		 					
@@ -239,9 +267,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 							     		 					n++;							     		 					
 									     		 		    
 							     		 				}else{
-							     		 					logger.debug("Packet Type !=0");
+							     		 					logger.debug("Packet Type as ",packetType);	
 							     		 				}
-							     		 			//}
+						     		 				//}
 							     		 		i++;							     		 			  
 						     		 		  }
 				     		 			
@@ -260,10 +288,10 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	
-/*	@Transactional
+	@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -343,7 +371,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 
 
