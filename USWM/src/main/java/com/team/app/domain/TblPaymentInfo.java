@@ -21,16 +21,44 @@ public class TblPaymentInfo implements Serializable {
 
 	private String amount;
 
+	private String cardnum;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createddt;
+	private Date createdOn;
+
+	private String discount;
+
+	private String emailId;
+
+	@Column(name="error_code")
+	private String errorCode;
+
+	@Column(name="error_message")
+	private String errorMessage;
+
+	private String firstname;
+
+	private String mode;
+
+	@Column(name="name_on_card")
+	private String nameOnCard;
+
+	@Column(name="net_amount_debit")
+	private String netAmountDebit;
 
 	private String paymentId;
 
+	private String phoneno;
+	
+	@Column(name="product_info")
 	private String productInfo;
+
+	@Column(name="retry_count")
+	private String retryCount;
 
 	private String status;
 
-	private String transactionId;
+	private String txnid;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;
@@ -59,12 +87,84 @@ public class TblPaymentInfo implements Serializable {
 		this.amount = amount;
 	}
 
-	public Date getCreateddt() {
-		return this.createddt;
+	public String getCardnum() {
+		return this.cardnum;
 	}
 
-	public void setCreateddt(Date createddt) {
-		this.createddt = createddt;
+	public void setCardnum(String cardnum) {
+		this.cardnum = cardnum;
+	}
+
+	public Date getCreatedOn() {
+		return this.createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getDiscount() {
+		return this.discount;
+	}
+
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
+
+	public String getEmailId() {
+		return this.emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public String getErrorCode() {
+		return this.errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+
+	public String getErrorMessage() {
+		return this.errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
+	public String getFirstname() {
+		return this.firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getMode() {
+		return this.mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public String getNameOnCard() {
+		return this.nameOnCard;
+	}
+
+	public void setNameOnCard(String nameOnCard) {
+		this.nameOnCard = nameOnCard;
+	}
+
+	public String getNetAmountDebit() {
+		return this.netAmountDebit;
+	}
+
+	public void setNetAmountDebit(String netAmountDebit) {
+		this.netAmountDebit = netAmountDebit;
 	}
 
 	public String getPaymentId() {
@@ -75,12 +175,30 @@ public class TblPaymentInfo implements Serializable {
 		this.paymentId = paymentId;
 	}
 
+	public String getPhoneno() {
+		return this.phoneno;
+	}
+
+	public void setPhoneno(String phoneno) {
+		this.phoneno = phoneno;
+	}
+
+	
+
 	public String getProductInfo() {
 		return this.productInfo;
 	}
 
 	public void setProductInfo(String productInfo) {
 		this.productInfo = productInfo;
+	}
+
+	public String getRetryCount() {
+		return this.retryCount;
+	}
+
+	public void setRetryCount(String retryCount) {
+		this.retryCount = retryCount;
 	}
 
 	public String getStatus() {
@@ -91,12 +209,12 @@ public class TblPaymentInfo implements Serializable {
 		this.status = status;
 	}
 
-	public String getTransactionId() {
-		return this.transactionId;
+	public String getTxnid() {
+		return this.txnid;
 	}
 
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
+	public void setTxnid(String txnid) {
+		this.txnid = txnid;
 	}
 
 	public Date getUpdateddt() {

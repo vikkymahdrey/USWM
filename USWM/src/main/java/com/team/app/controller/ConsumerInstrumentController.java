@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.domain.TblPaymentInfo;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
 import com.team.app.dto.UserLoginDTO;
 import com.team.app.exception.AtAppException;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.PaymentBillService;
 import com.team.app.service.UnizenCommonService;
 import com.team.app.service.UserLoginService;
 import com.team.app.utils.DateUtil;
@@ -49,6 +51,9 @@ public class ConsumerInstrumentController {
 	
 	@Autowired
 	private UnizenCommonService unizenCommonServiceImpl;
+	
+	@Autowired
+	private PaymentBillService paymentBillService;
 	
 		
 	private static final AtLogger logger = AtLogger.getLogger(ConsumerInstrumentController.class);
@@ -460,6 +465,79 @@ public class ConsumerInstrumentController {
 		}catch(AtAppException e) {
 			logger.error("Exception in /getGraphUnits",e);
 			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/paymentInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> paymentInfoHandler(@RequestBody String received){
+		logger.info(" /POST /paymentInfo API ", received);
+		ResponseEntity<String> responseEntity = null;
+		JSONObject obj=null;		
+		try{		
+			obj=new JSONObject();
+			obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Exception in /paymentInfo", HttpStatus.EXPECTATION_FAILED);
+		}
+		try {
+			
+			if(String.valueOf(obj.get("userId"))!=null){
+				
+				long createdOn=0;
+				try{
+					createdOn=Long.parseLong(String.valueOf(obj.get("createdOn")));						
+				}catch(Exception e){
+					;
+				}		
+				
+				
+				TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
+				if(userInfo!=null){
+					
+				Date crdtOn=DateUtil.convertLongToDateIST(createdOn, "yyyy-MM-dd HH:mm:ss");
+				TblPaymentInfo payment=null;
+					payment=new TblPaymentInfo();
+					payment.setTxnid(String.valueOf(obj.get("txnid")));
+					payment.setAmount(String.valueOf(obj.get("amount")));
+					payment.setCardnum(String.valueOf(obj.get("cardnum")));
+					payment.setDiscount(String.valueOf(obj.get("discount")));
+					payment.setEmailId(String.valueOf(obj.get("emailId")));
+					payment.setErrorCode(String.valueOf(obj.get("errorCode")));
+					payment.setErrorMessage(String.valueOf(obj.get("errorMessage")));
+					payment.setMode(String.valueOf(obj.get("mode")));
+					payment.setFirstname(String.valueOf(obj.get("firstname")));
+					payment.setNetAmountDebit(String.valueOf(obj.get("netAmountDebit")));
+					payment.setPhoneno(String.valueOf(obj.get("phoneno")));
+					payment.setProductInfo(String.valueOf(obj.get("productInfo")));
+					payment.setStatus(String.valueOf(obj.get("status")));
+					payment.setRetryCount(String.valueOf(obj.get("retryCount")));
+					payment.setTblUserInfo(userInfo);
+					payment.setNameOnCard(String.valueOf(obj.get("nameOnCard")));
+					payment.setPaymentId(String.valueOf(obj.get("paymentId")));
+					payment.setCreatedOn(crdtOn);
+					payment.setUpdateddt(new Date(System.currentTimeMillis()));					
+					
+					TblPaymentInfo paymentUpdated=paymentBillService.updatePaymentInfo(payment);
+					if(paymentUpdated!=null){
+						responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+					}		
+							
+				}else{
+						responseEntity = new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+				}
+				
+			}else{
+						responseEntity = new ResponseEntity<String>("userId not exist", HttpStatus.METHOD_NOT_ALLOWED);
+			}
+			
+			
+		}catch(Exception e) {
+			logger.error("Exception in /paymentInfo",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(), null);
 		}
 		return responseEntity;
 	}

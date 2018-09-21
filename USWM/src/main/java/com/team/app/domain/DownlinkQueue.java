@@ -29,30 +29,12 @@ public class DownlinkQueue implements Serializable {
 
 	@Column(name="dev_eui")
 	private String devEui;
-	
-	@Column(name="hourly")
-	private String hourly;
-	
-	public String getHourly() {
-		return hourly;
-	}
-
-	public void setHourly(String hourly) {
-		this.hourly = hourly;
-	}
-
-	public String getPacket() {
-		return packet;
-	}
-
-	public void setPacket(String packet) {
-		this.packet = packet;
-	}
-
-	@Column(name="packet")
-	private String packet;
 
 	private String fport;
+
+	private String hourly;
+
+	private String packet;
 
 	private String pending;
 
@@ -111,6 +93,22 @@ public class DownlinkQueue implements Serializable {
 
 	public void setFport(String fport) {
 		this.fport = fport;
+	}
+
+	public String getHourly() {
+		return this.hourly;
+	}
+
+	public void setHourly(String hourly) {
+		this.hourly = hourly;
+	}
+
+	public String getPacket() {
+		return this.packet;
+	}
+
+	public void setPacket(String packet) {
+		this.packet = packet;
 	}
 
 	public String getPending() {

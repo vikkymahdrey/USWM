@@ -62,7 +62,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	
 	
 
-	/*@Transactional
+	@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -74,8 +74,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  		json=(JSONObject)new JSONParser().parse(message.toString());
 				  		logger.debug("REsultant json",json);
 				  		
-				  		 frame=new LoraFrame();
-				  		
+				  		 frame=new LoraFrame();				  		
 				  		 frame.setApplicationID(json.get("applicationID").toString());
 				  		 frame.setApplicationName(json.get("applicationName").toString());
 				  		 frame.setNodeName(json.get("nodeName").toString());
@@ -194,10 +193,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 					packetLength=Integer.parseInt(decodeBinary.substring(1),16);
 						     		 				}else{
 						     		 					logger.debug("Packet Type as ",packetType);	
-						     		 				}
+						     		 				}				     		 			 			
 				     		 			 			
-				     		 			 			
-						     		 			
+						     		 				/*
 						     		 			  		String decodeBinary =String.format("%x", b);
 						     		 			 		logger.debug("decodeBinary i=2 :",decodeBinary);
 							     		 				if(packetType.equals("0")){
@@ -210,7 +208,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 							     		 					logger.debug("Date as :",formatter.parse(formatter.format(new Date(millseconds))));
 						     		 			 		}else{
 						     		 			 			logger.debug("Packet Type as ",packetType);	
-						     		 			 		}
+						     		 			 		}*/
 							     		 			
 							     		 		i++;	
 						     		 		  }else if(i>2){
@@ -288,10 +286,10 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	
-	@Transactional
+	/*@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -371,7 +369,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 
 

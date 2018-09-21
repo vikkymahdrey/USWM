@@ -17,16 +17,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team.app.dao.PaymentBillDao;
+import com.team.app.domain.TblPaymentInfo;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.PaymentBillService;
 
 @Service
-public class PaymentBillServiceImpl {
+public class PaymentBillServiceImpl implements PaymentBillService{
 	private static final AtLogger logger = AtLogger.getLogger(PaymentBillServiceImpl.class);
-
+	
+	@Autowired
+	private PaymentBillDao paymentBillDao;
+	
 	private Integer error;
-
+	
     public boolean empty(String s) {
         if (s == null || s.trim().equals("")) {
             return true;
@@ -153,4 +160,9 @@ public class PaymentBillServiceImpl {
             ex.printStackTrace();
         }
     }
+
+	
+	public TblPaymentInfo updatePaymentInfo(TblPaymentInfo payment) throws Exception {
+			return paymentBillDao.save(payment);
+	}
 }

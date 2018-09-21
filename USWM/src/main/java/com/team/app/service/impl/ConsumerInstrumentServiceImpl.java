@@ -56,7 +56,8 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 
 	
 	public String getUserAccountMessage(TblUserInfo u) throws Exception {
-		return "Heyo "
+		return "<img src=\""+AppConstants.appURL+"/images/unizen.png\" />"
+				+"<br/><br/>Heyo "
 				+u.getUname().toLowerCase()	
 				+",<br/><br/>I heard that you just created a Unizen SWM account. You're just a few steps away from taking your favorite portal on-the-go. Super exciting."
 				+"<br/><br/>You'll remain logged into your USWM account unless you login with a different account. If you happen to get logged out and can't remember your password, click the Forgot Password link on the USWM login screen to reset it."
