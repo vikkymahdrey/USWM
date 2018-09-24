@@ -20,8 +20,10 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team.app.dao.DeviceBattreyInfoDao;
 import com.team.app.dao.FrameDao;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblDeviceBattreyInfo;
 import com.team.app.logger.AtLogger;
 
 @Service
@@ -32,6 +34,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 		
 	@Autowired
 	private FrameDao frameDao;	
+	
+	@Autowired
+	private DeviceBattreyInfoDao deviceBattreyInfoDao;
 		
 	MqttClient client;
 	
@@ -105,7 +110,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				  	  	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
 				  	  	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				  	  	formatter.setTimeZone(TimeZone.getTimeZone("IST")); // Or whatever IST is supposed to be
-				  	  formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
+				  	  	formatter.parse(formatter.format(new Date(System.currentTimeMillis())));
 				  	  	frame.setCreatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
 				  	  	frame.setUpdatedAt(formatter.parse(formatter.format(new Date(System.currentTimeMillis()))));
 				  	  	
@@ -172,6 +177,53 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 			devMapId=String.valueOf(devMapCombination);
 						     		 			 		}else if(packetType.equals("1")){
 						     		 			 		 logger.debug("Packet Type as " ,packetType);
+						     		 			 		}else if(packetType.equals("2")){
+						     		 			 			logger.debug("Packet Type as " ,packetType);	
+						     		 			 		}else if(packetType.equals("3")){
+						     		 			 				logger.debug("Packet Type as " ,packetType);
+						     		 			 				TblDeviceBattreyInfo existBattreyInfo=deviceBattreyInfoDao.getDeviceBattreyInfoByDevEUI(frame.getDevEUI());
+						     		 			 				if(existBattreyInfo!=null){
+						     		 			 					existBattreyInfo.setBattreyPerc(String.valueOf(Integer.parseInt(decodeBinary,16)));
+						     		 			 					existBattreyInfo.setUpdatedAt(new Date(System.currentTimeMillis()));
+						     		 			 					deviceBattreyInfoDao.save(existBattreyInfo);
+						     		 			 				}else{
+						     		 			 					TblDeviceBattreyInfo newBattreyInfo=null;
+						     		 			 						newBattreyInfo=new TblDeviceBattreyInfo();
+						     		 			 						newBattreyInfo.setApplicationID(frame.getApplicationID());
+						     		 			 						newBattreyInfo.setApplicationName(frame.getApplicationName());
+						     		 			 						newBattreyInfo.setNodeName(frame.getNodeName());
+						     		 			 						newBattreyInfo.setDevEUI(frame.getDevEUI());
+						     		 			 						newBattreyInfo.setBattreyPerc(String.valueOf(Integer.parseInt(decodeBinary,16)));
+						     		 			 						newBattreyInfo.setCreatedAt(new Date(System.currentTimeMillis()));
+						     		 			 						newBattreyInfo.setUpdatedAt(new Date(System.currentTimeMillis()));
+						     		 			 						deviceBattreyInfoDao.save(newBattreyInfo);						     		 			 						
+						     		 			 						
+						     		 			 						
+						     		 			 				}
+						     		 			 			
+						     		 			 		}else if(packetType.equals("4")){
+						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			
+						     		 			 			TblDeviceBattreyInfo existBattreyInfo=deviceBattreyInfoDao.getDeviceBattreyInfoByDevEUI(frame.getDevEUI());
+					     		 			 				if(existBattreyInfo!=null){
+					     		 			 					existBattreyInfo.setTempInfo(String.valueOf(Integer.parseInt(decodeBinary,16)));
+					     		 			 					existBattreyInfo.setUpdatedAt(new Date(System.currentTimeMillis()));
+					     		 			 					deviceBattreyInfoDao.save(existBattreyInfo);
+					     		 			 				}else{
+					     		 			 					TblDeviceBattreyInfo newBattreyInfo=null;
+					     		 			 						newBattreyInfo=new TblDeviceBattreyInfo();
+					     		 			 						newBattreyInfo.setApplicationID(frame.getApplicationID());
+					     		 			 						newBattreyInfo.setApplicationName(frame.getApplicationName());
+					     		 			 						newBattreyInfo.setNodeName(frame.getNodeName());
+					     		 			 						newBattreyInfo.setDevEUI(frame.getDevEUI());
+					     		 			 						newBattreyInfo.setTempInfo(String.valueOf(Integer.parseInt(decodeBinary,16)));
+					     		 			 						newBattreyInfo.setCreatedAt(new Date(System.currentTimeMillis()));
+					     		 			 						newBattreyInfo.setUpdatedAt(new Date(System.currentTimeMillis()));
+					     		 			 						deviceBattreyInfoDao.save(newBattreyInfo);						     		 			 						
+					     		 			 						
+					     		 			 						
+					     		 			 				}
+						     		 			 			
 						     		 			 		}
 							     		 			//}
 							     		 		i++;	
