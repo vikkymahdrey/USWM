@@ -62,6 +62,15 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 	
 	@Query(value = "CALL dashboard(?1,?2,?3,?4,?5)", nativeQuery = true)
 	Object[] getFramesByFrmToDateAndDevEUIAndAppId(@Param("appId")  String appId, @Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate, @Param("type") String type);
+
+	@Query(value="Select f.* from lora_frames f where  f.applicationID=?1 and f.devEUI=?2 and f.devMapId=?3 order by f.id desc limit 1",nativeQuery=true)
+	LoraFrame getLoraFrameByDevEUIAndDeviceId(@Param("applicationID") String applicationID, @Param("devEUI") String devEUI, @Param("devMapId") String devMapId);
+
+	@Query(value="Select f.* from lora_frames f where f.devEUI=?1 and  f.applicationID=?2  order by f.id desc limit 1",nativeQuery=true)
+	LoraFrame getLoraFrameByDevEUIAndAppID(@Param("devEUI") String devEUI, @Param("appId") String appId);
+
+	@Query(value="Select f.* from lora_frames f where f.applicationID=?1 and f.devEUI=?2 and f.devMapId=?3 order by f.id desc limit 1,1",nativeQuery=true)
+	LoraFrame getSecLastLoraFrameByDevEUIAndDeviceId(@Param("applicationID") String applicationID, @Param("devEUI") String devEUI, @Param("devMapId") String devMapId);
 	
 	
 	

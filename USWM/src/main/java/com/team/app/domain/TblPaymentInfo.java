@@ -32,6 +32,18 @@ public class TblPaymentInfo implements Serializable {
 
 	@Column(name="error_code")
 	private String errorCode;
+	
+	@Column(name="payuMoneyId")
+	private String payuMoneyId;
+
+
+	public String getPayuMoneyId() {
+		return payuMoneyId;
+	}
+
+	public void setPayuMoneyId(String payuMoneyId) {
+		this.payuMoneyId = payuMoneyId;
+	}
 
 	@Column(name="error_message")
 	private String errorMessage;
@@ -49,12 +61,34 @@ public class TblPaymentInfo implements Serializable {
 	private String paymentId;
 
 	private String phoneno;
-	
+
 	@Column(name="product_info")
 	private String productInfo;
 
 	@Column(name="retry_count")
 	private String retryCount;
+	
+	@Column(name="additionalCharges")
+	private String additionalCharges;
+	
+	@Column(name="devEUI")
+	private String devEUI;
+
+	public String getDevEUI() {
+		return devEUI;
+	}
+
+	public void setDevEUI(String devEUI) {
+		this.devEUI = devEUI;
+	}
+
+	public String getAdditionalCharges() {
+		return additionalCharges;
+	}
+
+	public void setAdditionalCharges(String additionalCharges) {
+		this.additionalCharges = additionalCharges;
+	}
 
 	private String status;
 
@@ -182,8 +216,6 @@ public class TblPaymentInfo implements Serializable {
 	public void setPhoneno(String phoneno) {
 		this.phoneno = phoneno;
 	}
-
-	
 
 	public String getProductInfo() {
 		return this.productInfo;

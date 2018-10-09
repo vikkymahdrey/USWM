@@ -54,7 +54,7 @@ public class DateUtil {
 		    	Calendar calendar = Calendar.getInstance();
 		    	long currentDateTime = calendar.getTimeInMillis();
 				DateFormat formatter = new SimpleDateFormat(format);
-				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+				formatter.setTimeZone(TimeZone.getTimeZone("IST"));
 			//	String dateStr = formatter.format(currentDateTime);
 			//	System.out.println("dateStr = "+dateStr);
 				date = formatter.parse(formatter.format(currentDateTime));
@@ -118,6 +118,24 @@ public class DateUtil {
 				DateFormat formatter = new SimpleDateFormat(format);
 				//formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 				formatter.setTimeZone(TimeZone.getTimeZone("IST"));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTimeInMillis(longTime);
+				System.out.println(formatter.format(calendar.getTime()));
+				date = formatter.parse(formatter.format(calendar.getTime()));
+			} catch (Exception e) {
+
+				logger.error("error in Timestamp", e);
+			}
+			return date;
+		}
+		
+		
+		public static Date convertLongToDateNoZone(long longTime, String format) {
+			Date date = null;
+			try {
+				DateFormat formatter = new SimpleDateFormat(format);
+				//formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+				//formatter.setTimeZone(TimeZone.getTimeZone("IST"));
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTimeInMillis(longTime);
 				System.out.println(formatter.format(calendar.getTime()));

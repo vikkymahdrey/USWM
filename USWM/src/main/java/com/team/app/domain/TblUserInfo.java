@@ -39,22 +39,13 @@ public class TblUserInfo implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateddt;
 
+	//bi-directional many-to-one association to TblDeviceFeedback
+	@OneToMany(mappedBy="tblUserInfo")
+	private List<TblDeviceFeedback> tblDeviceFeedbacks;
+
 	//bi-directional many-to-one association to TblPaymentInfo
 	@OneToMany(mappedBy="tblUserInfo")
 	private List<TblPaymentInfo> tblPaymentInfos;
-
-	//bi-directional many-to-many association to TblDeviceInfo
-	@ManyToMany
-	@JoinTable(
-		name="tbl_user_device"
-		, joinColumns={
-			@JoinColumn(name="userId")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="deviceId")
-			}
-		)
-	private List<TblDeviceInfo> tblDeviceInfos;
 
 	//bi-directional many-to-one association to Landmark
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -145,6 +136,28 @@ public class TblUserInfo implements Serializable {
 		this.updateddt = updateddt;
 	}
 
+	public List<TblDeviceFeedback> getTblDeviceFeedbacks() {
+		return this.tblDeviceFeedbacks;
+	}
+
+	public void setTblDeviceFeedbacks(List<TblDeviceFeedback> tblDeviceFeedbacks) {
+		this.tblDeviceFeedbacks = tblDeviceFeedbacks;
+	}
+
+	public TblDeviceFeedback addTblDeviceFeedback(TblDeviceFeedback tblDeviceFeedback) {
+		getTblDeviceFeedbacks().add(tblDeviceFeedback);
+		tblDeviceFeedback.setTblUserInfo(this);
+
+		return tblDeviceFeedback;
+	}
+
+	public TblDeviceFeedback removeTblDeviceFeedback(TblDeviceFeedback tblDeviceFeedback) {
+		getTblDeviceFeedbacks().remove(tblDeviceFeedback);
+		tblDeviceFeedback.setTblUserInfo(null);
+
+		return tblDeviceFeedback;
+	}
+
 	public List<TblPaymentInfo> getTblPaymentInfos() {
 		return this.tblPaymentInfos;
 	}
@@ -165,14 +178,6 @@ public class TblUserInfo implements Serializable {
 		tblPaymentInfo.setTblUserInfo(null);
 
 		return tblPaymentInfo;
-	}
-
-	public List<TblDeviceInfo> getTblDeviceInfos() {
-		return this.tblDeviceInfos;
-	}
-
-	public void setTblDeviceInfos(List<TblDeviceInfo> tblDeviceInfos) {
-		this.tblDeviceInfos = tblDeviceInfos;
 	}
 
 	public Landmark getLandmark() {

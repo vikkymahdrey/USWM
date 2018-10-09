@@ -1,8 +1,10 @@
 package com.team.app.controller;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.domain.TblDeviceFeedback;
+import com.team.app.domain.TblDeviceFeedbackType;
 import com.team.app.domain.TblPaymentInfo;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
@@ -26,12 +30,14 @@ import com.team.app.dto.UserLoginDTO;
 import com.team.app.exception.AtAppException;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
+import com.team.app.service.DeviceInfo;
 import com.team.app.service.PaymentBillService;
 import com.team.app.service.UnizenCommonService;
 import com.team.app.service.UserLoginService;
 import com.team.app.utils.DateUtil;
 import com.team.app.utils.JWTKeyGenerator;
 import com.team.app.utils.JsonUtil;
+import com.team.app.utils.OtherFunctions;
 
 /**
  * 
@@ -54,6 +60,9 @@ public class ConsumerInstrumentController {
 	
 	@Autowired
 	private PaymentBillService paymentBillService;
+	
+	@Autowired
+	private DeviceInfo deviceInfo;
 	
 		
 	private static final AtLogger logger = AtLogger.getLogger(ConsumerInstrumentController.class);
@@ -278,6 +287,50 @@ public class ConsumerInstrumentController {
 	
 	
 	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getDeviceFeedbackType", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getDeviceFeedbackTypeHandler(@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+		logger.info(" /POST /getDeviceFeedbackType API ");
+		ResponseEntity<String> responseEntity = null;
+		
+		try {
+			//Validate X-ACCESS-TOKEN Value
+			//JWTKeyGenerator.validateXToken(xToken);
+			
+			// Validate Expriy Date
+			//unizenCommonServiceImpl.validateXToken(AppConstants.KEY_UNIZEN_MOBILE, xToken);
+			
+				List<TblDeviceFeedbackType> types=deviceInfo.getDeviceFeedbackType();		
+					  if(types!=null && !types.isEmpty()){							  
+							  JSONArray jsonArr=null;
+						  		jsonArr=new JSONArray();
+						  	  JSONObject res=null;
+						  	    res=new JSONObject();
+						  	    
+							  JSONObject json=null;
+							  for(TblDeviceFeedbackType f : types){
+								  json=new JSONObject();
+								  json.put("id", f.getId());
+								  json.put("type", f.getType());
+								  jsonArr.add(json);
+							  }
+							  
+							  res.put("resultant", jsonArr);
+							  String response=JsonUtil.objToJson(res);
+							  responseEntity = new ResponseEntity<String>(response,HttpStatus.OK);
+						  }else{
+							  responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+						  }					  
+			
+			
+		}catch(AtAppException e) {
+			logger.error("Exception in /getDeviceFeedbackType",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWaterConsumptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getWaterConsumptionsHandler(@RequestBody String received){
 		logger.info(" /POST /getWaterConsumptions API ", received);
@@ -336,9 +389,9 @@ public class ConsumerInstrumentController {
 							
 								
 						 }	
-								Date sDt=DateUtil.convertLongToDateIST(startDt, "yyyy-MM-dd");
-								Date eDt=DateUtil.convertLongToDateIST(endDt, "yyyy-MM-dd");
-								//logger.debug("Date sDt",DateUtil.changeDateFromatIST(sDt));
+								Date sDt=DateUtil.convertLongToDateNoZone(startDt+19800000, "yyyy-MM-dd");
+								Date eDt=DateUtil.convertLongToDateNoZone(endDt+19800000, "yyyy-MM-dd");
+								logger.debug("Date sDt",DateUtil.changeDateFromatIST(sDt));
 								logger.debug("Date eDt",eDt);
 								logger.debug("DevEUI :",devEUI);
 								logger.debug("AppId :",appId);
@@ -419,8 +472,11 @@ public class ConsumerInstrumentController {
 					    JSONObject res=null;
 					    	res=new JSONObject();
 					   							
-								Date rDt=DateUtil.convertLongToDateIST(reqDt, "yyyy-MM-dd");
+								Date rDt=DateUtil.convertLongToDateNoZone(reqDt+19800000, "yyyy-MM-dd");
+								logger.debug("Date rDt",rDt);
+								logger.debug("Date rDt",DateUtil.changeDateFromat(rDt));
 								logger.debug("Date rDt",DateUtil.changeDateFromatIST(rDt));
+								logger.debug("Date rDt",OtherFunctions.sqlFormatToDate(DateUtil.changeDateFromatIST(rDt)));
 								
 								for(UserDeviceMapping udm : udmList){
 									Object[] ob=consumerInstrumentServiceImpl.getLoraFrameByDateAndDevEUI(rDt,udm.getAppId().trim(),udm.getDevEUI().trim());
@@ -515,11 +571,12 @@ public class ConsumerInstrumentController {
 					payment.setProductInfo(String.valueOf(obj.get("productInfo")));
 					payment.setStatus(String.valueOf(obj.get("status")));
 					payment.setRetryCount(String.valueOf(obj.get("retryCount")));
+					payment.setPayuMoneyId(String.valueOf(obj.get("payuMoneyId")));
 					payment.setTblUserInfo(userInfo);
 					payment.setNameOnCard(String.valueOf(obj.get("nameOnCard")));
 					payment.setPaymentId(String.valueOf(obj.get("paymentId")));
 					payment.setCreatedOn(crdtOn);
-					payment.setUpdateddt(new Date(System.currentTimeMillis()));					
+					payment.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));					
 					
 					TblPaymentInfo paymentUpdated=paymentBillService.updatePaymentInfo(payment);
 					if(paymentUpdated!=null){
@@ -542,8 +599,218 @@ public class ConsumerInstrumentController {
 		return responseEntity;
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/setFeedback", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> setFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+		logger.info(" /POST /setFeedback API ", received);
+		ResponseEntity<String> responseEntity = null;
+		JSONObject obj=null;		
+		try{		
+			obj=new JSONObject();
+			obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Exception in /setFeedback", HttpStatus.EXPECTATION_FAILED);
+		}
+		try {
+			//Validate X-ACCESS-TOKEN Value
+			//JWTKeyGenerator.validateXToken(xToken);
+			
+			// Validate Expriy Date
+			//unizenCommonServiceImpl.validateXToken(AppConstants.KEY_UNIZEN_MOBILE, xToken);
+			
+			if(String.valueOf(obj.get("userId"))!=null && String.valueOf(obj.get("type"))!=null && 
+					String.valueOf(obj.get("textarea"))!=null && String.valueOf(obj.get("devEUI"))!=null &&
+					String.valueOf(obj.get("nodeName"))!=null && String.valueOf(obj.get("phoneType"))!=null &&
+					String.valueOf(obj.get("phoneDeviceVersion"))!=null){
+				
+					TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
+									  
+					  if(userInfo!=null){
+						  
+						TblDeviceFeedback f=null;
+							f=new TblDeviceFeedback();
+							f.setDevEUI(String.valueOf(obj.get("devEUI")));
+							f.setNodeName(String.valueOf(obj.get("nodeName")));
+							f.setPhoneType(String.valueOf(obj.get("phoneType")));
+							f.setPhoneDeviceVersion(String.valueOf(obj.get("phoneDeviceVersion")));
+							f.setTextarea(String.valueOf(obj.get("textarea")));
+							f.setType(String.valueOf(obj.get("type")));
+							f.setTblUserInfo(userInfo);
+							f.setStatus(AppConstants.IND_A);
+							f.setCreatedAt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+							f.setUpdatedAt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));							
+							
+							TblDeviceFeedback feedback=deviceInfo.setDeviceFeedback(f);
+							if(feedback!=null){
+								responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+							}else{
+								responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+							}						
+							  
+							  
+						  }else{
+							  responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+						  }					  
+					
+			}else{
+				responseEntity = new ResponseEntity<String>("Empty requested body", HttpStatus.BAD_REQUEST);
+			}
+			
+		}catch(AtAppException e) {
+			logger.error("Exception in /setFeedback",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getFeedbackInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+		logger.info(" /POST /getFeedback API ", received);
+		ResponseEntity<String> responseEntity = null;
+		JSONObject obj=null;		
+		try{		
+			obj=new JSONObject();
+			obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Exception in /setFeedback", HttpStatus.EXPECTATION_FAILED);
+		}
+		try {
+			//Validate X-ACCESS-TOKEN Value
+			//JWTKeyGenerator.validateXToken(xToken);
+			
+			// Validate Expriy Date
+			//unizenCommonServiceImpl.validateXToken(AppConstants.KEY_UNIZEN_MOBILE, xToken);
+			
+			if(String.valueOf(obj.get("userId"))!=null){
+				
+					TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
+									  
+					  if(userInfo!=null){
+						List<TblDeviceFeedback> feedbacklist=userInfo.getTblDeviceFeedbacks();
+						
+						if(feedbacklist!=null && !feedbacklist.isEmpty()){
+							JSONArray arr=null;
+								arr=new JSONArray();
+							JSONObject js=null;
+							 	js=new JSONObject();
+							for(TblDeviceFeedback f : feedbacklist){
+								JSONObject json=null;
+									json=new JSONObject();
+									json.put("id", f.getId());
+									json.put("devEUI", f.getDevEUI());
+									json.put("nodeName", f.getNodeName());
+									json.put("phoneType", f.getPhoneType());
+									json.put("phoneDeviceVersion", f.getPhoneDeviceVersion());
+									json.put("textarea", f.getTextarea());
+									json.put("type", f.getType());
+									json.put("status", f.getStatus());
+									json.put("createdAt", DateUtil.changeDateFromat(f.getCreatedAt()));
+									
+									arr.add(json);
+							}
+							
+							js.put("result", arr);
+							String response=JsonUtil.objToJson(js);
+							
+							responseEntity = new ResponseEntity<String>(response,HttpStatus.OK);
+							
+						}
+					}else{
+						responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 
+					}  
+				
+					
+			}else{
+				responseEntity = new ResponseEntity<String>("Empty requested body", HttpStatus.BAD_REQUEST);
+			}
+			
+		}catch(AtAppException e) {
+			logger.error("Exception in /getFeedback",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(),e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getPaymentInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getPaymentInfoHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+		logger.info(" /POST /getPaymentInfo API ", received);
+		ResponseEntity<String> responseEntity = null;
+		JSONObject obj=null;		
+		try{		
+			obj=new JSONObject();
+			obj=(JSONObject)new JSONParser().parse(received);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Exception in /getPaymentInfo", HttpStatus.EXPECTATION_FAILED);
+		}
+		try {
+			
+			if(String.valueOf(obj.get("userId"))!=null){
+							
+				
+				TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
+				if(userInfo!=null){
+						
+					List<TblPaymentInfo> payList=userInfo.getTblPaymentInfos();
+					if(payList!=null && !payList.isEmpty()){					
+						JSONArray arr=null;
+							arr=new JSONArray();
+								JSONObject js=null;
+									js=new JSONObject();
+						for(TblPaymentInfo p :payList){
+							JSONObject json=null;
+								json=new JSONObject();
+								json.put("id", p.getId());
+								json.put("txnid", p.getTxnid());
+								json.put("payuMoneyId", p.getPayuMoneyId());
+								json.put("amount", p.getAmount());
+								json.put("cardnum", p.getCardnum());
+								json.put("discount", p.getDiscount());
+								json.put("emailId", p.getEmailId());
+								json.put("errorCode", p.getErrorCode());
+								json.put("errorMessage", p.getErrorMessage());
+								json.put("firstname", p.getFirstname());
+								json.put("netAmountDebit", p.getNetAmountDebit());
+								json.put("phoneno", p.getPhoneno());
+								json.put("productInfo", p.getProductInfo());
+								json.put("status", p.getStatus());
+								json.put("retryCount", p.getRetryCount());
+								json.put("nameOnCard", p.getNameOnCard());
+								json.put("paymentId", p.getPaymentId());
+								json.put("createdOn",DateUtil.changeDateFromat(p.getCreatedOn()));
+								arr.add(json);	
+								
+																
+						}
+						js.put("result", arr);
+						String response=JsonUtil.objToJson(js);
+						responseEntity = new ResponseEntity<String>(response,HttpStatus.OK);
+					}else{
+							responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+					}						
+					
+				}else{
+							responseEntity = new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+				}
+			}else{
+				responseEntity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			}
+			
+		}catch(AtAppException e) {
+			logger.error("Exception in /getPaymentInfo",e);
+			responseEntity = new ResponseEntity<String>(e.getMessage(), e.getHttpStatus());
+		}
+		return responseEntity;
+	}
+	
 
+	
 	
 }
 	

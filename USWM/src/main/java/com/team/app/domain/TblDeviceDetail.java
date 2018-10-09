@@ -6,18 +6,22 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the tbl_device_battrey_info database table.
+ * The persistent class for the tbl_device_details database table.
  * 
  */
 @Entity
-@Table(name="tbl_device_battrey_info")
-@NamedQuery(name="TblDeviceBattreyInfo.findAll", query="SELECT t FROM TblDeviceBattreyInfo t")
-public class TblDeviceBattreyInfo implements Serializable {
+@Table(name="tbl_device_details")
+@NamedQuery(name="TblDeviceDetail.findAll", query="SELECT t FROM TblDeviceDetail t")
+public class TblDeviceDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
+
+	private String applicationID;
+
+	private String applicationName;
 
 	@Column(name="battrey_perc")
 	private String battreyPerc;
@@ -29,41 +33,17 @@ public class TblDeviceBattreyInfo implements Serializable {
 	private String devEUI;
 
 	private String nodeName;
+
+	@Column(name="sw_info")
+	private String swInfo;
+
 	private String tempInfo;
-	
-	public String getTempInfo() {
-		return tempInfo;
-	}
-
-	public void setTempInfo(String tempInfo) {
-		this.tempInfo = tempInfo;
-	}
-
-	private String applicationID;
-	private String applicationName;
-	
-
-	public String getApplicationID() {
-		return applicationID;
-	}
-
-	public void setApplicationID(String applicationID) {
-		this.applicationID = applicationID;
-	}
-
-	public String getApplicationName() {
-		return applicationName;
-	}
-
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at")
 	private Date updatedAt;
 
-	public TblDeviceBattreyInfo() {
+	public TblDeviceDetail() {
 	}
 
 	public String getId() {
@@ -72,6 +52,22 @@ public class TblDeviceBattreyInfo implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getApplicationID() {
+		return this.applicationID;
+	}
+
+	public void setApplicationID(String applicationID) {
+		this.applicationID = applicationID;
+	}
+
+	public String getApplicationName() {
+		return this.applicationName;
+	}
+
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 
 	public String getBattreyPerc() {
@@ -104,6 +100,22 @@ public class TblDeviceBattreyInfo implements Serializable {
 
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
+	}
+
+	public String getSwInfo() {
+		return this.swInfo;
+	}
+
+	public void setSwInfo(String swInfo) {
+		this.swInfo = swInfo;
+	}
+
+	public String getTempInfo() {
+		return this.tempInfo;
+	}
+
+	public void setTempInfo(String tempInfo) {
+		this.tempInfo = tempInfo;
 	}
 
 	public Date getUpdatedAt() {

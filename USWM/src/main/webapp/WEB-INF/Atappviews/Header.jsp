@@ -71,12 +71,12 @@
           
           
           <ul class="treeview-menu">
-          	<li><a href="downlinkConfig"><i class="fa fa-circle-o"></i><b>Downlink Config</b></a></li>
+          	<li><a href="downlinkConfig"><i class="fa fa-circle-o"></i><b>Uplink MPDU Config</b></a></li>
+          	<li><a href="retryConfig"><i class="fa fa-circle-o"></i><b>Uplink Retry Config</b></a></li> 
+          <!-- 	<li><a href="dateConfig"><i class="fa fa-circle-o"></i><b>Date Configuration</b></a></li> -->
             <li><a href="aplConfig"><i class="fa fa-circle-o"></i><b>APL Config</b></a></li>
-            <li><a href="#"><i class="fa fa-paypal"></i><b>Payment-CutOff</b></a></li>
-           
-          </ul>
-           
+            <li><a href="#"><i class="fa fa-paypal"></i><b>Payment-CutOff</b></a></li>           
+          </ul>           
         </li>
         
         <li class="treeview">
@@ -129,10 +129,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="payBills"><i class="fa fa-circle-o"></i><b>PUM-Java-Master</b></a></li> 
-              <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>PayUMoney</b></a></li> 
-             <li><a href="#"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
-                       
+              <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>                       
           </ul>
           
              
@@ -283,7 +280,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
+            <li><a href="payUBills"><i class="fa fa-circle-o"></i><b>Make a payment</b></a></li>
                        
           </ul>
           

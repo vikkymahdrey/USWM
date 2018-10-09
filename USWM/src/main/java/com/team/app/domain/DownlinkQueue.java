@@ -19,7 +19,13 @@ public class DownlinkQueue implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
 
-	private String confirmed;
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_at")
@@ -29,16 +35,44 @@ public class DownlinkQueue implements Serializable {
 
 	@Column(name="dev_eui")
 	private String devEui;
+	
+	@Column(name="deviceId")
+	private String deviceId;
+	
+	@Column(name="flag")
+	private String flag;
+	
+	@Column(name="downlinkID")
+	private String downlinkID;
+	
+	
+	
+	public String getDownlinkID() {
+		return downlinkID;
+	}
+
+	public void setDownlinkID(String downlinkID) {
+		this.downlinkID = downlinkID;
+	}
+
+	@Column(name="applicationID")
+	private String applicationID;
+
+	public String getApplicationID() {
+		return applicationID;
+	}
+
+	public void setApplicationID(String applicationID) {
+		this.applicationID = applicationID;
+	}
 
 	private String fport;
 
-	private String hourly;
+	private String mpdu;
 
-	private String packet;
+	private String pdu;
 
-	private String pending;
-
-	private String reference;
+	
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="updated_at")
@@ -55,13 +89,6 @@ public class DownlinkQueue implements Serializable {
 		this.id = id;
 	}
 
-	public String getConfirmed() {
-		return this.confirmed;
-	}
-
-	public void setConfirmed(String confirmed) {
-		this.confirmed = confirmed;
-	}
 
 	public Date getCreatedAt() {
 		return this.createdAt;
@@ -95,37 +122,32 @@ public class DownlinkQueue implements Serializable {
 		this.fport = fport;
 	}
 
-	public String getHourly() {
-		return this.hourly;
+
+	public String getDeviceId() {
+		return deviceId;
 	}
 
-	public void setHourly(String hourly) {
-		this.hourly = hourly;
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
-	public String getPacket() {
-		return this.packet;
+	public String getMpdu() {
+		return mpdu;
 	}
 
-	public void setPacket(String packet) {
-		this.packet = packet;
+	public void setMpdu(String mpdu) {
+		this.mpdu = mpdu;
 	}
 
-	public String getPending() {
-		return this.pending;
+	public String getPdu() {
+		return pdu;
 	}
 
-	public void setPending(String pending) {
-		this.pending = pending;
+	public void setPdu(String pdu) {
+		this.pdu = pdu;
 	}
 
-	public String getReference() {
-		return this.reference;
-	}
-
-	public void setReference(String reference) {
-		this.reference = reference;
-	}
+	
 
 	public Date getUpdatedAt() {
 		return this.updatedAt;

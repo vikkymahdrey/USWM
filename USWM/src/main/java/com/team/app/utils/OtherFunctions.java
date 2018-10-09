@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -152,6 +153,33 @@ public static Date getCurrentDate(){
 	}catch(Exception e){
 		return null;
 	}
+}
+
+
+public static Date getCurrentDateFrmt(){
+	
+	try{
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date date = new Date();
+	 return dateFormat.parse(dateFormat.format(date));
+	}catch(Exception e){
+		return null;
+	}
+}
+
+public static Date getDateWithoutTimestamp(Date date){
+	
+	try{
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		return dateFormat.parse(dateFormat.format(date));
+	}catch(Exception e){
+		return null;
+	}
+}
+
+public static long getDifferenceDays(Date d1, Date d2) {
+    long diff = d2.getTime() - d1.getTime();
+    return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 }
 
 public boolean checkDate90(String date) {

@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.team.app.utils.DateUtil;
+
 public class test6 {
 	public static void main(String[] args) {
 	    //short b=(short) 32769;
@@ -37,7 +39,8 @@ public class test6 {
 		for (Object i: s){
 		System.out.println(i.toString());
 		}*/
-		
+		long epoch=1537864200000L;
+		System.out.println("Date "+DateUtil.convertLongToDateIST(epoch,"yyyy-MM-dd"));
 	}
 		
 		

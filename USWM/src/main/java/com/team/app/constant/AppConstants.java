@@ -66,6 +66,27 @@ public class AppConstants {
 	public static final String devName = "device";
 	
 	
+	/*Device Downlink Command*/
+	public static final String MPDU = "32";
+	public static final String date = "64";
+	public static final String retry = "48";
+	public static final int missing = 1;
+	
+	
+	
+	/*Payment Configuration*/
+	
+	public static final String merchant_key = "gtKFFx";
+	public static final String salt = "eCwWELxi";
+	//public static final String base_url = "https://sandboxsecure.payu.in";
+	public static final String base_url = "https://test.payu.in";
+	public static final String surl = appURL+"/paymentStatus";
+	public static final String furl = appURL+"/paymentFailure";
+	public static final String txnMode = "Web";
+	
+	
+	
+	
 	
 	
 	

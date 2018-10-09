@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>MPDU Setting</title>
+    <title>Retry Uplink Setting</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -51,8 +51,8 @@
  	  	var orgDesc=document.getElementById("orgN").value;
 	  	var appDesc=document.getElementById("appN").value;
 	  	var devDesc=document.getElementById("devN").value;
-	  	var hourly=document.getElementById("hourly").value;
-	  	var packet=document.getElementById("packet").value;
+	  	var retry=document.getElementById("retry").value;
+	  	var interval=document.getElementById("interval").value;
  		
 	   	   
 	   if(orgid=="0"){
@@ -67,20 +67,20 @@
 		   alert(devDesc);
 		   document.getElementById("devid").focus();
 		   return false;
-	   }else if(hourly=="0"){
-		   alert("Choose Packets per day!");
-		   document.getElementById("hourly").focus();
+	   }else if(retry=="0"){
+		   alert("Choose Retry Number!");
+		   document.getElementById("retry").focus();
 		   return false;
-	   }else if(packet=="0"){
-		   alert("Choose Packet length");
-		   document.getElementById("packet").focus();
+	   }else if(interval=="0"){
+		   alert("Choose Interval length");
+		   document.getElementById("interval").focus();
 		   return false;
 	   }else{		   
 			   $.ajax({
-	               url: 'downlinkSetting',
+	               url: 'retrySetting',
 	               type: 'POST',
 	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
-	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,hourly:hourly,packet:packet}) ,
+	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,retry:retry,interval:interval}) ,
 	               success: function (data) {
 	            	   alert(data);
 	            	   if(data==="success"){
@@ -144,27 +144,27 @@
   } 
    
    
-   function getPacketByHourly(){
+   function getIntervalOfRetry(){
 	   
-	   var hourly=document.getElementById("hourly").value;
+	   var retry=document.getElementById("retry").value;
 	  
-	   if(hourly=="0")
+	   if(retry=="0")
    		{    
-	   		var packet=document.getElementById("packet");
-	   			packet.innerHTML='<select name="packet" class="form-control" id="packet"> <option value="0" >Please Choose</option></select>';
+	   		var interval=document.getElementById("interval");
+	   			interval.innerHTML='<select name="interval" class="form-control" id="interval"> <option value="0" >Please Choose</option></select>';
 	   			return;
    		}else{
 		   $.ajax({
-	           url: 'getPacketByHourly',
+	           url: 'getIntervalOfRetry',
 	           type: 'POST',
-	           data: jQuery.param({ hourly: hourly }) ,
+	           data: jQuery.param({ retryId: retry }) ,
 	           success: function (data) {
 	        	   
 		        	   if(data.length==0){
-		        		   alert("Packet size not associated on this hour config!");            		
+		        		   alert("Interval not associated on this retry config!");            		
 		        	   }else{
-		        		   var packet=document.getElementById("packet"); 
-		        		   packet.innerHTML='<select  name="packet" class="form-control" id="packet" >'+data+'</select>';
+		        		   var interval=document.getElementById("interval"); 
+		        		   interval.innerHTML='<select  name="interval" class="form-control" id="interval" >'+data+'</select>';
 		        	   }
 	        	
 	               },
@@ -295,7 +295,7 @@ function getDevEUIByAppID()
   			<% 
   				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   				List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
-  				List<TblDownlinkHoulyConfig> configs=(List<TblDownlinkHoulyConfig>)request.getAttribute("configs");
+  				List<TblRetryConfig> retryConfig=(List<TblRetryConfig>)request.getAttribute("retryConfig");
   			%>
   			
 							 
@@ -407,14 +407,14 @@ function getDevEUIByAppID()
 									
 									
 									<tr>	
-									   <td align="right"><b>Packets per day</b></td>
+									   <td align="right"><b>No. of retry</b></td>
 									   
 										 <td>
-										 	<select name="hourly" class="form-control" id="hourly" onchange="getPacketByHourly()" >
+										 	<select name="retry" class="form-control" id="retry" onchange="getIntervalOfRetry()" >
 										    	<option value="0">Please Choose</option>
-										    	<% if(configs!=null && !configs.isEmpty()){
-													for(TblDownlinkHoulyConfig d : configs){ %>
-										    			<option value="<%=d.getId()%>"><%=d.getPerday()%></option>	
+										    	<% if(retryConfig!=null && !retryConfig.isEmpty()){
+													for(TblRetryConfig r : retryConfig){ %>
+										    			<option value="<%=r.getId()%>"><%=r.getRetryVol()%></option>	
 										    		<%}
 												}%>
 										
@@ -423,10 +423,10 @@ function getDevEUIByAppID()
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Packet length</b></td>
+									   <td align="right"><b>Interval</b></td>
 									   
 										 <td>
-										 	<select name="packet" class="form-control" id="packet" >
+										 	<select name="interval" class="form-control" id="interval" >
 										    	<option value="0">Please Choose</option>										    	
 										    </select> 
 										</td>

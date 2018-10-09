@@ -33,6 +33,7 @@ import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
+import com.team.app.utils.DateUtil;
 
 @Controller
 @SessionAttributes({"status"})
@@ -547,8 +548,8 @@ public class UserInfoController {
 				udm.setDevEUI(devId);
 				udm.setDevNode(devNodeName);
 				udm.setStatus(AppConstants.IND_A);
-				udm.setCreateddt(new Date(System.currentTimeMillis()));
-				udm.setUpdateddt(new Date(System.currentTimeMillis()));
+				udm.setCreateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+				udm.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
 			
 			
 				TblUserInfo newUser=null;
@@ -563,8 +564,8 @@ public class UserInfoController {
 					newUser.setContactnumber(contact);
 					newUser.setRoleBean(r);
 					newUser.setLandmark(l);
-					newUser.setCreateddt(new Date(System.currentTimeMillis()));
-					newUser.setUpdateddt(new Date(System.currentTimeMillis()));
+					newUser.setCreateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+					newUser.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
 					newUser.setStatus(AppConstants.status);				
 					
 					String result=userLoginService.saveUser(newUser,udm);
@@ -638,7 +639,7 @@ public class UserInfoController {
 			if(user!=null){				
 				user.setContactnumber(contact);
 				user.setEmailId(email);
-				user.setUpdateddt(new Date(System.currentTimeMillis()));
+				user.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
 				userLoginService.updateUserInfo(user);
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"success\" >User details updated successfully!</div>");
@@ -817,8 +818,8 @@ public class UserInfoController {
 					udm.setAppName(appName);
 					udm.setTblUserInfo(user);
 					udm.setStatus(AppConstants.IND_A);
-					udm.setCreateddt(new Date(System.currentTimeMillis()));
-					udm.setUpdateddt(new Date(System.currentTimeMillis()));
+					udm.setCreateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+					udm.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
 					UserDeviceMapping udmReg=userLoginService.saveNewUDMToUser(udm);
 					if(udmReg!=null){
 						redirectAttributes.addFlashAttribute("status",

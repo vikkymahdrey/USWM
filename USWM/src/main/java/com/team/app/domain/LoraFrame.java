@@ -31,7 +31,16 @@ public class LoraFrame implements Serializable {
 
 	private String devMapId;
 
+	@Column(name="fPort")
 	private String fPort;
+
+	public String getfPort() {
+		return fPort;
+	}
+
+	public void setfPort(String fPort) {
+		this.fPort = fPort;
+	}
 
 	@Column(name="gateway_mac")
 	private String gatewayMac;
@@ -46,6 +55,12 @@ public class LoraFrame implements Serializable {
 	private Date updatedAt;
 
 	private String waterltr;
+	
+	@Column(name="mpdu")
+	private String mpdu;
+	
+	@Column(name="pdu")
+	private String pdu;
 
 	public LoraFrame() {
 	}
@@ -98,14 +113,25 @@ public class LoraFrame implements Serializable {
 		this.devMapId = devMapId;
 	}
 
-	public String getFPort() {
-		return this.fPort;
+	
+
+	public String getMpdu() {
+		return mpdu;
 	}
 
-	public void setFPort(String fPort) {
-		this.fPort = fPort;
+	public void setMpdu(String mpdu) {
+		this.mpdu = mpdu;
 	}
 
+	public String getPdu() {
+		return pdu;
+	}
+
+	public void setPdu(String pdu) {
+		this.pdu = pdu;
+	}
+
+	
 	public String getGatewayMac() {
 		return this.gatewayMac;
 	}

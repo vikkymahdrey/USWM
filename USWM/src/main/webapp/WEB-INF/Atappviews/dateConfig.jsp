@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>MPDU Setting</title>
+    <title>Uplink Date Setting</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -32,6 +32,14 @@
 	  <link rel="stylesheet" href="css/AdminLTE.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.css">
 	  <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+	  
+	  
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 	 
 
 	<script src="js/app.min.js"></script>
@@ -42,6 +50,12 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
     
    <script type="text/javascript">
+   $(function () {		
+	  $('#datetimepicker1').datetimepicker();  
+	     	   
+  });
+		  
+		  
    
    function confirmValidate(){
 	   
@@ -51,8 +65,7 @@
  	  	var orgDesc=document.getElementById("orgN").value;
 	  	var appDesc=document.getElementById("appN").value;
 	  	var devDesc=document.getElementById("devN").value;
-	  	var hourly=document.getElementById("hourly").value;
-	  	var packet=document.getElementById("packet").value;
+		var fromDate=document.getElementById("fromDate").value;
  		
 	   	   
 	   if(orgid=="0"){
@@ -67,20 +80,16 @@
 		   alert(devDesc);
 		   document.getElementById("devid").focus();
 		   return false;
-	   }else if(hourly=="0"){
-		   alert("Choose Packets per day!");
-		   document.getElementById("hourly").focus();
-		   return false;
-	   }else if(packet=="0"){
-		   alert("Choose Packet length");
-		   document.getElementById("packet").focus();
-		   return false;
+	   }else if ($("input[name=fromDate]").val() == "") {
+			alert("Choose FromDate");
+			document.getElementById("fromDate").focus();
+			return false;
 	   }else{		   
 			   $.ajax({
-	               url: 'downlinkSetting',
+	               url: 'dateSetting',
 	               type: 'POST',
 	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
-	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,hourly:hourly,packet:packet}) ,
+	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,fromDate:fromDate}) ,
 	               success: function (data) {
 	            	   alert(data);
 	            	   if(data==="success"){
@@ -144,38 +153,7 @@
   } 
    
    
-   function getPacketByHourly(){
-	   
-	   var hourly=document.getElementById("hourly").value;
-	  
-	   if(hourly=="0")
-   		{    
-	   		var packet=document.getElementById("packet");
-	   			packet.innerHTML='<select name="packet" class="form-control" id="packet"> <option value="0" >Please Choose</option></select>';
-	   			return;
-   		}else{
-		   $.ajax({
-	           url: 'getPacketByHourly',
-	           type: 'POST',
-	           data: jQuery.param({ hourly: hourly }) ,
-	           success: function (data) {
-	        	   
-		        	   if(data.length==0){
-		        		   alert("Packet size not associated on this hour config!");            		
-		        	   }else{
-		        		   var packet=document.getElementById("packet"); 
-		        		   packet.innerHTML='<select  name="packet" class="form-control" id="packet" >'+data+'</select>';
-		        	   }
-	        	
-	               },
-			 		error: function(e){
-		     			        alert('Error: ' + e);
-		     		 }
-	
-	              
-	           }); 
-   		} 
-   }
+   
    
 function getAppByOrgID()
 {    
@@ -295,7 +273,7 @@ function getDevEUIByAppID()
   			<% 
   				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   				List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
-  				List<TblDownlinkHoulyConfig> configs=(List<TblDownlinkHoulyConfig>)request.getAttribute("configs");
+  				
   			%>
   			
 							 
@@ -316,7 +294,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-gear"></span>&nbsp;&nbsp;<b>Uplink MPDU Setting </b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-gear"></span>&nbsp;&nbsp;<b>Uplink Date Setting </b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -407,31 +385,19 @@ function getDevEUIByAppID()
 									
 									
 									<tr>	
-									   <td align="right"><b>Packets per day</b></td>
-									   
-										 <td>
-										 	<select name="hourly" class="form-control" id="hourly" onchange="getPacketByHourly()" >
-										    	<option value="0">Please Choose</option>
-										    	<% if(configs!=null && !configs.isEmpty()){
-													for(TblDownlinkHoulyConfig d : configs){ %>
-										    			<option value="<%=d.getId()%>"><%=d.getPerday()%></option>	
-										    		<%}
-												}%>
+									   <td align="right"><b>Setting Date</b></td>
+									   <td>
+								          <div class='input-group date' id='datetimepicker1'>
+								          <input type='text' name="fromDate" id="fromDate" class="form-control" placeholder="Please choose"/>
+								            <span class="input-group-addon">
+								            	<span class="glyphicon glyphicon-calendar"></span>    
+								            </span>
+								         </div>
+								       </td>
 										
-										    </select> 
-										</td>
 									</tr>
 									
-									<tr>	
-									   <td align="right"><b>Packet length</b></td>
-									   
-										 <td>
-										 	<select name="packet" class="form-control" id="packet" >
-										    	<option value="0">Please Choose</option>										    	
-										    </select> 
-										</td>
-									</tr>
-										
+									
 										
 									<tr>	
 										<td align="right"></td>
