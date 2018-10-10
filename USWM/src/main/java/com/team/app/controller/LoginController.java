@@ -37,7 +37,7 @@ public class LoginController {
 		
 	
 	@RequestMapping(value= {"/"})
-	public String defaultURL(){
+	public String defaultURL(HttpServletRequest request){
 		return "index";
 	}
 	
@@ -100,6 +100,7 @@ public class LoginController {
         	}
         }else{
         	session.setAttribute("userInfo", "");
+        	session.setAttribute("msg", "Invalid Username/Password !");
         	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid Username/Password !</div");
         	return new ModelAndView("redirect:/");
         }
@@ -107,7 +108,7 @@ public class LoginController {
 	
 	}
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
-	 public String home(Map<String,Object> map) throws Exception{
+	 public String home(Map<String,Object> map,HttpServletRequest request) throws Exception{
 			  
 		List<TblUserInfo> userInfoList = userLoginService.getUserInfos();
 		 map.put("userInfoList",userInfoList);
@@ -131,19 +132,19 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value= {"/inValid"})
-	public String inValidCredentials(){
+	public String inValidCredentials(HttpServletRequest request){
 		return "index";
 	}
 	
 	
 	
 	@RequestMapping(value= {"/forgotPassword"})
-	public String forgetPasswordHandler(){
+	public String forgetPasswordHandler(HttpServletRequest request){
 		return "forgotPassword";
 	}
 	
 	@RequestMapping(value= {"/userHome"},method=RequestMethod.GET)
-	public String userHome(Map<String,Object> map){
+	public String userHome(Map<String,Object> map,HttpServletRequest request){
 		return "userHome";
 	}
 	

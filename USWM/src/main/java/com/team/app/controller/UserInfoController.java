@@ -61,7 +61,7 @@ public class UserInfoController {
 	private KeywordService keywordService;
 	
 	@RequestMapping(value= {"/userInfoHistory"}, method=RequestMethod.GET)
-    public String userInfoHistoryHandler(Map<String,Object> map) {		
+    public String userInfoHistoryHandler(Map<String,Object> map,HttpServletRequest request) {		
 			
 			try{
 
@@ -85,7 +85,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/frameInfos"}, method=RequestMethod.GET)
-    public String framesInfoHandler(Map<String,Object> map) {
+    public String framesInfoHandler(Map<String,Object> map,HttpServletRequest request) {
 		
 			logger.debug("/inside framesInfo");
 			List<LoraFrame> frames=null;
@@ -108,7 +108,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/userFrameInfos"}, method=RequestMethod.GET)
-    public String userFrameInfosHandler(HttpSession session,Map<String,Object> map) {
+    public String userFrameInfosHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
 			logger.debug("/inside framesInfo");
 			
 			TblUserInfo user=(TblUserInfo) session.getAttribute("user");
@@ -153,7 +153,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
-    public String autoSyncHandler(Map<String,Object> map) throws Exception {
+    public String autoSyncHandler(Map<String,Object> map,HttpServletRequest request) throws Exception {
 		   logger.debug("/inside sync");
 		   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 				map.put("organisations", orgMapped);
@@ -611,7 +611,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/personalInfo"}, method=RequestMethod.GET)
-    public String personalInfoHanlder(HttpSession session,Map<String,Object> map) throws Exception {
+    public String personalInfoHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		
 			logger.debug("/inside personalInfo");
 			TblUserInfo user=(TblUserInfo)session.getAttribute("user");
@@ -660,7 +660,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/addDevice"}, method=RequestMethod.GET)
-    public String addDeviceHandler(HttpSession session,Map<String,Object> map) throws Exception {
+    public String addDeviceHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		
 			logger.debug("/inside addDevice");
 				  		   

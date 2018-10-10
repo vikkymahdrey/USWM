@@ -26,6 +26,8 @@
 		<class>com.team.app.domain.UserDeviceMapping</class>
 		<class>com.team.app.domain.TblRetryConfig</class>
 		<class>com.team.app.domain.TblRetryIntervalMap</class>
+		<class>com.team.app.domain.ActionsAudit</class>
+		<class>com.team.app.domain.DatabaseAudit</class>
 		
 
 		<properties>
