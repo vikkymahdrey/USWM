@@ -2,6 +2,7 @@ package com.team.app.service;
 
 import java.util.List;
 
+import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.TblDownlinkHoulyConfig;
 import com.team.app.domain.TblDownlinkPacketConfig;
 import com.team.app.domain.TblRetryConfig;
@@ -25,6 +26,10 @@ public interface DownlinkService {
 	String doDownlinkForRetry(String devEUI, String applicationID, String fPort, String retry, String interval)throws Exception;
 
 	void doDownlinkForMissingPkt(String devEUI, String applicationID, String fport, String deviceId, String mpdu, String pdu)throws Exception;
+
+	List<DownlinkQueue> getDownlinkQueue()throws Exception;
+
+	List<DownlinkQueue> getDownlinkByDevEUIAndAppId(String applicationID, String devEUI)throws Exception;
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblDownlinkHoulyConfig;
 import com.team.app.domain.TblDownlinkPacketConfig;
@@ -196,126 +197,40 @@ public class DownlinkController {
 	
 	
 	
-	/*@RequestMapping(value= {"/dateConfig"}, method=RequestMethod.GET)
+	@RequestMapping(value= {"/downlinkQueue"}, method={RequestMethod.GET,RequestMethod.POST})
 	public String dateConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /dateConfig");	
+		logger.debug("Inside /downlinkQueue");	
 		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-			 return "dateConfig";
+		String devEUI=request.getParameter("devname");
+		String appIdName=request.getParameter("appname");
+		List<DownlinkQueue> queueList=null;
+		
+		if(devEUI!=null && appIdName!=null){
+			String[] appArr=appIdName.split(":");
+			String appId=appArr[0];		
+			
+			logger.debug("Check devEUI ",devEUI);
+				logger.debug("Check appId ",appId);
+				
+			queueList=downlinkService.getDownlinkByDevEUIAndAppId(appId.trim(),devEUI.trim());	
+			
+			logger.debug("Check Size",queueList.size());
+		}
+		
+	
+		
+			   
+				map.put("downlinkQueueList", queueList);
+			
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+				
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);	
+			 	return "downlinkQueue";
 	}
 	
 	
 	
-	@RequestMapping(value= {"/dateSetting"}, method=RequestMethod.POST)
-	public @ResponseBody String dateSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /downlinkSetting");
-		String orgs=request.getParameter("orgId").trim();
-		String[] orgArr=orgs.split(":");
-		String orgId=orgArr[0];
-		String apps=request.getParameter("appId").trim();
-		String[] appArr=apps.split(":");
-		String appId=appArr[0];
-		String appName=appArr[1];
-		String devId=request.getParameter("devId").trim();
-		String fromDate=request.getParameter("fromDate").trim();
-		
-		
-		logger.debug("orgID as ",orgId);
-		logger.debug("appId as ",appId);
-		logger.debug("appName as ",appName);
-		logger.debug("devId as ",devId);
-		logger.debug("fromDate as ",fromDate);
-
-		String returnVal="";
-						
-		try{			
-			LoraFrame frm=consumerInstrumentService.getLoraFrameByDevEUIAndAppID(devId,appId);
-			if(frm!=null){				
-					byte[] byteArr = new byte[4];
-					
-					 SimpleDateFormat formatDay = new SimpleDateFormat("dd");
-					 SimpleDateFormat formatMonth = new SimpleDateFormat("MM");
-					 SimpleDateFormat formatYear = new SimpleDateFormat("YY");
-
-					   String currentDay = formatDay.format(new Date(fromDate));
-					    String currentMonth = formatMonth.format(new Date(fromDate));
-					    String currentYear = formatYear.format(new Date(fromDate));
-					
-					
-				
-					byteArr[0]=Byte.valueOf(AppConstants.date);
-					byteArr[1]=Byte.valueOf(currentYear);
-					byteArr[2]=Byte.valueOf(currentMonth);
-					byteArr[3]=Byte.valueOf(currentDay);
-									
-					
-					logger.debug("/byteArr[0] ",byteArr[0]);				
-					logger.debug("/byteArr[1] ",byteArr[1]);
-					logger.debug("/byteArr[2] ",byteArr[2]);
-					logger.debug("/byteArr[2] ",byteArr[3]);
-					
-					int fPort=0;
-					try{
-						fPort=Integer.parseInt(frm.getFPort());
-					}catch(Exception e){
-						;
-					}
-					
-					 logger.debug("/fPort printing int ",fPort);			 
-					 logger.debug("Base64 resultant",Base64.encodeBase64String(byteArr));
-					 
-					 JSONObject jsonObj=null;
-		 				jsonObj=new JSONObject();
-		 				jsonObj.put("confirmed",true);
-		 				jsonObj.put("data",Base64.encodeBase64String(byteArr));
-		 				jsonObj.put("devEUI",devId);
-		 				jsonObj.put("fPort",fPort);
-		 				jsonObj.put("reference","DateSetting");
-	 	
-					
-	 				String jsonData=jsonObj.toString(); 			
-							
-	 				String url=AppConstants.domain+"/api/nodes/"+devId+"/queue";
-		    				logger.debug("URLConn",url);	    				
-		    				URL obj1 = new URL(url);
-		    				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-		    				con.setDoOutput(true);
-		    				con.setRequestMethod("POST");
-		    				con.setRequestProperty("accept", "application/json");
-		    				con.setRequestProperty("Content-Type", "application/json");
-		    				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-		    				
-		    				OutputStream os = con.getOutputStream();
-		    		        os.write(jsonData.getBytes());
-		    		        os.flush();
-		    		        os.close();
-		    		        
-		    				int responseCode = con.getResponseCode();
-		    					logger.debug("POST Response Code :: " + responseCode);
-		    						logger.debug("POST Response message :: " + con.getResponseMessage());
-		    				
-		    				if(responseCode == HttpURLConnection.HTTP_OK) {
-		    					returnVal="success";	
-		    				}else{
-		    					returnVal="failed";
-		    				}							
-						
-				
-				
-			}else{
-				logger.debug("No Data Found!");
-				returnVal="No Data Found!";
-			}	
-				
-		}catch(Exception e){
-			logger.error(e);
-		}
-		
-		
-		return returnVal;
-	}*/
-
+	
 }

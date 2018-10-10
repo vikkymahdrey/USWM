@@ -538,5 +538,16 @@ public class DownlinkServiceImpl implements DownlinkService {
 		}
 		
 	}
+
+
+	public List<DownlinkQueue> getDownlinkQueue() throws Exception {
+		return downlinkQueueDao.getDownlinkQueue();
+	}
+
+
+	
+	public List<DownlinkQueue> getDownlinkByDevEUIAndAppId(String applicationID, String devEUI) throws Exception {
+		return downlinkQueueDao.getDownlinkByDevEUIAndAppId(applicationID,devEUI);
+	}
 	
 }
