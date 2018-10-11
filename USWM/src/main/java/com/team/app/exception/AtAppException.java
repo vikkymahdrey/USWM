@@ -2,7 +2,6 @@ package com.team.app.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.team.app.controller.ConsumerInstrumentController;
 import com.team.app.logger.AtLogger;
 
 /**

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
 
+
 @Controller
 public class LoginController {
 	private static final AtLogger logger = AtLogger.getLogger(LoginController.class);
@@ -37,97 +39,150 @@ public class LoginController {
 		
 	
 	@RequestMapping(value= {"/"})
-	public String defaultURL(HttpServletRequest request){
-		return "index";
+	public String defaultURL(HttpServletRequest request,HttpSession session,Map<String, Object> map){
+		
+		String statusLog=String.valueOf(session.getAttribute("statusLog"));
+		if(statusLog!=null){
+			 logger.debug("In / status as ,",statusLog);
+			 	map.put("url",String.valueOf(session.getAttribute("url")));
+			 	map.put("exception",String.valueOf(session.getAttribute("exception")));
+			 	map.put("className",String.valueOf(session.getAttribute("className")));
+			 	map.put("methodName",String.valueOf(session.getAttribute("methodName")));
+			 	map.put("lineNumber",String.valueOf(session.getAttribute("lineNumber")));
+			 	map.put("statusLog",String.valueOf(session.getAttribute("statusLog")));
+			 	session.invalidate();
+		}	
+			
+			 return "index";		
 	}
+	
+	
+	/*@RequestMapping(value= {"/exception"}, method=RequestMethod.GET)
+	public String exceptionHandler(HttpServletRequest request,HttpSession session,Map<String, Object> map){
+		logger.debug("In / Exception");
+		String statusLog=request.getParameter("status");
+		if(statusLog!=null){
+			 logger.debug("In / status as ,",statusLog);
+			 	map.put("url",String.valueOf(session.getAttribute("url")));
+			 	map.put("exception",String.valueOf(session.getAttribute("exception")));
+			 	map.put("statusLog",statusLog);
+			 	session.invalidate();
+		}	
+			
+			 return "exception";		
+	}*/
 	
 		
 	
 	@RequestMapping(value= {"/onSubmitlogin"}, method=RequestMethod.POST)
-	public ModelAndView loginUser(HttpServletRequest request, HttpSession session, HttpServletResponse response,RedirectAttributes redirectAttributes) throws Exception{
+	public ModelAndView loginUser(HttpServletRequest request, HttpSession session, HttpServletResponse response,RedirectAttributes redirectAttributes) {
 		logger.debug("in /onSubmitlogin");
-		String username = request.getParameter("uname") == null ? "" : request
-				.getParameter("uname");
-		String password = request.getParameter("pass") == null ? "" : request
-				.getParameter("pass");
+		try{
 		
-        TblUserInfo userInfo=null;
-        boolean needToChangePwd=false;
-		
-        if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
-        	redirectAttributes.addFlashAttribute("status",
-					"<div class='failure'>Enter Username/Password!</div");
-			return new ModelAndView("redirect:/");
-		} else {			
-			userInfo=userLoginService.getUserByUserAndPwd(username,password);
-		}
-        
-        if (userInfo!=null) {
-        	logger.debug("Inside NeedToPwd Change");
-			if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
-				logger.debug("Inside NeedToPwd is null");
-				needToChangePwd = true;
-			} 
-		}
-        
-        if(userInfo!=null){
-        	session.setAttribute("user", userInfo);
-        	        	         	
-        }
-        
-        
-        if (userInfo!=null) {
-			if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
-				needToChangePwd = true;
-			}
-		}
-        
-        if (needToChangePwd) {
-        	
-			return new ModelAndView("redirect:/changePasswordReq");
+			String username = request.getParameter("uname") == null ? "" : request
+					.getParameter("uname");
+			//String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");	
 			
-		} 
-        
-        if(userInfo!=null){
-        	if(userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin) || userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)) {
-        	 	return new ModelAndView("redirect:/home");
-        	}else if(userInfo.getRoleBean().getType().equalsIgnoreCase("usr")) {
-        		return new ModelAndView("redirect:/userHome");
-        	}else {
-        		redirectAttributes.addFlashAttribute("status",
-    					"<div class='failure'>Incorrect role identified!</div");
-        		return new ModelAndView("redirect:/");
-        	}
-        }else{
-        	session.setAttribute("userInfo", "");
-        	session.setAttribute("msg", "Invalid Username/Password !");
-        	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid Username/Password !</div");
-        	return new ModelAndView("redirect:/");
-        }
-		
+			String password=null;
+	        TblUserInfo userInfo=null;
+	        boolean needToChangePwd=false;
+			
+	        if (username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
+	        	redirectAttributes.addFlashAttribute("status",
+						"<div class='failure'>Enter Username/Password!</div");
+				return new ModelAndView("redirect:/");
+			} else {			
+				userInfo=userLoginService.getUserByUserAndPwd(username,password);
+			}
+	        
+	        if (userInfo!=null) {
+	        	logger.debug("Inside NeedToPwd Change");
+				if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
+					logger.debug("Inside NeedToPwd is null");
+					needToChangePwd = true;
+				} 
+			}
+	        
+	        if(userInfo!=null){
+	        	session.setAttribute("user", userInfo);
+	        	        	         	
+	        }
+	        
+	        
+	        if (userInfo!=null) {
+				if (userInfo.getPwdChangeDt()== null || userInfo.getPwdChangeDt().equals("")) {
+					needToChangePwd = true;
+				}
+			}
+	        
+	        if (needToChangePwd) {
+	        	
+				return new ModelAndView("redirect:/changePasswordReq");
+				
+			} 
+	        
+	        if(userInfo!=null){
+	        	if(userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin) || userInfo.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)) {
+	        		logger.debug("In end /onSubmitlogin");
+	        		return new ModelAndView("redirect:/home");
+	        	}else if(userInfo.getRoleBean().getType().equalsIgnoreCase("usr")) {
+	        		return new ModelAndView("redirect:/userHome");
+	        	}else {
+	        		redirectAttributes.addFlashAttribute("status",
+	    					"<div class='failure'>Incorrect role identified!</div");
+	        		return new ModelAndView("redirect:/");
+	        	}
+	        }else{
+	        	session.setAttribute("userInfo", "");
+	        	session.setAttribute("msg", "Invalid Username/Password !");
+	        	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid Username/Password !</div");
+	        	return new ModelAndView("redirect:/");
+	        }
+		}catch(Exception e){			 		        
+		        HttpSession s=request.getSession();
+		        s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		        return new ModelAndView("redirect:/");
+		}
 	
 	}
+	
+	
 	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
-	 public String home(Map<String,Object> map,HttpServletRequest request) throws Exception{
+	 public String home(Map<String,Object> map,HttpServletRequest request){
+		try{  
+			List<TblUserInfo> userInfoList = userLoginService.getUserInfos();
+			 map.put("userInfoList",userInfoList);
+			 map.put("appUserCount",String.valueOf(userInfoList.size()));
+			 
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);
 			  
-		List<TblUserInfo> userInfoList = userLoginService.getUserInfos();
-		 map.put("userInfoList",userInfoList);
-		 map.put("appUserCount",String.valueOf(userInfoList.size()));
-		 
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-		  
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-			map.put("orgCount",String.valueOf(orgMapped.size()));
-			
-			logger.debug("orgCount as: ",String.valueOf(orgMapped.size()));
-			
-		/*long userCount=organisationService.getLoraServerUsers();	
-			map.put("userCount", String.valueOf(userCount));
-				logger.debug("userCount as: ",userCount);*/
-			
-		return "adminDashboard";
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+				map.put("orgCount",String.valueOf(orgMapped.size()));
+				
+				logger.debug("orgCount as: ",String.valueOf(orgMapped.size()));
+				
+			/*long userCount=organisationService.getLoraServerUsers();	
+				map.put("userCount", String.valueOf(userCount));
+					logger.debug("userCount as: ",userCount);*/
+				
+			return "adminDashboard";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
+		}
 	    	
 	}
 	
@@ -174,31 +229,65 @@ public class LoginController {
 			
 			
 			@RequestMapping(value= {"/changePasswordSubmit"},method=RequestMethod.POST)
-			public String changePwdSubmitHandler(HttpSession session,HttpServletRequest request,RedirectAttributes redirectAttributes) throws Exception{
+			public String changePwdSubmitHandler(HttpSession session,HttpServletRequest request,RedirectAttributes redirectAttributes){
 				logger.debug("IN ChangePassword Controller....");
-			TblUserInfo user=(TblUserInfo)session.getAttribute("user");
-				String password=request.getParameter("pwd");
-				String oldpwd=request.getParameter("oldpwd");
-				if(user.getPassword().equals(oldpwd)){
-					user.setPassword(password);
-					user.setPwdChangeDt(new Date(System.currentTimeMillis()));
-					userLoginService.updateUserInfo(user);
-					redirectAttributes.addFlashAttribute("status",
-							"<div class='success'>New Password set, Please Sign-In!</div");
-					
-				}else{
-					redirectAttributes.addFlashAttribute("status",
-							"<div class='failure'>Old Password didn't match!</div");
-				}				
-				
-		        
-				return "redirect:/";
+				try{
+					TblUserInfo user=(TblUserInfo)session.getAttribute("user");
+						String password=request.getParameter("pwd");
+						String oldpwd=request.getParameter("oldpwd");
+						if(user.getPassword().equals(oldpwd)){
+							user.setPassword(password);
+							user.setPwdChangeDt(new Date(System.currentTimeMillis()));
+							userLoginService.updateUserInfo(user);
+							redirectAttributes.addFlashAttribute("status",
+									"<div class='success'>New Password set, Please Sign-In!</div");
+							
+						}else{
+							redirectAttributes.addFlashAttribute("status",
+									"<div class='failure'>Old Password didn't match!</div");
+						}				
+				        
+						return "redirect:/";
+						
+				}catch(Exception e){
+					HttpSession s=request.getSession();
+			        s.setAttribute("statusLog",AppConstants.statusLog);
+					s.setAttribute("url", request.getRequestURL());
+					s.setAttribute("exception", e.toString());				
+					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			        return "redirect:/";
+				}
 			}
 			
-			@RequestMapping(value= {"/test"})
-			public String test(){
-				return "test";
-			}
-
+			
+			/*@RequestMapping(value= {"/exception"}, method=RequestMethod.GET)
+			public ModelAndView handleEmployeeNotFoundException(HttpServletRequest request, HttpServletResponse response,Exception ex){
+				logger.error("Inside Exception Handler");				
+				logger.error("Requested URL="+request.getRequestURL());
+				logger.error("Exception Raised="+ex);
+								
+				ModelAndView modelAndView = new ModelAndView();
+			    modelAndView.addObject("exception", ex);
+			    modelAndView.addObject("url", request.getRequestURL());	
+			    if(request.getRequestURL().toString().contains("onSubmitlogin")){
+			    	logger.debug("In / URL");
+			    	modelAndView.setViewName("/");
+				}else{
+					logger.debug("In /exception URL");
+					modelAndView.setViewName("exception");
+				}
+			    
+			    return modelAndView;
+			}*/
+			
+		
+			
+			
+			
+			
+			
+			
 			
 }

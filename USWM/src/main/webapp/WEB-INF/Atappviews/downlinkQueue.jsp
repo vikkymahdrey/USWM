@@ -37,10 +37,11 @@
 	  <link rel="stylesheet" href="css/AdminLTE.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.css">
 	  <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+	   <link href="css/styling.css" rel="stylesheet">
 	 
 
 	<script src="js/app.min.js"></script>
-	<!-- <script src="js/demo.js"></script> -->
+	 <script src="js/demo.js"></script>
 	
 <!-- Pie Charts... -->
 <script src="https://code.highcharts.com/highcharts.js"></script>

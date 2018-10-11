@@ -32,6 +32,8 @@
 	<script src="js/bootstrap.min.js"></script>
 	<!-- iCheck -->
 	<script src="plugins/iCheck/icheck.min.js"></script>
+	
+	<%String statusLog=(String)request.getAttribute("statusLog");%>
 	<script>
 	  $(function () {
 	    $('input').iCheck({
@@ -43,6 +45,16 @@
 	</script>
 	
 	<script  type="text/javascript">
+	
+	 function loadScript(){		 
+		 var stsLog='<%=statusLog%>';		
+		 if(stsLog!='null'){			 
+			$("#loginAudit").modal(); 
+		 }
+		 
+	 }
+ 
+	
 function browserIdentity()
 {
 	if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
@@ -92,7 +104,15 @@ function validate() {
 	
 	
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" onload="loadScript()">
+		<%String log=(String)request.getAttribute("statusLog");
+			String url=(String)request.getAttribute("url");
+				String exception=(String)request.getAttribute("exception");
+					String fullClassName=(String)request.getAttribute("fullClassName");
+						String className=(String)request.getAttribute("className");
+							String methodName=(String)request.getAttribute("methodName");
+								String lineNumber=(String)request.getAttribute("lineNumber");
+				%>	
 <div class="wrapper">
 <%
 						response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
@@ -159,6 +179,71 @@ function validate() {
     <!-- /.social-auth-links -->
 
     <!-- <a href="#">I forgot my password</a><br> -->
+    
+    <!-- Calling StatusLog Modal -->
+    <!-- Modal -->
+                                      <div class="modal fade" id="loginAudit" role="dialog">
+                                      	<div class="modal-dialog ">    
+                                      		<!-- Modal content-->
+                                      		<div class="modal-content">
+                                      			<div class="modal-header" style="padding:15px 30px;">
+                                      				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      				<h4><span class="fa fa-history"></span> Exception Audit Log </h4>
+                                      			</div>
+                                      			
+                                      			<div class="modal-body" style="padding:40px 50px;">
+        		                                      <div class="row" style="overflow-y: auto;">		                                      			
+															<div class="col-sm-12 ">
+																	<table class="table table-striped">
+																	    <thead>
+																	      <tr>
+																	        <th>URL</th>
+																	        <th>Exception_Message</th>
+																	        <th>ClassName</th>
+																	        <th>MethodName</th>
+																	        <th>LineNumber</th>																	      											        
+																	      </tr>
+																	    </thead>
+																	    <tbody>	
+																	    <tr>
+																	    <%if(log!=null){%>																	    	
+																	   
+																		    <td>
+																		    	<%=url %>
+																		    </td>
+																		    
+																		     <td>
+																		      	<%=exception %>
+																		    </td>
+																		   
+																		    <td>
+																		      	<%=className %>
+																		    </td>
+																		    <td>
+																		      	<%=methodName %>
+																		    </td>
+																		    <td>
+																		      	<%=lineNumber %>
+																		    </td>
+																		    
+																		  <% }%>  
+																	    </tr>												 
+																	    </tbody>
+																	</table>
+															
+														   </div>
+														</div>
+					  								
+							                   </div>
+						
+									  
+					     					  <div class="modal-footer">
+                         						<button type="button" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         					  </div>
+                         					  	  
+				      					  </div><!-- content close here -->
+			                           </div><!-- modal dialog close here -->					             			              
+					               </div><!-- modal close here -->		
     
 
   </div>

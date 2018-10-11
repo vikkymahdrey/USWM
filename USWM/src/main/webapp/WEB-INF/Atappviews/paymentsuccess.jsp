@@ -16,7 +16,8 @@
     
 	  <link href="css/bootstrap.min.css" rel="stylesheet">
 	  <link href="css/custom_siemens.css" rel="stylesheet">
-	  <link href="css/marquees.css" rel="stylesheet">	       
+	  <link href="css/marquees.css" rel="stylesheet">	
+	  <link href="css/styling.css" rel="stylesheet">	       
     
    
 	  <!-- Font Awesome -->

@@ -60,9 +60,9 @@ public class UserActionAudit {
 	@SuppressWarnings("unused")
 	@Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
 	public Object urlAccessed(ProceedingJoinPoint jp) {
-
+		logger.debug("In Aspect");
 	
-		String user = "", url = "", ipaddress = "",message = "";;
+		String user = null, url = "", ipaddress = "",message = "";
 		Object returnobj = null;
 		Date responsetime;
 		Date requesttime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");
@@ -73,7 +73,6 @@ public class UserActionAudit {
 			for (Object o : jp.getArgs()) {
 				if (o instanceof HttpServletRequest) {
 					HttpServletRequest servletRequest = (HttpServletRequest) o;
-					
 					ipaddress = (servletRequest.getRemoteAddr());
 					HttpSession session = servletRequest.getSession();	
 
@@ -82,17 +81,17 @@ public class UserActionAudit {
 						message = (String)session.getAttribute("msg");	
 						session.invalidate();
 					}
-					
-					try {
-						if (session != null) {
-							user = (((TblUserInfo) session.getAttribute("user")).getId());							
-							
-						} else {
-							user = "NO SESSION FOUND";
+						try{
+							/*Session checker*/
+							if (session != null ) {
+								user = (((TblUserInfo) session.getAttribute("user")).getId());						
+							}else {
+								user = "NO SESSION FOUND";
+							}
+						}catch(Exception e){
+							logger.error("Exception ",e);
 						}
-					} catch (Exception e) {
-
-					}
+					
 				}
 			}
 			for (String annotationvalue : requestMapping.value()) {
@@ -102,22 +101,33 @@ public class UserActionAudit {
 			}
 
 			try {
-				returnobj = jp.proceed();
-				responsetime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			actionsAudit.setRequestTime(requesttime);
-			actionsAudit.setResponseTime(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
-			if (user != null) {
-				actionsAudit.setUserid(Integer.parseInt(user));
-			}
-			actionsAudit.setUrl(url);
-			actionsAudit.setIpaddress(ipaddress);
-			actionsAudit.setMessage(message);
-			auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
+				returnobj = jp.proceed();				
+				responsetime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");				
+				actionsAudit.setRequestTime(requesttime);
+				actionsAudit.setResponseTime(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+					if (user != null) {
+						actionsAudit.setUserid(Integer.parseInt(user));
+					}
+				actionsAudit.setUrl(url);
+				actionsAudit.setIpaddress(ipaddress);
+				actionsAudit.setMessage(message);
+				auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
+				logger.debug("In End");
+				
+			} catch (Throwable e){
+				actionsAudit = new ActionsAudit();
+				actionsAudit.setRequestTime(requesttime);
+				actionsAudit.setUrl(url);
+				actionsAudit.setIpaddress(ipaddress);
+				actionsAudit.setException(e.toString()+" Line# "+Thread.currentThread().getStackTrace()[1].getLineNumber());
+				actionsAudit.setMessage(message);
+				auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
+				logger.debug("In catch End");	
+				
+				//returnobj = "Found Exception";
+					
+				
+			}			
 
 		} catch (Exception e) {
 			logger.error("Exception In ",e);
@@ -125,15 +135,15 @@ public class UserActionAudit {
 			actionsAudit.setRequestTime(requesttime);
 			actionsAudit.setUrl(url);
 			actionsAudit.setIpaddress(ipaddress);
-			actionsAudit.setException(e.toString());
+			actionsAudit.setException(e.toString()+" Line# "+Thread.currentThread().getStackTrace()[1].getLineNumber());
 			actionsAudit.setMessage(message);
 			auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
-
+				logger.debug("In after try-catch catch End");
 			try {
 				returnobj = jp.proceed();
+				
 			} catch (Throwable e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.error("Exception ",e1);
 			}
 		}
 

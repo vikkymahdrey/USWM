@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.team.app.constant.AppConstants;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
@@ -33,101 +34,162 @@ public class APLConfigController {
 	private APLService aplService;
 	
 	@RequestMapping(value= {"/aplConfig"}, method=RequestMethod.GET)
-	public String getAPLHandler(Map<String,Object> map, HttpServletRequest request) throws Exception{
-		
-		logger.debug("INside /aplConfig");
-		List<OrganisationDto> orgDtos=aplService.getOrganisation();
-		 map.put("organisations", orgDtos);
-		 String orgId=request.getParameter("orgid");
-		 logger.debug("printing orgId ",orgId);
-		 if(orgId != null && !(orgId.isEmpty())){
-			 List<Area> areaList=aplService.getAreasByOrgId(orgId);
-			 map.put("areaList",areaList);
-		 }
-		 return "area";
+	public String getAPLHandler(Map<String,Object> map, HttpServletRequest request){
+		logger.debug("Inside /aplConfig");
+		try{	
+			
+			List<OrganisationDto> orgDtos=aplService.getOrganisation();
+			 map.put("organisations", orgDtos);
+			 String orgId=request.getParameter("orgid");
+			 logger.debug("printing orgId ",orgId);
+			 if(orgId != null && !(orgId.isEmpty())){
+				 List<Area> areaList=aplService.getAreasByOrgId(orgId);
+				 map.put("areaList",areaList);
+			 }
+			 return "area";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
+		}
 	}
 	
 		
 	@RequestMapping(value= {"/LandMarkSearch"}, method=RequestMethod.GET)
-	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map){		
 		logger.debug("Inside /LandMarkSearch");		
-		String orgs=request.getParameter("orgId");
-		String[] orgIdName=orgs.split(":");
-		String orgId=orgIdName[0];
-			logger.debug("printing orgId as: ",orgId);
-		map.put("orgId", orgId);
-			 return "LandMarkSearch1";
+		try{
+			String orgs=request.getParameter("orgId");
+			String[] orgIdName=orgs.split(":");
+			String orgId=orgIdName[0];
+				logger.debug("printing orgId as: ",orgId);
+			map.put("orgId", orgId);
+				 return "LandMarkSearch1";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
+		}
+		
 	}
 	
 	
 	
 	@RequestMapping(value= {"/marklandmark"}, method=RequestMethod.GET)
-	public String getAPLFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
-		String orgId=request.getParameter("orgId");
-		String areaId=request.getParameter("area");
-		String placeId=request.getParameter("place");
-		List<Area> areaList=null;
-		if(orgId!=null && !(orgId.isEmpty())){
-			 areaList=aplService.getAreasByOrgId(orgId);	
-		}else if(areaId!=null && !(areaId.isEmpty())){
-			areaList=aplService.getAreasListByAreaId(areaId);
-		}else if(placeId!=null && !(placeId.isEmpty())){
-			Place p=aplService.getPlaceById(placeId);
-			areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+	public String getAPLFromGoogleMap(HttpServletRequest request,Map<String,Object> map){
+		try{
+			String orgId=request.getParameter("orgId");
+			String areaId=request.getParameter("area");
+			String placeId=request.getParameter("place");
+			List<Area> areaList=null;
+			if(orgId!=null && !(orgId.isEmpty())){
+				 areaList=aplService.getAreasByOrgId(orgId);	
+			}else if(areaId!=null && !(areaId.isEmpty())){
+				areaList=aplService.getAreasListByAreaId(areaId);
+			}else if(placeId!=null && !(placeId.isEmpty())){
+				Place p=aplService.getPlaceById(placeId);
+				areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+			}
+			
+			map.put("areas",areaList);
+				
+			 return "marklandmark";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
 		}
 		
-		map.put("areas",areaList);
-			
-		 return "marklandmark";
 	}
 	
 	
 	@RequestMapping(value= {"/marklandmarkdash"}, method=RequestMethod.GET)
-	public String getAPLForDashFromGoogleMap(HttpServletRequest request,Map<String,Object> map) throws Exception{
-		String orgId=request.getParameter("orgId");
-		String areaId=request.getParameter("area");
-		String placeId=request.getParameter("place");
-		List<Area> areaList=null;
-		if(orgId!=null && !(orgId.isEmpty())){
-			 areaList=aplService.getAreasByOrgId(orgId);	
-		}else if(areaId!=null && !(areaId.isEmpty())){
-			areaList=aplService.getAreasListByAreaId(areaId);
-		}else if(placeId!=null && !(placeId.isEmpty())){
-			Place p=aplService.getPlaceById(placeId);
-			areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+	public String getAPLForDashFromGoogleMap(HttpServletRequest request,Map<String,Object> map){
+		try{
+			String orgId=request.getParameter("orgId");
+			String areaId=request.getParameter("area");
+			String placeId=request.getParameter("place");
+			List<Area> areaList=null;
+			if(orgId!=null && !(orgId.isEmpty())){
+				 areaList=aplService.getAreasByOrgId(orgId);	
+			}else if(areaId!=null && !(areaId.isEmpty())){
+				areaList=aplService.getAreasListByAreaId(areaId);
+			}else if(placeId!=null && !(placeId.isEmpty())){
+				Place p=aplService.getPlaceById(placeId);
+				areaList=aplService.getAreasListByAreaId(p.getArea().getId());
+			}
+			
+			map.put("areas",areaList);
+				
+			 return "marklandmarkdash";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
 		}
 		
-		map.put("areas",areaList);
-			
-		 return "marklandmarkdash";
+		
 	}
 	
 	
 	@RequestMapping(value= {"/marklandmarkUserDash"}, method=RequestMethod.GET)
-	public String marklandmarkUserDashHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public String marklandmarkUserDashHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map){
 		logger.debug("/marklandmarkUserDash");
-		TblUserInfo user=(TblUserInfo)session.getAttribute("user");		
-		logger.debug("/landmarkId",user.getLandmark().getId());
-		String orgId=request.getParameter("orgId");
 		
-		List<Area> areaList=null;
-			areaList=new ArrayList<Area>();
-		Landmark landmark=aplService.getLandMarkById(user.getLandmark().getId());
-		if(orgId!=null && !(orgId.isEmpty())){			
-			Area area=landmark.getPlace().getArea();
-			if(area.getOrgId().equals(orgId)){
-				areaList.add(area);
+		try{
+			TblUserInfo user=(TblUserInfo)session.getAttribute("user");		
+			logger.debug("/landmarkId",user.getLandmark().getId());
+			String orgId=request.getParameter("orgId");
+			
+			List<Area> areaList=null;
+				areaList=new ArrayList<Area>();
+			Landmark landmark=aplService.getLandMarkById(user.getLandmark().getId());
+			if(orgId!=null && !(orgId.isEmpty())){			
+				Area area=landmark.getPlace().getArea();
+				if(area.getOrgId().equals(orgId)){
+					areaList.add(area);
+				}
 			}
+			
+			map.put("areas",areaList);
+			map.put("landmarkId", user.getLandmark().getId());
+				
+			 return "marklandmarkUserDash";
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
 		}
 		
-		map.put("areas",areaList);
-		map.put("landmarkId", user.getLandmark().getId());
-			
-		 return "marklandmarkUserDash";
 	}
 	
 	
-	// An ajax call comes from marklandmark.jsp
+			// An ajax call comes from marklandmark.jsp
 			@RequestMapping(value = {"/getLandmarks"},  method=RequestMethod.POST)
 			public  @ResponseBody String getLandmarks(@RequestParam(required = false, value = "place") String place,
 					@RequestParam(required = false, value = "area") String area, @RequestParam(required = false, value = "orgId") String orgId,
@@ -176,7 +238,7 @@ public class APLConfigController {
 			
 			
 			
-			// An ajax call comes from marklandmark.jsp
+						// An ajax call comes from marklandmark.jsp
 						@RequestMapping(value = {"/getLandmarksByLandmarkId"},  method=RequestMethod.POST)
 						public  @ResponseBody String getLandmarksByLandmarkIdHanlder(@RequestParam(required = false, value = "place") String place,
 								@RequestParam(required = false, value = "area") String area, @RequestParam(required = false, value = "orgId") String orgId,
@@ -226,7 +288,7 @@ public class APLConfigController {
 						
 			
 			@RequestMapping(value= {"/addArea"}, method=RequestMethod.GET)
-			public String getArea(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String getArea(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
 				String areaName = request.getParameter("area");
 				String orgId = request.getParameter("orgId");
 				
@@ -264,7 +326,7 @@ public class APLConfigController {
 			
 			
 			@RequestMapping(value= {"/showPlace"}, method=RequestMethod.GET)
-			public String getPlaceHandler(Map<String,Object> map, HttpServletRequest request) throws Exception{
+			public String getPlaceHandler(Map<String,Object> map, HttpServletRequest request){
 				String areaId=request.getParameter("areaId"); 
 				
 				try{
@@ -272,33 +334,47 @@ public class APLConfigController {
 					List<Place> placeList=a.getPlaces();
 					map.put("placeList",placeList);
 					map.put("areas", a);
+					return "place";
 				}catch(Exception ex){
-					logger.error("Error in showPlace",ex);
+					HttpSession s=request.getSession();
+			        s.setAttribute("statusLog",AppConstants.statusLog);
+					s.setAttribute("url", request.getRequestURL());
+					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			        return "redirect:/";
 				}
 				
-				return "place";
+				
 			}
 			
 			@RequestMapping(value= {"/showLandmark"}, method=RequestMethod.GET)
-			public String getLandmarkHandler(Map<String,Object> map, HttpServletRequest request) throws Exception{
+			public String getLandmarkHandler(Map<String,Object> map, HttpServletRequest request){
 				String placeId=request.getParameter("placeId");
-				try{
-					
+				try{					
 					Place place=aplService.getPlaceById(placeId);
-					List<Landmark> landmarkList=place.getLandmarks();
-									
+					List<Landmark> landmarkList=place.getLandmarks();									
 					map.put("landmarkList",landmarkList);
 					map.put("place", place);
+					return "landmark";
 				}catch(Exception ex){
-					logger.error("Error in showLandmark",ex);
+					HttpSession s=request.getSession();
+			        s.setAttribute("statusLog",AppConstants.statusLog);
+					s.setAttribute("url", request.getRequestURL());
+					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			        return "redirect:/";
 				}
 				
-				return "landmark";
+				
 			}
 			
 			
 			@RequestMapping(value= {"/updateArea"}, method=RequestMethod.GET)
-			public String getUpdatedArea(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String getUpdatedArea(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
 
 				String areaId = request.getParameter("areaId");
 				String areaName = request.getParameter("area");
@@ -338,7 +414,7 @@ public class APLConfigController {
 			
 
 			@RequestMapping(value= {"/addPlace"}, method=RequestMethod.GET)
-			public String addPlace(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String addPlace(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
 				
 				String placeName = request.getParameter("place");
 				String areaId = request.getParameter("areaId");
@@ -372,7 +448,7 @@ public class APLConfigController {
 			
 			
 			@RequestMapping(value= {"/updatePlace"}, method=RequestMethod.GET)
-			public String getUpdatedPlace(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String getUpdatedPlace(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
 				
 				String placeId = request.getParameter("placeId");
 				String placeName = request.getParameter("place");
@@ -394,7 +470,7 @@ public class APLConfigController {
 				
 									
 			}catch(Exception e){
-					logger.error("Error in updating place ",e);
+				logger.error("Error in updating place ",e);
 					redirectAttributes.addFlashAttribute("status",
 							"<div class=\"failure\" > Place updating failed</div>");
 						}
@@ -403,7 +479,7 @@ public class APLConfigController {
 			
 			
 			@RequestMapping(value= {"/addLandmark"}, method=RequestMethod.POST)
-			public String addLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String addLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 				
 				String landmarkName = request.getParameter("landmark");
 				String placeId = request.getParameter("placeId");
@@ -424,7 +500,7 @@ public class APLConfigController {
 									"<div class=\"failure\" > Landmark Already Exist in the place!</div>");
 					 }
 				
-			}catch(Exception e){
+			   }catch(Exception e){
 					logger.error("Error in adding landmark ",e);
 					map.put("status",
 							"<div class=\"failure\" > Landmark adding failed</div>");
@@ -434,7 +510,7 @@ public class APLConfigController {
 				}
 					
 			@RequestMapping(value= {"/updateLandmark"}, method=RequestMethod.POST)
-			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 				logger.debug("In Ajax /updateLandmark");
 				String retVal = "";
 				String placeId = request.getParameter("placeId");
@@ -499,17 +575,26 @@ public class APLConfigController {
 					}
 					retVal =  "redirect:/showLandmark?placeId=" + placeId;
 					
-				}				
-				}catch(Exception ex){
-					logger.error("Error in fetching the landmark ",ex);
-				}
+				}	
+				
 				return retVal;
+				}catch(Exception ex){
+					HttpSession s=request.getSession();
+			        s.setAttribute("statusLog",AppConstants.statusLog);
+					s.setAttribute("url", request.getRequestURL());
+					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			        return "redirect:/";
+				}
+				
 			}	
 			
 			
 			
 			@RequestMapping(value= {"/updateMapLandmark"}, method=RequestMethod.POST)
-			public String updateMapLandmarkHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
+			public String updateMapLandmarkHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
 				logger.debug("In Ajax /updateMapLandmark");
 				String retVal = "";
 				String placeId = request.getParameter("placeId");
@@ -549,10 +634,19 @@ public class APLConfigController {
 									 }
 							}
 					}		
+					
+					return retVal;
 				}catch(Exception ex){
-					logger.error("Error in fetching the landmark ",ex);
+					HttpSession s=request.getSession();
+			        s.setAttribute("statusLog",AppConstants.statusLog);
+					s.setAttribute("url", request.getRequestURL());
+					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			        return "redirect:/";
 				}
-				return retVal;
+				
 			}
 			
 			/* AJAX calling from marklandmark.jsp */		
