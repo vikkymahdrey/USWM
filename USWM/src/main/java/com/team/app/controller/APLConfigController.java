@@ -35,7 +35,7 @@ public class APLConfigController {
 	
 	@RequestMapping(value= {"/aplConfig"}, method=RequestMethod.GET)
 	public String getAPLHandler(Map<String,Object> map, HttpServletRequest request){
-		logger.debug("Inside /aplConFiG");
+		logger.debug("Inside /aplCoNFiG");
 		try{	
 			
 			List<OrganisationDto> orgDtos=aplService.getOrganisation();
