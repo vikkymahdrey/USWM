@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,9 +80,8 @@ public class LoginController {
 		
 			String username = request.getParameter("uname") == null ? "" : request
 					.getParameter("uname");
-			//String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");	
+			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");				
 			
-			String password=null;
 	        TblUserInfo userInfo=null;
 	        boolean needToChangePwd=false;
 			

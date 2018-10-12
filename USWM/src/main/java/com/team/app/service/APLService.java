@@ -5,7 +5,6 @@ import java.util.List;
 import com.team.app.domain.Area;
 import com.team.app.domain.Landmark;
 import com.team.app.domain.Place;
-import com.team.app.dto.APLDto;
 import com.team.app.dto.OrganisationDto;
 
 public interface APLService {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.team.app.constant.AppConstants;
 import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblDownlinkHoulyConfig;
@@ -46,69 +47,110 @@ public class DownlinkController {
 	private ConsumerInstrumentService  consumerInstrumentService;
 	
 	@RequestMapping(value= {"/downlinkConfig"}, method=RequestMethod.GET)
-	public String downlinkConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /downlinkConfig");		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+	public String downlinkConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
+		logger.debug("Inside /downlinkConfig");	
+		try{
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 			map.put("keyTypes",keyTypes);
-		List<TblDownlinkHoulyConfig> configs=downlinkService.getDownlinkHourlyConfig();
+			List<TblDownlinkHoulyConfig> configs=downlinkService.getDownlinkHourlyConfig();
 			map.put("configs",configs);		
 			 return "downlinkConfig";
+
+		}catch(Exception e){
+				HttpSession s=request.getSession();
+			    s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			    return "redirect:/";
+		}
+			
+		
 	}
 	
 	@RequestMapping(value= {"/getPacketByHourly"}, method=RequestMethod.POST)
-	public @ResponseBody String getPacketByHourlyHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public @ResponseBody String getPacketByHourlyHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
 		logger.debug("Inside /getPacketByHourly");
-		String hourly=request.getParameter("hourly").trim();
-		String returnVal="";
 		
-		List<TblDownlinkPacketConfig> packets=downlinkService.getDownlinkPacketByHourlyID(hourly);
-		if(packets!=null && !packets.isEmpty()){
-			for(TblDownlinkPacketConfig p : packets){
-					returnVal+="<option value="+p.getPacket()+">"+ p.getPacket() + "</option>";
+		try{			
+			String hourly=request.getParameter("hourly").trim();
+			String returnVal="";			
+			List<TblDownlinkPacketConfig> packets=downlinkService.getDownlinkPacketByHourlyID(hourly);
+			if(packets!=null && !packets.isEmpty()){
+				for(TblDownlinkPacketConfig p : packets){
+						returnVal+="<option value="+p.getPacket()+">"+ p.getPacket() + "</option>";
 				}
+			}			
+			return returnVal;
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+			s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			return "redirect:/";
 		}
 		
-			 return returnVal;
 	}
 	
 	
 	
 	@RequestMapping(value= {"/retryConfig"}, method=RequestMethod.GET)
-	public String uplinkRetryConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public String uplinkRetryConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
 		logger.debug("Inside /retryConfig");		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-		List<TblRetryConfig> retryConfig=downlinkService.getDownlinkForRetryConfig();
-			map.put("retryConfig",retryConfig);		
-			 return "retryConfig";
+		
+		try{	
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);
+			List<TblRetryConfig> retryConfig=downlinkService.getDownlinkForRetryConfig();
+				map.put("retryConfig",retryConfig);		
+				 return "retryConfig";
+				 
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+			s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			return "redirect:/";
+		}
 	}
 	
 	
 	@RequestMapping(value= {"/getIntervalOfRetry"}, method=RequestMethod.POST)
-	public @ResponseBody String getIntervalOfRetryHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public @ResponseBody String getIntervalOfRetryHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		logger.debug("Inside /getIntervalOfRetry");
-		String retryId=request.getParameter("retryId").trim();
-		String returnVal="";
 		
-		TblRetryConfig retry=downlinkService.getRetryConfigById(retryId);
-		if(retry!=null){
-			List<TblRetryIntervalMap> retryIntervals=retry.getTblRetryIntervalMaps();
-			if(retryIntervals!=null && !retryIntervals.isEmpty()){
-				for(TblRetryIntervalMap r : retryIntervals){
-						returnVal+="<option value="+r.getInterval()+">"+ r.getInterval() + "</option>";
-					}
+		
+			String retryId=request.getParameter("retryId").trim();
+			String returnVal="";
+			
+			TblRetryConfig retry=downlinkService.getRetryConfigById(retryId);
+			if(retry!=null){
+				List<TblRetryIntervalMap> retryIntervals=retry.getTblRetryIntervalMaps();
+				if(retryIntervals!=null && !retryIntervals.isEmpty()){
+					for(TblRetryIntervalMap r : retryIntervals){
+							returnVal+="<option value="+r.getInterval()+">"+ r.getInterval() + "</option>";
+						}
+				}
 			}
-		}
+			
+				 return returnVal;
 		
-			 return returnVal;
 	}
 	
 	@RequestMapping(value= {"/downlinkSetting"}, method=RequestMethod.POST)
-	public @ResponseBody String downlinkSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public @ResponseBody String downlinkSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map){
 		logger.debug("Inside /downlinkSetting");
 		String orgs=request.getParameter("orgId").trim();
 		String[] orgArr=orgs.split(":");
@@ -198,36 +240,47 @@ public class DownlinkController {
 	
 	
 	@RequestMapping(value= {"/downlinkQueue"}, method={RequestMethod.GET,RequestMethod.POST})
-	public String dateConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public String dateConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map){
 		logger.debug("Inside /downlinkQueue");	
-		
-		String devEUI=request.getParameter("devname");
-		String appIdName=request.getParameter("appname");
-		List<DownlinkQueue> queueList=null;
-		
-		if(devEUI!=null && appIdName!=null){
-			String[] appArr=appIdName.split(":");
-			String appId=appArr[0];		
-			
-			logger.debug("Check devEUI ",devEUI);
-				logger.debug("Check appId ",appId);
+		try{
+				String devEUI=request.getParameter("devname");
+				String appIdName=request.getParameter("appname");
+				List<DownlinkQueue> queueList=null;
 				
-			queueList=downlinkService.getDownlinkByDevEUIAndAppId(appId.trim(),devEUI.trim());	
+				if(devEUI!=null && appIdName!=null){
+					String[] appArr=appIdName.split(":");
+					String appId=appArr[0];		
+					
+					logger.debug("Check devEUI ",devEUI);
+						logger.debug("Check appId ",appId);
+						
+					queueList=downlinkService.getDownlinkByDevEUIAndAppId(appId.trim(),devEUI.trim());	
+					
+					logger.debug("Check Size",queueList.size());
+				}
+				
 			
-			logger.debug("Check Size",queueList.size());
+				
+					   
+						map.put("downlinkQueueList", queueList);
+					
+					Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+						map.put("organisations", orgMapped);
+						
+					List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+						map.put("keyTypes",keyTypes);	
+					 	return "downlinkQueue";
+				 	
+		}catch(Exception e){
+			HttpSession s=request.getSession();
+			s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			return "redirect:/";
 		}
-		
-	
-		
-			   
-				map.put("downlinkQueueList", queueList);
-			
-			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-				map.put("organisations", orgMapped);
-				
-			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-				map.put("keyTypes",keyTypes);	
-			 	return "downlinkQueue";
 	}
 	
 	

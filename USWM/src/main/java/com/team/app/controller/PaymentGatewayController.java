@@ -39,10 +39,21 @@ public class PaymentGatewayController {
 	@RequestMapping(value= {"/payUBills"}, method={RequestMethod.GET,RequestMethod.POST})
 	public String payUBillsHandler(HttpServletRequest req, HttpSession session, Map<String, Object> map){
 		logger.debug("In /payUBills");	
-	TblUserInfo user=(TblUserInfo) session.getAttribute("user");
-	List<UserDeviceMapping> deviceList=user.getUserDeviceMappings();
-		map.put("deviceList", deviceList);		
-			return "payuform";
+		try{
+				TblUserInfo user=(TblUserInfo) session.getAttribute("user");
+				List<UserDeviceMapping> deviceList=user.getUserDeviceMappings();
+					map.put("deviceList", deviceList);		
+						return "payuform";
+		}catch(Exception e){
+			HttpSession s=req.getSession();
+			s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", req.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			return "redirect:/";
+		}
 	}
 	
 	/*@RequestMapping(value= {"/payBillForm"}, method=RequestMethod.POST)
@@ -322,30 +333,25 @@ public class PaymentGatewayController {
 		        					"<div class=\"success\" > System not persisted payment information !</div>");
 	        			}
 			
-			
+	        			return "paymentsuccess";
 		}catch(Exception e){
 			logger.error(e);
-			redirectAttributes.addFlashAttribute("status",
-					"<div class=\"failure\" >Exception failed transation /paymentSuccess !</div>");
+			/*redirectAttributes.addFlashAttribute("status","<div class=\"failure\" >Exception failed transation /paymentSuccess !</div>");*/
+			HttpSession s=request.getSession();
+	        s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	        return "redirect:/";
 		}
 			
-		return "paymentsuccess";
+		
 		
 	}
 	
 	
-	@RequestMapping(value= {"/paymentFailure"}, method={RequestMethod.GET,RequestMethod.POST})
-	public String paymentFailureHandler(HttpServletRequest request, HttpSession session, HttpServletResponse response,Map<String, Object> map,RedirectAttributes redirectAttributes){
-		logger.debug("In /paymentFailure");	
-		try{
-			redirectAttributes.addFlashAttribute("status",
-					"<div class=\"success\" > Redirecting url getting success result of /paymentFailure!</div>");
-		}catch(Exception e){
-			logger.error(e);
-			redirectAttributes.addFlashAttribute("status",
-					"<div class=\"failure\" >Exception in  success redirecting URL /paymentFailure !</div>");
-		}
-			return "redirect:/payUBills";
-	}
+	
 
 }
