@@ -711,6 +711,7 @@ public class ConsumerInstrumentController {
 									json.put("phoneDeviceVersion", f.getPhoneDeviceVersion());
 									json.put("textarea", f.getTextarea());
 									json.put("type", f.getType());
+									json.put("ticketId", f.getTicketId());
 									json.put("status", f.getStatus());
 									json.put("createdAt", DateUtil.changeDateFromat(f.getCreatedAt()));
 									
