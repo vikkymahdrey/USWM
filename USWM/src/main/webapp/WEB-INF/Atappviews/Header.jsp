@@ -113,8 +113,9 @@
            
           </ul> -->
            <ul class="treeview-menu">
-            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Remove Water Meter</b></a></li>
+            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Remove Water Meter Data</b></a></li>
              <li><a href="addDevice"><i class="fa fa-user-plus"></i><b>Add Water Meter</b></a></li>
+              <li><a href="deleteNode"><i class="fa fa-recycle"></i><b>Delete Node</b></a></li>
            
           </ul>
           

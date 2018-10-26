@@ -33,6 +33,7 @@
  <!--  AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+   <link rel="stylesheet" href="css/styling.css">
   
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -308,6 +309,11 @@ function getDevEUIByAppID()
   			List<LoraFrame> frames=(List<LoraFrame>)request.getAttribute("frames"); 
   			Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   			List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
+  			Long totalwaterunitsfrmtodate = (Long) request.getAttribute("totalwaterunitsfrmtodate");
+  			if(totalwaterunitsfrmtodate==null){
+  				totalwaterunitsfrmtodate=0L;
+  			}
+  			
   			%>	
 <div class="wrapper">  
  <%@include file="Header.jsp"%>  
@@ -331,6 +337,8 @@ function getDevEUIByAppID()
 						<div class="box-header with-border">
   					 		 <h5 class="text-blue text-left "><span class="fa fa-tint"></span><b> Water Consumption In Liter</b></h5>
           				</div><!-- /.box-header -->
+          			
+						
           				
           				
 						<div class="row">
@@ -356,7 +364,7 @@ function getDevEUIByAppID()
 		   						</div>
 		   				  </div>
 		   				  
-		   				  
+		   				 
 		   				  <div class="row" >
     				    	<div class="col-sm-12">	
     				    	
@@ -568,9 +576,46 @@ function getDevEUIByAppID()
 							</div>	
 											 
 					   </div>
-					 
-    				    	 <% if(frames!=null && !frames.isEmpty()){
-    				    	 %>
+
+                  <!-- Icon displaying Total Water Units Consumed based on From and To Date -->
+					<div class="row">
+						<div class="col-md-12">
+							<div class="box box-solid">
+								<div class="box-header">
+									<i class="fa fa-tint"></i>
+									<h3 class="box-title">
+										<b>Total Water Consumptions</b>
+									</h3>
+
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-default btn-sm"
+											data-widget="collapse">
+											<i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-default btn-sm">
+											<i class="fa fa-refresh"></i>
+										</button>
+									</div>
+								</div>
+
+								<div class="box-body">
+
+									<div class="info-box col-sm-6 mar-top-25">
+										<span class="info-box-icon bg-blue"><i
+											class="fa fa-tint"></i></span>
+										<div class="info-box-content">
+											<span class="info-box-text">Total Water Units Consumed</span>
+											<span class="info-box-number"><b><%=totalwaterunitsfrmtodate%></b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>   <!-- Icon ends here -->
+
+					<%
+						if (frames != null && !frames.isEmpty()) {
+					%>
     				    	 
     				    	 <div class="row" style="overflow-y: auto;">
 							<div class="col-sm-12 ">	

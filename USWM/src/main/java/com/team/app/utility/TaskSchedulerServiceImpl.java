@@ -39,7 +39,7 @@ public class TaskSchedulerServiceImpl {
 	 
 	
 	    
-	    public static final String CRON_EXPRESSION = "0 */5 * * * ?";
+	    public static final String CRON_EXPRESSION = "0 */60 * * * ?";
 
 	    TblSchedularTask task=null;
 	    

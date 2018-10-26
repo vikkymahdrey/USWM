@@ -60,9 +60,8 @@ public class UserInfoController {
 	private KeywordService keywordService;
 	
 	@RequestMapping(value= {"/userInfoHistory"}, method=RequestMethod.GET)
-    public String userInfoHistoryHandler(Map<String,Object> map,HttpServletRequest request) {		
-			
-			try{
+    public String userInfoHistoryHandler(Map<String,Object> map,HttpServletRequest request) {	
+		try{
 					UserDeviceDto dto=null;
 					List<TblUserInfo> userInfos=userLoginService.getUserInfos();
 					
@@ -74,27 +73,25 @@ public class UserInfoController {
 					}
 						map.put("userInfos", userInfos);
 						return "userInfo";
-			}catch(Exception e){
-				HttpSession s=request.getSession();
-		        s.setAttribute("statusLog",AppConstants.statusLog);
-				s.setAttribute("url", request.getRequestURL());
-				s.setAttribute("exception", e.toString());				
-				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		        return "redirect:/";
-			}
-					
-		 
+		}catch(Exception e){		
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/";
+	    }			 
 	 }
 	
 	
 	
 	@RequestMapping(value= {"/frameInfos"}, method=RequestMethod.GET)
-    public String framesInfoHandler(Map<String,Object> map,HttpServletRequest request) {		
+    public String framesInfoHandler(Map<String,Object> map,HttpServletRequest request){		
 			logger.debug("/inside framesInfo");
+		 try{
 			List<LoraFrame> frames=null;
-			try{
 				frames=consumerInstrumentServiceImpl.getFrames();
 				
 				if(frames!=null && !frames.isEmpty()){
@@ -102,52 +99,51 @@ public class UserInfoController {
 					logger.debug("Date is is ",frames.get(0).getCreatedAt());
 					map.put("frames", frames);
 				}
-				return "frames";
-			}catch(Exception e){
+				return "frames";				
+			}catch(Exception e){		
 				HttpSession s=request.getSession();
-		        s.setAttribute("statusLog",AppConstants.statusLog);
+			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
 				s.setAttribute("exception", e.toString());				
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		        return "redirect:/";
-			}
-					
-		 
+			    return "redirect:/";
+		    }
 	 }
 	
 	
 	@RequestMapping(value= {"/userFrameInfos"}, method=RequestMethod.GET)
     public String userFrameInfosHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
-			logger.debug("/inside framesInfo");			
+			logger.debug("/inside framesInfo");	
+		try{	
 			TblUserInfo user=(TblUserInfo) session.getAttribute("user");
-			List<LoraFrame> frames=null;
-			try{
-				frames=consumerInstrumentServiceImpl.getDeviceIdByDevEUI(user.getUserDeviceMappings().get(0).getDevEUI());				
+			TblUserInfo u=userLoginService.getUserByUserId(user.getId());
+			List<LoraFrame> frames=null;			
+				frames=consumerInstrumentServiceImpl.getDeviceIdByDevEUI(u.getUserDeviceMappings().get(0).getDevEUI());				
 				if(frames!=null && !frames.isEmpty()){
 					logger.debug("size is ",frames.size());
 					map.put("frames", frames);
 				}
-				return "userFrames";
+			return "userFrames";
+	}catch(Exception e){		
+		HttpSession s=request.getSession();
+	    s.setAttribute("statusLog",AppConstants.statusLog);
+		s.setAttribute("url", request.getRequestURL());
+		s.setAttribute("exception", e.toString());				
+		s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+		s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+		s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+	    return "redirect:/";
+    }	
 			
-			}catch(Exception e){
-				HttpSession s=request.getSession();
-		        s.setAttribute("statusLog",AppConstants.statusLog);
-				s.setAttribute("url", request.getRequestURL());
-				s.setAttribute("exception", e.toString());				
-				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		        return "redirect:/";
-			}
 					
 		 
 	 }
 	@RequestMapping(value= {"/userMgmt"}, method=RequestMethod.GET)
     public String userMgmtHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		   logger.debug(" IN /userMgmt ");
-		  try{		   
+		try{	   
 				   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 						map.put("organisations", orgMapped);	
 				   List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
@@ -155,60 +151,62 @@ public class UserInfoController {
 				   List<Role> roles=userLoginService.getRoles();
 						map.put("roles", roles);
 							return "UserMgmt";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }
+		
 	}
 	
 	@RequestMapping(value= {"/orgUserMgmt"}, method=RequestMethod.GET)
     public String orgUserMgmtHanlder(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		   logger.debug(" IN /orgUserMgmt ");	
-		   try{
-			   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+		try{   
+		   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 					map.put("organisations", orgMapped);	
-			List<Role> roles=userLoginService.getRoles();
+		   List<Role> roles=userLoginService.getRoles();
 					map.put("roles", roles);
-						return "OrganisationUser";
-		}catch(Exception e){
+		   return "OrganisationUser";
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }
 	}
 	
 	
 	
 	@RequestMapping(value= {"/sync"}, method=RequestMethod.GET)
-    public String autoSyncHandler(Map<String,Object> map,HttpServletRequest request) throws Exception {
+    public String autoSyncHandler(Map<String,Object> map,HttpServletRequest request) {
 		   logger.debug("/inside sync");
-	    try{
+	   try{
 		   Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 				map.put("organisations", orgMapped);
 		   List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);		
 		   return "AutoSync";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }
+		
 	}
 	
 	
@@ -222,8 +220,7 @@ public class UserInfoController {
 		String orgs = request.getParameter("orgId");
 		String[] orgIdName=orgs.split(":");
 		String orgId=orgIdName[0];
-		logger.debug("Organisation Id as ",orgId);
-		
+		logger.debug("Organisation Id as ",orgId);		
 		
 		String returnVal="";
 			returnVal=organisationService.getLoraServerApplicationByOrgId(orgId);
@@ -271,7 +268,9 @@ public class UserInfoController {
 	public @ResponseBody String getDevEUIHandler(HttpServletRequest request,Map<String,Object> map) throws Exception  {
 		logger.debug("/*Ajax getting getDevEUI */");
 		
-		String appId = request.getParameter("appId").trim();
+		String appName = request.getParameter("appId").trim();
+		String[] appArr=appName.split(":");
+		String appId=appArr[0];
 		logger.debug("Application Id as ",appId);
 		
 		String returnVal="";
@@ -383,10 +382,59 @@ public class UserInfoController {
 		
 		try{
 			consumerInstrumentServiceImpl.deleteDevEUI(appId.trim(), devId.trim());
-			returnVal="Water Meter '"+devId+"'"+" has removed successfully! Thanks ";
+			returnVal="Water Meter '"+devId+"'"+" data has removed successfully! Thanks ";
 			
 		}catch(Exception e){
 			logger.error("Error in Ajax/deleteDev",e);
+			e.printStackTrace();
+			returnVal="Water Meter '"+devId+"'"+" data removable has failed! Thanks ";
+		}
+			
+			
+		return returnVal;
+		 
+	 }
+	
+	
+	@RequestMapping(value= {"/deleteLoraNode"}, method=RequestMethod.POST)
+    public @ResponseBody String deleteLoraNodeHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map) {
+		logger.debug("/inside deleteLoraNode");
+		String orgs=request.getParameter("orgId").trim();
+		String[] orgArr=orgs.split(":");
+		String orgId=orgArr[0];
+		String apps=request.getParameter("appId").trim();
+		String[] appArr=apps.split(":");
+		String appId=appArr[0];
+		String devId=request.getParameter("devId").trim();
+		
+		
+				
+		logger.debug("OrgId....",orgId);
+		logger.debug("appId....",appId);
+		logger.debug("devId....",devId);
+		String returnVal="";
+		
+		
+		try{
+			
+			TblUserInfo user=(TblUserInfo)session.getAttribute("user");
+				TblUserInfo u=userLoginService.getUserByUId(user.getId());	
+				logger.debug("userId....",u.getId());
+				
+			/*List<UserDeviceMapping> udmList=u.getUserDeviceMappings();
+			if(udmList!=null && !udmList.isEmpty()){
+				for(UserDeviceMapping udm : udmList){
+					if(udm.getDevEUI().equals(devId.trim()) && udm.getAppId().equals(appId.trim())){
+						u.removeUserDeviceMapping(udm);
+						return "Water Meter '"+devId+"'"+" has removed successfully! Thanks ";
+					}
+				}
+			}*/
+			userLoginService.deleteDevLoraNode(appId.trim(), devId.trim(),u.getId());
+			returnVal="Water Meter '"+""+"'"+" has removed successfully! Thanks ";
+			
+		}catch(Exception e){
+			logger.error("Error in Ajax/deleteDevEUI",e);
 			e.printStackTrace();
 			returnVal="Water Meter '"+devId+"'"+" removable has failed! Thanks ";
 		}
@@ -433,45 +481,49 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/deleteNode"}, method=RequestMethod.GET)
-    public String deleteNodeHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes)  {
+    public String deleteNodeHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
 		   logger.debug("/inside deleteNode");
-		try{	   
-			   	Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			   		map.put("organisations", orgMapped);		   
-			   			return "deleteNode";
-		}catch(Exception e){
-			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
-			s.setAttribute("url", request.getRequestURL());
-			s.setAttribute("exception", e.toString());				
-			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    try{ 
+		 	   	Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+			   		map.put("organisations", orgMapped);	
+			   	List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+					map.put("keyTypes",keyTypes);	
+		   				return "deleteNode";
+			}catch(Exception e){		
+				HttpSession s=request.getSession();
+			    s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			    return "redirect:/";
+		    }
+		
 	}
 	
 	
 	@RequestMapping(value= {"/delDevEUI"}, method=RequestMethod.GET)
     public String delDevEUIHandler(HttpServletRequest request,HttpSession session,Map<String,Object> map,RedirectAttributes redirectAttributes) {
-		   logger.debug("/inside delDevEUI");
-		try{	   
+		   logger.debug("/inside delDevEUI");	
+		   try{
 				Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 		   			map.put("organisations", orgMapped);
 		   			
 		   		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 					map.put("keyTypes",keyTypes);	
 		   				return "deleteAllNode";
-		}catch(Exception e){
-			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
-			s.setAttribute("url", request.getRequestURL());
-			s.setAttribute("exception", e.toString());				
-			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+			}catch(Exception e){		
+				HttpSession s=request.getSession();
+			    s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			    return "redirect:/";
+		    }
+		
 	}
 	
 	
@@ -658,7 +710,7 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/userReport"}, method=RequestMethod.GET)
-    public String userReportHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+    public String userReportHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes){
 		logger.debug("/inside userReport");
 		try{
 			List<TblUserInfo> userList=userLoginService.getUserInfos();
@@ -670,17 +722,17 @@ public class UserInfoController {
 				map.put("subscribedUsers", "");	
 			}
 			return "userReport";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			
+		    return "redirect:/";
+	    }
+		
 		
 		 
 	 }
@@ -696,18 +748,17 @@ public class UserInfoController {
 					map.put("user", u);
 				}
 				
-					return "personalInfo";
-		}catch(Exception e){
+				return "personalInfo";
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-		 
+		    return "redirect:/";
+	    }
 	 }
 	
 	
@@ -734,66 +785,62 @@ public class UserInfoController {
 				redirectAttributes.addFlashAttribute("status",
 						"<div class=\"failure\" >Incorrect UserId!</div>");	
 			}
-			return "redirect:/personalInfo";
-		}catch(Exception e){
+			return "redirect:/personalInfo";	
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			
-		
-		 
+		    return "redirect:/";
+	    }
 	 }
 	
 	
 	@RequestMapping(value= {"/addDevice"}, method=RequestMethod.GET)
     public String addDeviceHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
 		logger.debug("/inside addDevice");
-			try{						  		   
+			try{					  		   
 					 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 						map.put("organisations", orgMapped);
 						
 					 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 							map.put("keyTypes",keyTypes);	
-						      return "addDevice";
-			}catch(Exception e){
+						      return "addDevice";		
+			}catch(Exception e){		
 				HttpSession s=request.getSession();
-		        s.setAttribute("statusLog",AppConstants.statusLog);
+			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
 				s.setAttribute("exception", e.toString());				
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		        return "redirect:/";
-			}
-		 
+			    return "redirect:/";
+		    }
 	 }
 	@RequestMapping(value= {"/UserSearch"}, method=RequestMethod.GET)
 	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map) {
-		logger.debug("Inside /UserSearch");	
-		try{	
+		        logger.debug("Inside /UserSearch");	
+		 try{       
 			String orgs=request.getParameter("orgId");
 			String[] orgArr=orgs.split(":");
 			String orgId=orgArr[0];
 				logger.debug("printing orgId as: ",orgId);
 			map.put("orgId", orgId);
 				 return "UserSearch";
-		}catch(Exception e){
+		
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			 
+		    return "redirect:/";
+	    } 
 	}
 	
 	
@@ -963,22 +1010,23 @@ public class UserInfoController {
 	
 	
 	@RequestMapping(value= {"/userDeviceMapped"}, method=RequestMethod.GET)
-	public String userDeviceMappedHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map){
-		logger.debug("Inside /userDeviceMapped");
-		try{
-			TblUserInfo user=(TblUserInfo) session.getAttribute("user");		
-			map.put("userInfo", user);
-				 return "UserDeviceMapping";
-		}catch(Exception e){
+	public String userDeviceMappedHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
+			logger.debug("Inside /userDeviceMapped");	
+		try{		
+			TblUserInfo user=(TblUserInfo) session.getAttribute("user");	
+			TblUserInfo u=userLoginService.getUserByUserId(user.getId());
+			map.put("userInfo", u);
+					 return "UserDeviceMapping";
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }
 	}
 	
 	

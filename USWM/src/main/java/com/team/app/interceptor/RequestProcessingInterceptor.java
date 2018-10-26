@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -66,10 +65,10 @@ public class RequestProcessingInterceptor extends HandlerInterceptorAdapter {
 				}
 		
 			
-				if(page.equals("/") || page.equals("forgotPassword") || page.equals("resetPassword") || page.equals("exception"))
+				if(page.equals("/") || page.equals("forgotPassword") || page.equals("resetPassword"))
 				{	
 					return true;
-				}else if(page.equals("rest/consumer")) { 
+				}else if(page.contains("rest/consumer")) { 
 					return true;
 				}else if(page.equals("onSubmitlogin")) { 
 					return true;

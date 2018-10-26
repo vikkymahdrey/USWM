@@ -530,6 +530,10 @@ function getDevEUIByAppID()
   		 	String appUser=(String)request.getAttribute("appUserCount");
   		 	//String loraServerUser=(String)request.getAttribute("userCount");
   		 	String orgCount=(String)request.getAttribute("orgCount"); 
+  		 	/* Long curMonthWaterUnits=(Long)request.getAttribute("curMonthWaterUnits"); 
+  		 	if(curMonthWaterUnits==null){
+  		 		curMonthWaterUnits=0L;	
+  		 	} */
   			%>
 							 
   <div class="wrapper">  
@@ -556,7 +560,7 @@ function getDevEUIByAppID()
 					        <div class="box-header">
 					            <i class="fa fa-user"></i>
 								<h3 class="box-title">
-									<b>Total Subscribed Users</b>
+									<b>User Details</b>
 								</h3>				           
 					
 					            <div class="box-tools pull-right">
@@ -569,7 +573,7 @@ function getDevEUIByAppID()
 					            <div class="box-body">					             
 					              	    							
 									  <div class="info-box col-sm-6 mar-top-25" >											
-										  	<span class="info-box-icon bg-blue"><i class="fa fa-user"></i></span>
+										  	<span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
 										  	<div class="info-box-content">
 											    <span class="info-box-text">Enterprise User Subscription</span>
 											    <%-- <span class="info-box-number"><b><%=userInfo.get(0)%></b></span> --%>
@@ -588,13 +592,13 @@ function getDevEUIByAppID()
 									   </div>
 									   
 									   
-									   <%-- <div class="info-box col-sm-4 mar-top-25" >											
-										  	<span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+									<%-- <div class="info-box col-sm-6 mar-top-25" >											
+										  	<span class="info-box-icon bg-blue"><i class="fa fa-user"></i></span>
 										  	<div class="info-box-content">
-											    <span class="info-box-text">Lora Server Users</span>
-											     <span class="info-box-number"><b><%=loraServerUser%></b></span> 											    
+											    <span class="info-box-text">Current Month Water Consumption Units</span>
+											     <span class="info-box-number"><b><%=curMonthWaterUnits%></b></span> 											    
 										 	</div>
-									   </div> --%>
+								   </div>  --%>
 									  
 									  <!-- Modal -->
                                       <div class="modal fade" id="userModal" role="dialog">

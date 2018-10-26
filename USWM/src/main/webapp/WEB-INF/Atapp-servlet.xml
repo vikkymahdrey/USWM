@@ -29,13 +29,13 @@
 	<task:annotation-driven />
 	<aop:aspectj-autoproxy />       
 	
-	  <mvc:interceptors> 
-	 <bean class="com.team.app.interceptor.RequestProcessingInterceptor" />
-	 <!-- <mvc:interceptor>
+	   <mvc:interceptors> 
+	 	<bean class="com.team.app.interceptor.RequestProcessingInterceptor" />
+	 	<!-- <mvc:interceptor>
 			<mvc:mapping path="/transportBooking" />
 			<bean class="com.agiledge.atom.interceptor.TransportBookingInterceptor" />
-		</mvc:interceptor> -->
-	 </mvc:interceptors>  
+		</mvc:interceptor>  -->
+	 </mvc:interceptors>   
 
 	 <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/USWM" /> 
 	

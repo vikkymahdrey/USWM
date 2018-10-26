@@ -54,6 +54,8 @@ public interface UserLoginService {
 
 	UserDeviceMapping getUserDeviceByDevEUI(String devEUI)throws AtAppException;
 
+	void deleteDevLoraNode(String appId, String devEUI, String userId) throws Exception;
+
 	
 
 }

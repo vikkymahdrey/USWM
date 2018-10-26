@@ -24,6 +24,7 @@ import com.team.app.dto.APLDto;
 import com.team.app.dto.OrganisationDto;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.APLService;
+import com.team.app.service.UserLoginService;
 
 @Controller
 public class APLConfigController {
@@ -33,13 +34,15 @@ public class APLConfigController {
 	@Autowired
 	private APLService aplService;
 	
+	@Autowired
+	private UserLoginService userLoginService;
+	
 	@RequestMapping(value= {"/aplConfig"}, method=RequestMethod.GET)
 	public String getAPLHandler(Map<String,Object> map, HttpServletRequest request){
 		logger.debug("Inside /aplCoNFiG");
-		try{	
-			
-			List<OrganisationDto> orgDtos=aplService.getOrganisation();
-			 map.put("organisations", orgDtos);
+		try{
+		  	 List<OrganisationDto> orgDtos=aplService.getOrganisation();
+			 map.put("organisations", orgDtos); 
 			 String orgId=request.getParameter("orgid");
 			 logger.debug("printing orgId ",orgId);
 			 if(orgId != null && !(orgId.isEmpty())){
@@ -47,22 +50,22 @@ public class APLConfigController {
 				 map.put("areaList",areaList);
 			 }
 			 return "area";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }		
 	}
 	
 		
 	@RequestMapping(value= {"/LandMarkSearch"}, method=RequestMethod.GET)
 	public String LandMarkSearchHandler(HttpServletRequest request,Map<String,Object> map){		
-		logger.debug("Inside /LandMarkSearch");		
+		logger.debug("Inside /LandMarkSearch");	
 		try{
 			String orgs=request.getParameter("orgId");
 			String[] orgIdName=orgs.split(":");
@@ -70,16 +73,16 @@ public class APLConfigController {
 				logger.debug("printing orgId as: ",orgId);
 			map.put("orgId", orgId);
 				 return "LandMarkSearch1";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }		
 		
 	}
 	
@@ -104,22 +107,22 @@ public class APLConfigController {
 			map.put("areas",areaList);
 				
 			 return "marklandmark";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }		
 		
 	}
 	
 	
 	@RequestMapping(value= {"/marklandmarkdash"}, method=RequestMethod.GET)
-	public String getAPLForDashFromGoogleMap(HttpServletRequest request,Map<String,Object> map){
+	public String getAPLForDashFromGoogleMap(HttpServletRequest request,Map<String,Object> map) {
 		try{
 			String orgId=request.getParameter("orgId");
 			String areaId=request.getParameter("area");
@@ -137,16 +140,16 @@ public class APLConfigController {
 			map.put("areas",areaList);
 				
 			 return "marklandmarkdash";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }		
 		
 		
 	}
@@ -157,7 +160,8 @@ public class APLConfigController {
 		logger.debug("/marklandmarkUserDash");
 		
 		try{
-			TblUserInfo user=(TblUserInfo)session.getAttribute("user");		
+			TblUserInfo u=(TblUserInfo)session.getAttribute("user");	
+			TblUserInfo user=userLoginService.getUserByUserId(u.getId());
 			logger.debug("/landmarkId",user.getLandmark().getId());
 			String orgId=request.getParameter("orgId");
 			
@@ -175,16 +179,16 @@ public class APLConfigController {
 			map.put("landmarkId", user.getLandmark().getId());
 				
 			 return "marklandmarkUserDash";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		    return "redirect:/";
+	    }		
 		
 	}
 	
@@ -289,6 +293,7 @@ public class APLConfigController {
 			
 			@RequestMapping(value= {"/addArea"}, method=RequestMethod.GET)
 			public String getArea(HttpSession session,HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
+			 
 				String areaName = request.getParameter("area");
 				String orgId = request.getParameter("orgId");
 				
@@ -327,49 +332,45 @@ public class APLConfigController {
 			
 			@RequestMapping(value= {"/showPlace"}, method=RequestMethod.GET)
 			public String getPlaceHandler(Map<String,Object> map, HttpServletRequest request){
-				String areaId=request.getParameter("areaId"); 
-				
-				try{
-					Area a=aplService.getAreasByAreaId(areaId);
-					List<Place> placeList=a.getPlaces();
-					map.put("placeList",placeList);
-					map.put("areas", a);
-					return "place";
-				}catch(Exception ex){
+				try{		
+					String areaId=request.getParameter("areaId");
+						Area a=aplService.getAreasByAreaId(areaId);
+						List<Place> placeList=a.getPlaces();
+						map.put("placeList",placeList);
+						map.put("areas", a);
+						return "place";	
+				}catch(Exception e){		
 					HttpSession s=request.getSession();
-			        s.setAttribute("statusLog",AppConstants.statusLog);
+				    s.setAttribute("statusLog",AppConstants.statusLog);
 					s.setAttribute("url", request.getRequestURL());
-					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("exception", e.toString());				
 					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			        return "redirect:/";
-				}
-				
+				    return "redirect:/";
+			    }			
 				
 			}
 			
 			@RequestMapping(value= {"/showLandmark"}, method=RequestMethod.GET)
-			public String getLandmarkHandler(Map<String,Object> map, HttpServletRequest request){
-				String placeId=request.getParameter("placeId");
-				try{					
+			public String getLandmarkHandler(Map<String,Object> map, HttpServletRequest request) {
+				try{
+				    String placeId=request.getParameter("placeId");								
 					Place place=aplService.getPlaceById(placeId);
 					List<Landmark> landmarkList=place.getLandmarks();									
 					map.put("landmarkList",landmarkList);
 					map.put("place", place);
 					return "landmark";
-				}catch(Exception ex){
+				}catch(Exception e){		
 					HttpSession s=request.getSession();
-			        s.setAttribute("statusLog",AppConstants.statusLog);
+				    s.setAttribute("statusLog",AppConstants.statusLog);
 					s.setAttribute("url", request.getRequestURL());
-					s.setAttribute("exception", ex.toString());				
+					s.setAttribute("exception", e.toString());				
 					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			        return "redirect:/";
-				}
-				
-				
+				    return "redirect:/";
+			    }			
 			}
 			
 			
@@ -510,8 +511,8 @@ public class APLConfigController {
 				}
 					
 			@RequestMapping(value= {"/updateLandmark"}, method=RequestMethod.POST)
-			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) {
-				logger.debug("In Ajax /updateLandmark");
+			public String getUpdatedLandmark(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception {
+				logger.debug("In /updateLandmark");
 				String retVal = "";
 				String placeId = request.getParameter("placeId");
 				String landmarkId = request.getParameter("landmarkId");
@@ -525,7 +526,7 @@ public class APLConfigController {
 				logger.debug("printing landmark /updateLandmark",landmark);
 				logger.debug("latitude longitude = "+latLng);
 				
-				try{
+			
 					
 					Landmark lm = aplService.getLandMarkByIdAndPlaceId(landmarkId,placeId);
 					if(lm != null){
@@ -578,23 +579,13 @@ public class APLConfigController {
 				}	
 				
 				return retVal;
-				}catch(Exception ex){
-					HttpSession s=request.getSession();
-			        s.setAttribute("statusLog",AppConstants.statusLog);
-					s.setAttribute("url", request.getRequestURL());
-					s.setAttribute("exception", ex.toString());				
-					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			        return "redirect:/";
-				}
-				
+						
 			}	
 			
 			
 			
 			@RequestMapping(value= {"/updateMapLandmark"}, method=RequestMethod.POST)
-			public String updateMapLandmarkHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes){
+			public String updateMapLandmarkHandler(HttpServletRequest request,Map<String,Object> map,RedirectAttributes redirectAttributes) throws Exception{
 				logger.debug("In Ajax /updateMapLandmark");
 				String retVal = "";
 				String placeId = request.getParameter("placeId");
@@ -612,7 +603,7 @@ public class APLConfigController {
 				logger.debug("placeId placeId = ",placeId);
 				logger.debug("orgId orgId = ",orgId);
 				
-				try{
+				
 					
 					Landmark lm = aplService.getLandMarkByIdAndPlaceId(landmarkId,placeId);
 					if(lm != null){				
@@ -636,16 +627,7 @@ public class APLConfigController {
 					}		
 					
 					return retVal;
-				}catch(Exception ex){
-					HttpSession s=request.getSession();
-			        s.setAttribute("statusLog",AppConstants.statusLog);
-					s.setAttribute("url", request.getRequestURL());
-					s.setAttribute("exception", ex.toString());				
-					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			        return "redirect:/";
-				}
+				
 				
 			}
 			

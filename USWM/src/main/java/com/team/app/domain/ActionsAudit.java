@@ -1,5 +1,6 @@
 package com.team.app.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,11 +12,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.team.app.logger.AtLogger;
-
 @Entity
 @Table(name="tbl_audit_log")
-public class ActionsAudit {
+public class ActionsAudit implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	
 

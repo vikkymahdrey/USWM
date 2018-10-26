@@ -24,6 +24,17 @@ public class TblDeviceFeedback implements Serializable {
 	private Date createdAt;
 
 	private String devEUI;
+	
+	@Column(name="ticketId")
+	private String ticketId;
+
+	public String getTicketId() {
+		return ticketId;
+	}
+
+	public void setTicketId(String ticketId) {
+		this.ticketId = ticketId;
+	}
 
 	private String nodeName;
 

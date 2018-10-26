@@ -23,6 +23,7 @@
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/custom_siemens.css" rel="stylesheet">
+<link href="css/styling.css" rel="stylesheet">
 <link href="css/marquees.css" rel="stylesheet">
 
 <link rel="stylesheet"
@@ -89,7 +90,6 @@ public boolean empty(String s)
 	String base_url=AppConstants.base_url;
 	String surl=AppConstants.surl;
 	String furl=AppConstants.furl;
-	String udf1=request.getParameter("userId");
 	String action1 ="";
 	int error=0;
 	String hashString="";	
@@ -183,6 +183,10 @@ function confirmValidate(){
 	    var amount=document.getElementById("amount").value;
 	  	var email=document.getElementById("email").value;
 	  	var phone=document.getElementById("phone").value;  	
+	  	
+	  	var emailRegx = /^((([a-z]|\d|[!#\$%&\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/;
+	   	var phoneRegx = /^\+?\d?\d?\d{10}$/;
+	   	var amountRegx=/^\d*[1-9]\d*$/;
 		
 	   	   
 	   if(productinfo=="NA"){
@@ -190,15 +194,19 @@ function confirmValidate(){
 		   document.getElementById("productinfo").focus();
 		   return false;
 	   }else if(amount==""){
-		   alert("Please enter the amount !");
+		   alert("Please enter the amount!");
 		   document.getElementById("amount").focus();
 		   return false;
-	   }else if(email==""){
-		   alert("Please enter the email !");
+	   } else if(amountRegx.test(amount)==false){
+		   alert("Invalid amount entered!");
+		   document.getElementById("amount").focus();
+		   return false;
+	   }else if(emailRegx.test(email)==false){
+		   alert("Invalid email format!");
 		   document.getElementById("email").focus();
 		   return false;
-	   }else if(phone==""){
-		   alert("Please enter the phone number !");
+	   }else if(phoneRegx.test(phone)==false){
+		   alert("Invalid mobile number!");
 		   document.getElementById("phone").focus();
 		   return false;
 	   }
@@ -207,7 +215,8 @@ function confirmValidate(){
 
 <body class="hold-transition skin-blue sidebar-mini"
 	onload="submitPayubillForm();">
-	<% List<UserDeviceMapping> deviceList=(List<UserDeviceMapping>)request.getAttribute("deviceList");%>
+	<% List<UserDeviceMapping> deviceList=(List<UserDeviceMapping>)request.getAttribute("deviceList");	
+		List<TblPaymentInfo> paymentHistory=(List<TblPaymentInfo>)request.getAttribute("paymentHistory");%>
 	<div class="wrapper">
 		<%@include file="Header.jsp"%>
 
@@ -254,6 +263,83 @@ function confirmValidate(){
 
 						</div>
 					</div>
+					
+					
+					<%if(paymentHistory!=null && !paymentHistory.isEmpty()){
+				for(TblPaymentInfo payInfo : paymentHistory) {
+				 %>
+					<div class="row">
+						<div class="col-sm-9 mar-top-20" style="border:1px solid black;">
+
+							<table class="table table-condensed table-striped " >
+
+								<thead >
+									<tr>
+										<th>Transaction ID: <%=payInfo.getTxnid()%></th>
+										<th>Date:  <%=payInfo.getCreatedOn()%></th>										
+									</tr>
+								<thead>
+								<tbody>
+
+									<tr>
+										<td>PaymentID:</td>
+										<td><%=payInfo.getPaymentId()%></td>
+										<!-- <td rowspan="10" style="vertical-align:middle">
+							              <button class="btn btn-primary" type="button">Leave Feedback	</button>
+							            </td> -->
+									</tr>
+									<tr>
+										<td>Mode:</td>
+										<td><%=payInfo.getMode()%></td>
+									</tr>
+									<tr>
+										<td>FirstName:</td>
+										<td><%=payInfo.getFirstname()%></td>
+									</tr>
+									<tr>
+										<td>Amount:</td>
+										<td><%=payInfo.getAmount()%></td>
+									</tr>
+									<!-- <tr>
+									<td align="right"><button class="form-control text-bold" type="button">Leave Feedback	</button></td>
+									</tr> -->
+									<tr>
+										<td>Cardnum:</td>
+										<td><%=payInfo.getCardnum()%></td>
+									</tr>
+									<tr>
+										<td>EmailId:</td>
+										<td><%=payInfo.getEmailId()%></td>
+									</tr>
+									<tr>
+										<td>WaterMeter:</td>
+										<td><%=payInfo.getDevEUI()%></td>
+									</tr>
+									<tr>
+										<td>Productinfo:</td>
+										<td><%=payInfo.getProductInfo()%></td>
+									</tr>
+									<tr>
+										<td>Phone:</td>
+										<td><%=payInfo.getPhoneno()%></td>
+									</tr>
+									<tr>
+										<td>Status:</td>
+										<td><%=payInfo.getStatus()%></td>
+									</tr>
+									
+								</tbody>
+								
+							</table>
+						</div>
+					</div>
+
+					<%
+						}
+					}
+					%>
+					
+					
 
 					<div class="container">
 
@@ -281,18 +367,18 @@ function confirmValidate(){
 												type="hidden" name="firstname"
 												value="<%= userSession.getUname() %>" /> <input
 												type="hidden" name="furl" value="<%= furl %>" /> <input
-												type="hidden" name="userId"	value="<%= userSession.getId() %>" />
+												type="hidden" name="udf1"	value="<%= userSession.getId() %>" />
 
 
 											<table>
 												<tr>
 													<td><fieldset class="fieldset">
-															<legend class="legend"> Product Info</legend>
+															<legend class="legend"> Water Meter</legend>
 															<select style="border: none" name="productinfo"
 																id="productinfo">
 																<% if(deviceList!=null && !deviceList.isEmpty()){
 	              		   											for(UserDeviceMapping udm : deviceList){ %>
-																		<option value="<%=udm.getDevEUI()%>"><%=udm.getAppName()+"-"+udm.getDevEUI()%></option>
+																		<option value="<%=udm.getDevEUI()%>"><%=udm.getDevNode()+"-"+udm.getDevEUI()%></option>
 																<%}
 		               											 }else{%>
 																<option value="NA">Please Choose</option>
@@ -314,7 +400,7 @@ function confirmValidate(){
 												<tr>
 													<td><fieldset class="fieldset">
 															<legend class="legend">Email</legend>
-															<input style="border: none" id="email" name="email"
+															<input style="border: none" id="email" name="email" readonly
 																value="<%=userSession.getEmailId()%>" />
 														</fieldset></td>
 												</tr>
@@ -323,7 +409,7 @@ function confirmValidate(){
 												<tr>
 													<td><fieldset class="fieldset">
 															<legend class="legend">Phone</legend>
-															<input style="border: none" id="phone" name="phone"
+															<input style="border: none" id="phone" name="phone" readonly
 																value="<%= userSession.getContactnumber() %>" />
 														</fieldset></td>
 												</tr>
@@ -342,12 +428,13 @@ function confirmValidate(){
 										</form>
 
 									</div>
-
-
-									<div class="modal-footer">
+						<div class="modal-footer">
+						
+						
+						
 										<%@include file="Footer.jsp"%>
 
-									</div>
+						</div>
 								</div>
 
 							</div>

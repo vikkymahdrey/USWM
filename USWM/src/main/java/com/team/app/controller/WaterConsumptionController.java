@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.team.app.config.MqttIntrf;
 import com.team.app.constant.AppConstants;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblKeywordType;
@@ -48,6 +47,9 @@ public class WaterConsumptionController {
 	@Autowired
 	private KeywordService keywordService;
 	
+	@Autowired
+	private UserLoginService userLoginService;
+	
 	
 	@RequestMapping(value= {"/waterConsumption"}, method=RequestMethod.GET)
     public String waterConsumptionHanlder(Map<String,Object> map) {		
@@ -57,31 +59,33 @@ public class WaterConsumptionController {
 	
 	@RequestMapping(value= {"/waterConsumptionCal"}, method={ RequestMethod.GET, RequestMethod.POST })
     public String waterConsumptionCalHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
-		try{
+		try{	
 			 Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 				map.put("organisations", orgMapped);
 			 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);
 					return "AdminWaterConsumptionCal";
-		}catch(Exception e){
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}	
+		    return "redirect:/";
+	    }
+		
 		 
 	 }
 	
 	
 	@RequestMapping(value= {"/endUserWaterConsumption"}, method={ RequestMethod.GET, RequestMethod.POST })
     public String endUserWaterConsumptionHanlder(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
-		try{		  
+		  try{
 		     TblUserInfo user=(TblUserInfo) session.getAttribute("user");
-			 List<UserDeviceMapping> udm=user.getUserDeviceMappings();
+		     TblUserInfo u=userLoginService.getUserByUserId(user.getId());
+			 List<UserDeviceMapping> udm=u.getUserDeviceMappings();
 			 
 			 if(udm!=null && !udm.isEmpty()){
 				 map.put("udmList", udm);
@@ -93,22 +97,23 @@ public class WaterConsumptionController {
 			   map.put("frames", frm);
 		     }	
 		     return "EndUserWaterConsumption";
-		}catch(Exception e){
-			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
-			s.setAttribute("url", request.getRequestURL());
-			s.setAttribute("exception", e.toString());				
-			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
+		  }catch(Exception e){		
+				HttpSession s=request.getSession();
+			    s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			    return "redirect:/";
+		    }
 		
 	 }
 	
 	
 	@RequestMapping(value= {"/waterConsumptionUnits"}, method=RequestMethod.POST)
     public String waterConsumptionUnitsHanlder(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
+	  try{
 		String orgs=request.getParameter("orgid");
 		//String name=request.getParameter("orgName");
 		String apps=request.getParameter("appid");
@@ -131,8 +136,7 @@ public class WaterConsumptionController {
 		logger.debug("devNode",devNode);
 		logger.debug("fromDate",fDate);
 		logger.debug("toDate",fDate);
-		try{
-		
+				
 			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	         Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
 	        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
@@ -142,6 +146,9 @@ public class WaterConsumptionController {
 			
 			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);
+				
+			Long totalwaterunitsfrmtodate = (Long) consumerInstrumentServiceImpl.getTotalWaterUnitsFrmToDate(appId,devNode, fromDate, toDate);
+	            map.put("totalwaterunitsfrmtodate", totalwaterunitsfrmtodate);
 	            
 	        List<LoraFrame> frames=consumerInstrumentServiceImpl.getFramesByFrmToDateAndDevEUI(devNode,fromDate,toDate);
 	       
@@ -153,17 +160,16 @@ public class WaterConsumptionController {
 	        	//redirectAttributes.addAllAttributes(request.getParameterMap());
 	        }
 	        return "WaterConsumptionVal";
-		}catch(Exception e){
+	    }catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			
+		    return "redirect:/";
+	    }			
 		 
 	 }
 	
@@ -248,7 +254,7 @@ public class WaterConsumptionController {
 	
 	@RequestMapping(value= {"/endUserWaterConsumptionUnits"}, method=RequestMethod.POST)
     public String endUserWaterConsumptionUnitsHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
-		
+	  try{
 		String devNode=request.getParameter("devid");
 		String fDate=request.getParameter("fromDate");		
 		String tDate=request.getParameter("toDate");
@@ -256,7 +262,6 @@ public class WaterConsumptionController {
 		logger.debug("devNode",devNode);
 		logger.debug("fromDate",fDate);
 		logger.debug("toDate",fDate);
-		try{
 		
 			SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	         Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
@@ -271,17 +276,17 @@ public class WaterConsumptionController {
 	        	      	//redirectAttributes.addAllAttributes(request.getParameterMap());
 	        }
 	        return "forward:/endUserWaterConsumption";
-		}catch(Exception e){
+		
+		}catch(Exception e){		
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			
+		    return "redirect:/";
+	    }			
 		 
 	 }
 	

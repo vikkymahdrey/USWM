@@ -37,23 +37,33 @@ public class PaymentGatewayController {
 	
 		
 	@RequestMapping(value= {"/payUBills"}, method={RequestMethod.GET,RequestMethod.POST})
-	public String payUBillsHandler(HttpServletRequest req, HttpSession session, Map<String, Object> map){
+	public String payUBillsHandler(HttpServletRequest request, HttpSession session, Map<String, Object> map){
 		logger.debug("In /payUBills");	
 		try{
 				TblUserInfo user=(TblUserInfo) session.getAttribute("user");
-				List<UserDeviceMapping> deviceList=user.getUserDeviceMappings();
-					map.put("deviceList", deviceList);		
+				
+				TblUserInfo u=userLoginService.getUserByUserId(user.getId());
+				
+				List<UserDeviceMapping> deviceList=u.getUserDeviceMappings();				
+				   map.put("deviceList", deviceList);	
+					
+				List<TblPaymentInfo> paymentHistory=u.getTblPaymentInfos();
+					logger.debug("In /paymentHistory",paymentHistory.size());	
+				
+					map.put("paymentHistory", paymentHistory);					
+					
 						return "payuform";
-		}catch(Exception e){
-			HttpSession s=req.getSession();
-			s.setAttribute("statusLog",AppConstants.statusLog);
-			s.setAttribute("url", req.getRequestURL());
+		}catch(Exception e){		
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			return "redirect:/";
-		}
+		    return "redirect:/";
+	    }
+		
 	}
 	
 	/*@RequestMapping(value= {"/payBillForm"}, method=RequestMethod.POST)
@@ -160,10 +170,9 @@ public class PaymentGatewayController {
 	
 	
 	@RequestMapping(value= {"/paymentStatus"}, method={RequestMethod.GET,RequestMethod.POST})
-	public String paymentStatusHandler(HttpServletRequest request, HttpSession session, HttpServletResponse response,Map<String, Object> map,RedirectAttributes redirectAttributes){
+	public String paymentStatusHandler(HttpServletRequest request, HttpSession session, HttpServletResponse response,Map<String, Object> map,RedirectAttributes redirectAttributes) {
 		logger.debug("In /paymentStatus");	
-		
-		try{
+			try{
 				 	String amount = request.getParameter("amount");
 					String productinfo= request.getParameter("productinfo");
 					String txnid = request.getParameter("txnid");
@@ -184,14 +193,20 @@ public class PaymentGatewayController {
 			        
 			        String cardnum =request.getParameter("cardnum");
 			        String discount =request.getParameter("discount");
-			        String errorCode =request.getParameter("errorCode");
-			        String errorMessage =request.getParameter("errorMessage");
+			        String errorCode =request.getParameter("error");
+			        String errorMessage =request.getParameter("error_Message");
 			        String mode =request.getParameter("mode"); 
-			        String netAmountDebit =request.getParameter("netAmountDebit");
-			        String nameOnCard =request.getParameter("nameOnCard");
-			        String retryCount =request.getParameter("retryCount");
+			        String netAmountDebit =request.getParameter("net_amount_debit");
+			        String nameOnCard =request.getParameter("name_on_card");
+			        String retryCount =request.getParameter("retry_count");
 			        String payuMoneyId =request.getParameter("payuMoneyId");
-			 
+			        /*String city =request.getParameter("city");
+			        String state =request.getParameter("state");
+			        String country =request.getParameter("country");
+			        String zipcode =request.getParameter("zipcode");
+			        String address1 =request.getParameter("address1");
+			        String address2 =request.getParameter("address2");
+			        */			 
 			        
 			        String additionalCharges = request.getParameter("additionalCharges");
 			        
@@ -304,6 +319,203 @@ public class PaymentGatewayController {
 			        }
 			        
 			        
+			        TblUserInfo user=userLoginService.getUserByUId(udfStr1);
+	                p= new TblPaymentInfo();
+	        			p.setPaymentId(p_Id);
+	        			p.setTxnid(txnid);
+	        			p.setProductInfo(AppConstants.txnMode);
+	        			p.setAmount(amount);
+	        			p.setAdditionalCharges(additionalCharges);
+	        			p.setStatus(status);
+	        			p.setDevEUI(productinfo);
+	        			p.setEmailId(email);
+	        			p.setPhoneno(phone);
+	        			p.setTblUserInfo(user);
+	        			p.setFirstname(firstname);
+	        			p.setMode(mode);
+	        			p.setDiscount(discount);
+	        			p.setNameOnCard(nameOnCard);
+	        			p.setErrorCode(errorCode);
+	        			p.setErrorMessage(errorMessage);
+	        			p.setPayuMoneyId(payuMoneyId);
+	        			p.setRetryCount(retryCount);
+	        			p.setNetAmountDebit(netAmountDebit);
+	        			p.setCardnum(cardnum);
+	        			p.setCreatedOn(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+	        			p.setUpdateddt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+	        			
+	        			TblPaymentInfo pay=paymentBillService.updatePaymentInfo(p);
+	        			if(pay!=null){
+	        				map.put("paymentInfo", pay);
+	        				redirectAttributes.addFlashAttribute("status",
+		        					"<div class=\"success\" > Payment information saved successfully !</div>");
+	        			}else{
+	        				redirectAttributes.addFlashAttribute("status",
+		        					"<div class=\"success\" > System not persisted payment information !</div>");
+	        			}
+			
+	        			return "paymentsuccess";
+		
+		}catch(Exception e){		
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/";
+	    }
+		
+		
+	}
+	
+	
+	
+	@RequestMapping(value= {"/paymentFailure"}, method={RequestMethod.GET,RequestMethod.POST})
+	public String paymentFailureHandler(HttpServletRequest request, HttpSession session, HttpServletResponse response,Map<String, Object> map,RedirectAttributes redirectAttributes){
+		logger.debug("In /paymentFailure");	
+			try{
+		     	 	String amount = request.getParameter("amount");
+					String productinfo= request.getParameter("productinfo");
+					String txnid = request.getParameter("txnid");
+					String phone = request.getParameter("phone");
+					String firstname = request.getParameter("firstname");
+					String userId = request.getParameter("udf1");
+					String key = AppConstants.merchant_key;
+					String salt=AppConstants.salt;
+					String status = request.getParameter("status");
+					String r_h =request.getParameter("hash");
+			        String hashStr="";
+			      	String udfStr1 =request.getParameter("udf1");
+			        String udfStr2 =request.getParameter("udf2");
+			        String udfStr3 =request.getParameter("udf3");
+			        String udfStr4 =request.getParameter("udf4");
+			        String udfStr5 =request.getParameter("udf5"); 
+			        String p_Id =request.getParameter("mihpayid");
+			        
+			        String cardnum =request.getParameter("cardnum");
+			        String discount =request.getParameter("discount");
+			        String errorCode =request.getParameter("errorCode");
+			        String errorMessage =request.getParameter("errorMessage");
+			        String mode =request.getParameter("mode"); 
+			        String netAmountDebit =request.getParameter("netAmountDebit");
+			        String nameOnCard =request.getParameter("nameOnCard");
+			        String retryCount =request.getParameter("retryCount");
+			        String payuMoneyId =request.getParameter("payuMoneyId");
+			 
+			        
+			        String additionalCharges = request.getParameter("additionalCharges");
+			        
+			        logger.debug("Printing amount",amount);
+			        logger.debug("Printing productinfo",productinfo);
+			        logger.debug("Printing txnid",txnid);
+			        logger.debug("Printing firstname",firstname);
+			        logger.debug("Printing phone",phone);
+			        logger.debug("Printing userId",userId);
+			        logger.debug("Printing udfStr1",udfStr1);
+			        logger.debug("Printing status",status);
+			        logger.debug("Printing p_Id",p_Id);
+			        logger.debug("Printing cardnum",cardnum);
+			        logger.debug("Printing discount",discount);
+			        logger.debug("Printing error_code",errorCode);
+			        logger.debug("Printing error_message",errorMessage);
+			        logger.debug("Printing mode",mode);
+			        logger.debug("Printing netAmountDebit",netAmountDebit);
+			        logger.debug("Printing name_on_card",nameOnCard);
+			        logger.debug("Printing retry_count",retryCount);
+			        logger.debug("Printing mode",payuMoneyId);
+			        
+			        
+			        
+			        
+			        
+			        //out.println("Your payment with <b>Payment ID</b> is :    " + p_Id + "    is    "+"<br>");
+			        
+			        TblPaymentInfo p=null;		        	
+			        	
+			        String hash1;
+			        String email = request.getParameter("email");
+			        if(status=="failure"){
+			        	logger.debug("In failure");
+			        			        	
+			                if(additionalCharges!=null){
+			                	String hashSeq = additionalCharges+"|"+salt+"|"+status+"||||||"+udfStr5+"|"+udfStr4+"|"+udfStr3+"|"+udfStr2+"|"+udfStr1+"|"+email+"|"+firstname+"|"+productinfo+"|"+amount+"|"+txnid+"|";		
+					
+							hashStr=hashSeq.concat(key);
+					                        	logger.debug("Printing hashStr",hashStr);
+					                        hash1=paymentBillService.hashCal("SHA-512",hashStr);
+					                        	logger.debug("Printing hash1",hash1);					                       
+								if(r_h.equals(hash1)){
+									logger.debug("Successfull with additional charges" + "<br>");
+									logger.debug("Transaction details</b>:  " + "<br>");
+									logger.debug("<b>Transaction Id</b>:    " + txnid+"<br>");
+									logger.debug("<b>Product Info</b>:    " + productinfo+"<br>");
+									logger.debug("<b>Amount</b>:    " + amount+"<br>");
+									logger.debug("<b>additionalCharges</b>:    " + additionalCharges+"<br>");
+									logger.debug("<b>Status of Transaction</b>:    " + status+"<br>");
+									logger.debug("<b>Email</b>:    " + email+"<br>");
+									logger.debug("<b>Phone</b>:    " + phone+"<br>");
+					           }else{
+					        	   logger.debug("<b>Transaction details</b>:  "+"<br>");
+					        	   logger.debug("<b>Transaction Id</b>:    " + txnid+"<br>");
+					        	   logger.debug("<b>Product Info</b>:    " + productinfo+"<br>");
+					        	   logger.debug("<b>Amount</b>:    " + amount+"<br>");
+					        	   logger.debug("<b>additionalCharges</b>:    " + additionalCharges+"<br>");
+					        	   logger.debug("<b>Status of Transaction</b>:    " + status+"<br>");
+					        	   logger.debug("<b>Email</b>:    " + email+"<br>");
+					        	   logger.debug("<b>Phone</b>:    " + phone+"<br>");
+			                       }
+								
+			                }else{
+			                	String hashSeq = salt+"|"+status+"||||||"+udfStr5+"|"+udfStr4+"|"+udfStr3+"|"+udfStr2+"|"+udfStr1+"|"+email+"|"+firstname+"|"+productinfo+"|"+amount+"|"+txnid+"|";
+					
+										hashStr=hashSeq.concat(key);
+										logger.debug("hashStr",hashStr);
+											hash1=paymentBillService.hashCal("SHA-512",hashStr);				                       
+										logger.debug("hash1",hash1);
+									if(r_h.equals(hash1)){
+										logger.debug("Successfull"+"<br>");
+										logger.debug("<b>Transaction details</b>:  "+"<br>");
+										logger.debug("<b>Transaction Id</b>:    " + txnid+"<br>");
+										logger.debug("<b>Product Info</b>:    " + productinfo+"<br>");
+										logger.debug("<b>Amount</b>:    " + amount+"<br>");
+										logger.debug("<b>additionalCharges</b>:    " + additionalCharges+"<br>");
+										logger.debug("<b>Status of Transaction</b>:    " + status+"<br>");
+										logger.debug("<b>Email</b>:    " + email+"<br>");
+										logger.debug("<b>Phone</b>:    " + phone+"<br>");
+			                            
+			                            }else{                             	
+			                            	logger.debug("failure"+"<br>");
+			                            	logger.debug("<b>Transaction details</b>:  "+"<br>");
+			                            	logger.debug("<b>Transaction Id</b>:    " + txnid+"<br>");
+			                            	logger.debug("<b>Product Info</b>:    " + productinfo+"<br>");
+			                            	logger.debug("<b>Amount</b>:    " + amount+"<br>");
+			                            	logger.debug("<b>additionalCharges</b>:    " + additionalCharges+"<br>");
+			                            	logger.debug("<b>Status of Transaction</b>:    " + status+"<br>");
+			                            	logger.debug("<b>Email</b>:    " + email+"<br>");
+			                            	logger.debug("<b>Phone</b>:    " + phone+"<br>");
+			                            }
+			                }	
+			                
+			                	        			
+			        			
+			             //Success ended here   
+			        }else{
+				        	logger.debug("<b>Transaction details</b>:  "+"<br>");
+				            logger.debug("<b>Transaction Id</b>:    " + txnid+"<br>");
+				        	logger.debug("<b>Product Info</b>:    " + productinfo+"<br>");
+				        	logger.debug("<b>Amount</b>:    " + amount+"<br>");
+				        	logger.debug("<b>additionalCharges</b>:    " + additionalCharges+"<br>");
+				        	logger.debug("<b>Status of Transaction</b>:    " + status+"<br>");
+				        	logger.debug("<b>Email</b>:    " + email+"<br>");
+				        	logger.debug("<b>Phone</b>:    " + phone+"<br>");
+				        	
+				        	redirectAttributes.addFlashAttribute("status",
+		        					"<div class=\"success\" > System has failed !</div>");
+			        }
+			        
+			        
 			        TblUserInfo user=userLoginService.getUserByUId(userId);
 	                p= new TblPaymentInfo();
 	        			p.setPaymentId(p_Id);
@@ -327,26 +539,23 @@ public class PaymentGatewayController {
 	        			if(pay!=null){
 	        				map.put("paymentInfo", pay);
 	        				redirectAttributes.addFlashAttribute("status",
-		        					"<div class=\"success\" > Payment has done successfully !</div>");
+		        					"<div class=\"success\" > Payment information saved successfully !</div>");
 	        			}else{
 	        				redirectAttributes.addFlashAttribute("status",
 		        					"<div class=\"success\" > System not persisted payment information !</div>");
 	        			}
 			
 	        			return "paymentsuccess";
-		}catch(Exception e){
-			logger.error(e);
-			/*redirectAttributes.addFlashAttribute("status","<div class=\"failure\" >Exception failed transation /paymentSuccess !</div>");*/
-			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
-			s.setAttribute("url", request.getRequestURL());
-			s.setAttribute("exception", e.toString());				
-			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-			
+			}catch(Exception e){		
+				HttpSession s=request.getSession();
+			    s.setAttribute("statusLog",AppConstants.statusLog);
+				s.setAttribute("url", request.getRequestURL());
+				s.setAttribute("exception", e.toString());				
+				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+			    return "redirect:/";
+		    }
 		
 		
 	}

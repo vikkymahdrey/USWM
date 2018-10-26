@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.constant.PasswordGenerator;
 import com.team.app.domain.TblDeviceFeedback;
 import com.team.app.domain.TblDeviceFeedbackType;
 import com.team.app.domain.TblPaymentInfo;
@@ -82,7 +85,7 @@ public class ConsumerInstrumentController {
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> userLoginFromApp(@RequestBody String received){
+	public ResponseEntity<String> userLoginFromApp(@RequestBody String received,HttpServletRequest request){
 		logger.info(" /POST /login API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -130,7 +133,7 @@ public class ConsumerInstrumentController {
 	
 	/*Refreshing unizen access token from base token*/
 	@RequestMapping(value = "/getRefreshToken", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getRefreshTokenHandler(@RequestHeader(value = AppConstants.HTTP_HEADER_BASE_TOKEN_NAME) String refreshToken){
+	public ResponseEntity<String> getRefreshTokenHandler(@RequestHeader(value = AppConstants.HTTP_HEADER_BASE_TOKEN_NAME) String refreshToken,HttpServletRequest request){
 		logger.info("/POST /getRefreshToken API ",refreshToken);		
 		ResponseEntity<String> responseEntity = null;	
 		
@@ -171,7 +174,7 @@ public class ConsumerInstrumentController {
 	
 	
 	@RequestMapping(value = "/setPassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> setPasswordHandler(@RequestBody String received){
+	public ResponseEntity<String> setPasswordHandler(@RequestBody String received,HttpServletRequest request){
 		logger.info(" /POST /setPassword API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -223,10 +226,11 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getDevices", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getDevicesHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+	public ResponseEntity<String> getDevicesHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken,HttpServletRequest request){
 		logger.info(" /POST /getDevices API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
+		
 		try{		
 			obj=new JSONObject();
 			obj=(JSONObject)new JSONParser().parse(received);
@@ -242,7 +246,7 @@ public class ConsumerInstrumentController {
 			
 			if(String.valueOf(obj.get("userId"))!=null){
 					TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
-									  
+								  
 					  if(userInfo!=null){ 
 						  
 						  List<UserDeviceMapping> udmList=userInfo.getUserDeviceMappings();
@@ -286,7 +290,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getDeviceFeedbackType", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getDeviceFeedbackTypeHandler(@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+	public ResponseEntity<String> getDeviceFeedbackTypeHandler(@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken,HttpServletRequest request){
 		logger.info(" /POST /getDeviceFeedbackType API ");
 		ResponseEntity<String> responseEntity = null;
 		
@@ -330,7 +334,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWaterConsumptions", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getWaterConsumptionsHandler(@RequestBody String received){
+	public ResponseEntity<String> getWaterConsumptionsHandler(@RequestBody String received,HttpServletRequest request){
 		logger.info(" /POST /getWaterConsumptions API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -437,7 +441,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getGraphUnits", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getGraphUnits(@RequestBody String received){
+	public ResponseEntity<String> getGraphUnits(@RequestBody String received,HttpServletRequest request){
 		logger.info(" /POST /getGraphUnits API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -496,6 +500,7 @@ public class ConsumerInstrumentController {
 										JSONObject json=null;
 											json=new JSONObject();
 											json.put("devEUI", udm.getDevEUI());
+											json.put("nodeName", udm.getDevNode());
 											json.put("devices", arr);
 											jsonArr.add(json);
 									}
@@ -527,7 +532,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/paymentInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> paymentInfoHandler(@RequestBody String received){
+	public ResponseEntity<String> paymentInfoHandler(@RequestBody String received,HttpServletRequest request){
 		logger.info(" /POST /paymentInfo API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -600,7 +605,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/setFeedback", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> setFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+	public ResponseEntity<String> setFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken,HttpServletRequest request){
 		logger.info(" /POST /setFeedback API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -625,7 +630,7 @@ public class ConsumerInstrumentController {
 					TblUserInfo userInfo=userLoginService.getUserByUserId(String.valueOf(obj.get("userId")).trim());
 									  
 					  if(userInfo!=null){
-						  
+						String ticketId = new PasswordGenerator().randomString(6); 
 						TblDeviceFeedback f=null;
 							f=new TblDeviceFeedback();
 							f.setDevEUI(String.valueOf(obj.get("devEUI")));
@@ -634,8 +639,9 @@ public class ConsumerInstrumentController {
 							f.setPhoneDeviceVersion(String.valueOf(obj.get("phoneDeviceVersion")));
 							f.setTextarea(String.valueOf(obj.get("textarea")));
 							f.setType(String.valueOf(obj.get("type")));
+							f.setTicketId("SWC"+ticketId);
 							f.setTblUserInfo(userInfo);
-							f.setStatus(AppConstants.IND_A);
+							f.setStatus(AppConstants.open);
 							f.setCreatedAt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
 							f.setUpdatedAt(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));							
 							
@@ -666,7 +672,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFeedbackInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+	public ResponseEntity<String> getFeedbackHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken,HttpServletRequest request){
 		logger.info(" /POST /getFeedback API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		
@@ -737,7 +743,7 @@ public class ConsumerInstrumentController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getPaymentInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getPaymentInfoHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken){
+	public ResponseEntity<String> getPaymentInfoHandler(@RequestBody String received,@RequestHeader(value = AppConstants.HTTP_HEADER_TOKEN_NAME) String xToken,HttpServletRequest request){
 		logger.info(" /POST /getPaymentInfo API ", received);
 		ResponseEntity<String> responseEntity = null;
 		JSONObject obj=null;		

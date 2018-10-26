@@ -19,6 +19,7 @@ import com.team.app.constant.AppConstants;
 import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.logger.AtLogger;
+import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.KeywordService;
 import com.team.app.service.OrganisationService;
 import com.team.app.service.UserLoginService;
@@ -35,24 +36,27 @@ public class LoginController {
 	
 	@Autowired
 	private KeywordService keywordService;
+	
+	@Autowired
+	private ConsumerInstrumentService consumerInstrumentServiceImpl;
 		
 	
 	@RequestMapping(value= {"/"})
-	public String defaultURL(HttpServletRequest request,HttpSession session,Map<String, Object> map){
+	public String defaultURL(HttpServletRequest request,HttpSession session,Map<String, Object> map) {
+		logger.debug("In / URL");
 		
-		String statusLog=String.valueOf(session.getAttribute("statusLog"));
+		String statusLog=(String)session.getAttribute("statusLog");		
 		if(statusLog!=null){
-			 logger.debug("In / status as ,",statusLog);
-			 	map.put("url",String.valueOf(session.getAttribute("url")));
+				map.put("statusLog",statusLog);
+				map.put("url",String.valueOf(session.getAttribute("url")));
 			 	map.put("exception",String.valueOf(session.getAttribute("exception")));
-			 	map.put("className",String.valueOf(session.getAttribute("className")));
+			 	map.put("className", String.valueOf(session.getAttribute("className")));
 			 	map.put("methodName",String.valueOf(session.getAttribute("methodName")));
-			 	map.put("lineNumber",String.valueOf(session.getAttribute("lineNumber")));
-			 	map.put("statusLog",String.valueOf(session.getAttribute("statusLog")));
-			 	session.invalidate();
-		}	
-			
-			 return "index";		
+			 	map.put("lineNumber", String.valueOf(session.getAttribute("lineNumber")));
+			 	session.invalidate();			 			 	
+		}
+		
+		return "index";		
 	}
 	
 	
@@ -77,11 +81,10 @@ public class LoginController {
 	public ModelAndView loginUser(HttpServletRequest request, HttpSession session, HttpServletResponse response,RedirectAttributes redirectAttributes) {
 		logger.debug("in /onSubmitlogin");
 		try{
-		
 			String username = request.getParameter("uname") == null ? "" : request
 					.getParameter("uname");
-			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");				
-			
+			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");		
+		
 	        TblUserInfo userInfo=null;
 	        boolean needToChangePwd=false;
 			
@@ -130,27 +133,26 @@ public class LoginController {
 	    					"<div class='failure'>Incorrect role identified!</div");
 	        		return new ModelAndView("redirect:/");
 	        	}
-	        }else{
-	        	session.setAttribute("userInfo", "");
-	        	session.setAttribute("msg", "Invalid Username/Password !");
+	        }else{	        	
 	        	redirectAttributes.addFlashAttribute("status","<div class='failure'>Invalid Username/Password !</div");
 	        	return new ModelAndView("redirect:/");
 	        }
-		}catch(Exception e){			 		        
-		        HttpSession s=request.getSession();
-		        s.setAttribute("statusLog",AppConstants.statusLog);
-				s.setAttribute("url", request.getRequestURL());
-				s.setAttribute("exception", e.toString());				
-				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		        return new ModelAndView("redirect:/");
-		}
-	
+	        
+		}catch(Exception e){		
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return new ModelAndView("redirect:/");
+	    }
+		
 	}
 	
 	
-	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
+	 @RequestMapping(value= {"/home"}, method=RequestMethod.GET) 
 	 public String home(Map<String,Object> map,HttpServletRequest request){
 		try{  
 			List<TblUserInfo> userInfoList = userLoginService.getUserInfos();
@@ -160,29 +162,34 @@ public class LoginController {
 			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);
 			  
+				
 			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
 				map.put("organisations", orgMapped);
 				map.put("orgCount",String.valueOf(orgMapped.size()));
 				
 				logger.debug("orgCount as: ",String.valueOf(orgMapped.size()));
 				
+			/*Long curMonthWaterUnits=consumerInstrumentServiceImpl.getWaterConsumptionUnitsByCurMonth();	
+				map.put("curMonthWaterUnits",curMonthWaterUnits);*/
+				
 			/*long userCount=organisationService.getLoraServerUsers();	
 				map.put("userCount", String.valueOf(userCount));
 					logger.debug("userCount as: ",userCount);*/
 				
 			return "adminDashboard";
-		}catch(Exception e){
+	   }catch(Exception e){	
 			HttpSession s=request.getSession();
-	        s.setAttribute("statusLog",AppConstants.statusLog);
+		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
 			s.setAttribute("exception", e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	        return "redirect:/";
-		}
-	    	
+		    return "redirect:/";
+	   }
 	}
+	    	
+	
 	
 	@RequestMapping(value= {"/inValid"})
 	public String inValidCredentials(HttpServletRequest request){
@@ -227,9 +234,9 @@ public class LoginController {
 			
 			
 			@RequestMapping(value= {"/changePasswordSubmit"},method=RequestMethod.POST)
-			public String changePwdSubmitHandler(HttpSession session,HttpServletRequest request,RedirectAttributes redirectAttributes){
+			public String changePwdSubmitHandler(HttpSession session,HttpServletRequest request,RedirectAttributes redirectAttributes) throws Exception{
 				logger.debug("IN ChangePassword Controller....");
-				try{
+			
 					TblUserInfo user=(TblUserInfo)session.getAttribute("user");
 						String password=request.getParameter("pwd");
 						String oldpwd=request.getParameter("oldpwd");
@@ -247,16 +254,7 @@ public class LoginController {
 				        
 						return "redirect:/";
 						
-				}catch(Exception e){
-					HttpSession s=request.getSession();
-			        s.setAttribute("statusLog",AppConstants.statusLog);
-					s.setAttribute("url", request.getRequestURL());
-					s.setAttribute("exception", e.toString());				
-					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
-					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
-					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			        return "redirect:/";
-				}
+				
 			}
 			
 			

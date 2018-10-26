@@ -88,9 +88,12 @@ public class AppConstants {
 	
 	
 	
+	//Feedback status
 	
-	
-	
+	public static final String open = "Open";
+	public static final String close = "Close";
+	public static final String pending = "Pending";
+	public static final String reopen = "ReOpen";
 	
 	
 	

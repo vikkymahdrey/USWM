@@ -46,9 +46,11 @@
 	
 	<script  type="text/javascript">
 	
-	 function loadScript(){		 
-		 var stsLog='<%=statusLog%>';		
-		 if(stsLog!='null'){			 
+	 function loadScript(){	
+	
+		 var statusLog='<%=statusLog%>';
+		
+		 if(statusLog!='null'){			 
 			$("#loginAudit").modal(); 
 		 }
 		 
@@ -105,13 +107,14 @@ function validate() {
 	
 </head>
 <body class="hold-transition login-page" onload="loadScript()">
-		<%String log=(String)request.getAttribute("statusLog");
+		<%String statusLogg=(String)request.getAttribute("statusLog");
 			String url=(String)request.getAttribute("url");
 				String exception=(String)request.getAttribute("exception");
-					String fullClassName=(String)request.getAttribute("fullClassName");
-						String className=(String)request.getAttribute("className");
-							String methodName=(String)request.getAttribute("methodName");
-								String lineNumber=(String)request.getAttribute("lineNumber");
+					String className=(String)request.getAttribute("className");
+						String methodName=(String)request.getAttribute("methodName");	
+							String lineNumber=(String)request.getAttribute("lineNumber");	
+				
+					
 				%>	
 <div class="wrapper">
 <%
@@ -198,33 +201,37 @@ function validate() {
 																	    <thead>
 																	      <tr>
 																	        <th>URL</th>
+																	        <th>Status</th>
 																	        <th>Exception_Message</th>
 																	        <th>ClassName</th>
 																	        <th>MethodName</th>
-																	        <th>LineNumber</th>																	      											        
+																	        <th>LineNumber</th>
+																	        																      											        
 																	      </tr>
 																	    </thead>
 																	    <tbody>	
 																	    <tr>
-																	    <%if(log!=null){%>																	    	
+																	    <%if(statusLogg!=null){%>																	    	
 																	   
 																		    <td>
 																		    	<%=url %>
+																		    </td>																		    
+																		    <td>
+																		      	<%=statusLogg %>
+																		    </td>																		   
+																		    <td>
+																		      	<%=exception%>
 																		    </td>
-																		    
 																		     <td>
-																		      	<%=exception %>
+																		      	<%=className%>
 																		    </td>
-																		   
-																		    <td>
-																		      	<%=className %>
-																		    </td>
-																		    <td>
-																		      	<%=methodName %>
-																		    </td>
-																		    <td>
-																		      	<%=lineNumber %>
-																		    </td>
+																		     <td>
+																		      	<%=methodName%>
+																		     </td>
+																		     <td>
+																		      	<%=lineNumber%>
+																		     </td>
+																		    
 																		    
 																		  <% }%>  
 																	    </tr>												 

@@ -3,7 +3,10 @@ package com.team.app.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,6 +22,11 @@ public interface UserDeviceMappingDao extends JpaRepository<UserDeviceMapping, S
 
 	@Query("from UserDeviceMapping udm where udm.orgId=:orgId and udm.status='A' ")
 	List<UserDeviceMapping> getUserDeviceByOrgId(@Param("orgId") String orgId);
+	
+	@Modifying
+	@Query(value="delete from user_device_mapping where appId=?1 and devEUI=?2 and userId=?3",nativeQuery = true)
+	@Transactional
+	void deleteDevLoraNode(@Param("appId") String appId, @Param("devEUI") String devEUI, @Param("userId") String userId);
 
 
 
