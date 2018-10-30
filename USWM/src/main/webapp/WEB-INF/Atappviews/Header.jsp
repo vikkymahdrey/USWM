@@ -156,6 +156,22 @@
           
         </li>
         
+         <li class="treeview"> 
+          <a href="#">
+            <i class="fa fa-upload"></i>
+            <span><b>Upload</b></span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">1</span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="uploadUserSubscription"><i class="fa fa-circle-o"></i><b>User Upload</b></a></li>
+                       
+          </ul>
+          
+             
+        </li>
+        
         
         <li class="treeview"> 
           <a href="#">
@@ -287,6 +303,8 @@
           
              
         </li>
+        
+       
         
         
         
