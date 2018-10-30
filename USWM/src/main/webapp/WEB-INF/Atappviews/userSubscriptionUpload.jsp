@@ -5,7 +5,6 @@
 
 <%@page import="com.team.app.constant.AppConstants"%>
 <%@page import="com.team.app.domain.*"%>
-<%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
 <html lang="en">
   <head>
@@ -266,7 +265,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-dashboard"></span>&nbsp;&nbsp;<b>Sync-Water Meter </b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-upload"></span>&nbsp;&nbsp;<b>User Subscription Upload </b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -274,7 +273,7 @@ function getDevEUIByAppID()
    						  <div class="row" >
     				    	<div class="col-sm-6">	
     				    	
-    				    	<form name="form1" action="syncDev" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
 								  <tr>								  		
@@ -345,7 +344,7 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									
-									<%-- <tr>	
+									<%--  <tr>	
 									   <td id="dId" align="right"><b><%=(String)request.getAttribute("devN")%></b></td>
 									   
 										 <td>
@@ -353,14 +352,13 @@ function getDevEUIByAppID()
 										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
-									</tr> --%>
+									</tr>  --%>
 									
 									
 									<tr>	
-										
-											<td> <input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Download"/></td>
-											<td> <input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Upload"/></td>
-										 
+											<td></td>								
+											<td align="right"> <input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Download"/>
+											 	<input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Upload"/></td>										 
 									</tr>	
 								</table>	
 							 </form> 
