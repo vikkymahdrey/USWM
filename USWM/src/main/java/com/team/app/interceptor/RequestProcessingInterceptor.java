@@ -96,7 +96,8 @@ public class RequestProcessingInterceptor extends HandlerInterceptorAdapter {
 								}
 						 }
 				    }
-				}else {					
+				}else {		
+					logger.debug("In session active: ");
 					request.getRequestDispatcher("/"+page).forward(request, response);
 				}
 				

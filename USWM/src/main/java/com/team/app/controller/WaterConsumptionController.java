@@ -34,9 +34,7 @@ import com.team.app.utils.JsonUtil;
 @SessionAttributes({"status"})
 public class WaterConsumptionController {
 
-	private static final AtLogger logger = AtLogger.getLogger(WaterConsumptionController.class);
-	
-	
+	private static final AtLogger logger = AtLogger.getLogger(WaterConsumptionController.class);	
 		
 	@Autowired
 	private ConsumerInstrumentService consumerInstrumentServiceImpl;
@@ -65,7 +63,8 @@ public class WaterConsumptionController {
 			 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);
 					return "AdminWaterConsumptionCal";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -73,7 +72,7 @@ public class WaterConsumptionController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 		 
@@ -97,7 +96,8 @@ public class WaterConsumptionController {
 			   map.put("frames", frm);
 		     }	
 		     return "EndUserWaterConsumption";
-		  }catch(Exception e){		
+		  }catch(Exception e){
+			  	e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -105,7 +105,7 @@ public class WaterConsumptionController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 		
 	 }
@@ -160,7 +160,8 @@ public class WaterConsumptionController {
 	        	//redirectAttributes.addAllAttributes(request.getParameterMap());
 	        }
 	        return "WaterConsumptionVal";
-	    }catch(Exception e){		
+	    }catch(Exception e){
+	    	e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -168,7 +169,7 @@ public class WaterConsumptionController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }			
 		 
 	 }
@@ -252,6 +253,138 @@ public class WaterConsumptionController {
 	 }
 	
 	
+	/* Ajax calling for /getGraphOnDemand */	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value= {"/getGraphOnDemand"}, method=RequestMethod.POST)
+    public @ResponseBody String getGraphOnDemandHandler(HttpServletRequest request,HttpSession session) {
+		String userId=(String)session.getAttribute("userId");	
+		String devId=request.getParameter("devId");
+		String fDate=request.getParameter("fromDate");		
+		String tDate=request.getParameter("toDate");
+			
+		logger.debug("devNode",devId);
+		logger.debug("fromDate",fDate);
+		logger.debug("toDate",fDate);
+	
+		
+		String returnVal="";
+		try{
+			TblUserInfo user=userLoginService.getUserByUserId(userId);
+			if(user!=null){
+				JSONArray dateUnitArr=null;
+					dateUnitArr=new JSONArray();
+					
+				JSONObject json=null;	
+					json=new JSONObject();	
+				
+			
+			
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        Date fromDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(fDate)));
+		        Date toDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date(tDate)));
+		        if (fDate.compareTo(tDate) > 0) {
+		        	logger.debug("Greater");
+		        	json.put("result",dateUnitArr);
+					returnVal=JsonUtil.objToJson(json);
+					   return returnVal;
+		        }
+		        
+		        
+		        
+		        Object[] frames=consumerInstrumentServiceImpl.getUserDashboardGraphOnSubmit(devId,fromDate,toDate);
+		        logger.debug("resultant",frames[0]);
+		      
+		       if(String.valueOf(frames[0])!=null && !String.valueOf(frames[0]).isEmpty()){
+					String[] result=String.valueOf(frames[0]).split(",");
+					logger.debug("result length",result.length);				
+					
+								
+						for(int i=0;i<result.length;i++){							
+							String[] jsonVal=result[i].split("&");
+							JSONObject js=null;
+								js=new JSONObject();
+								js.put("xaxis", jsonVal[0]);
+								js.put("units", Integer.parseInt(jsonVal[1]));
+								dateUnitArr.add(js);
+																			
+						}
+													
+						json.put("result",dateUnitArr);
+						returnVal=JsonUtil.objToJson(json);
+					
+					    logger.debug("Resultant JSON String ",returnVal);
+		       }else{
+		    	   json.put("result","No Content");
+		    	   returnVal=JsonUtil.objToJson(json);
+		       }
+			}   
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+			return returnVal;
+		 
+	 }
+	
+	
+	
+	/* Ajax calling for /getGraphVal */	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value= {"/getGraphOnBodyLoad"}, method=RequestMethod.GET)
+    public @ResponseBody String getGraphOnBodyLoadHandler(HttpServletRequest request, HttpSession session) {
+		logger.debug("In /getGraphOnBodyLoad");
+		String userId=(String)session.getAttribute("userId");		
+		String returnVal="";
+		try{
+			TblUserInfo user=userLoginService.getUserByUserId(userId);
+			if(user!=null){
+				JSONArray dateUnitArr=null;
+					dateUnitArr=new JSONArray();
+					
+				JSONObject json=null;	
+					json=new JSONObject();				
+			
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        Date currDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date())); 
+		        	logger.debug("Date as:",currDate);
+		        List<UserDeviceMapping> udmList=user.getUserDeviceMappings();
+		       if(udmList!=null){
+		    	   for(UserDeviceMapping udm: udmList){
+		    		   Object[] frames=consumerInstrumentServiceImpl.getUserDashboardGraphsOnLoad(udm.getAppId(),udm.getDevEUI(),currDate);
+		    		   
+		    		   logger.debug("resultant",frames[0]);
+		    		   
+			    		   if(String.valueOf(frames[0])!=null && !String.valueOf(frames[0]).isEmpty()){
+			   				String[] result=String.valueOf(frames[0]).split(",");
+			   				logger.debug("result length",result.length);
+			   						   					
+			   					for(int i=0;i<result.length;i++){							
+			   						String[] jsonVal=result[i].split("&");
+			   						JSONObject js=null;
+			   							js=new JSONObject();
+			   							js.put("xaxis", jsonVal[0]);
+			   							js.put("units", Integer.parseInt(jsonVal[1]));
+			   							dateUnitArr.add(js);
+			   																		
+			   					}		   	       
+			    	       }					
+		             }
+		    	   
+		    	   	json.put("result",dateUnitArr);
+ 					returnVal=JsonUtil.objToJson(json);
+  				    logger.debug("Resultant JSON String ",returnVal);
+		      }else{
+	   	    	   json.put("result","No Content");
+	   	    	   returnVal=JsonUtil.objToJson(json);
+	   	      }
+	       }
+		}catch(Exception e){
+			logger.error(e);
+		}
+			return returnVal;
+		 
+	 }
+	
+	
 	@RequestMapping(value= {"/endUserWaterConsumptionUnits"}, method=RequestMethod.POST)
     public String endUserWaterConsumptionUnitsHandler(HttpServletRequest request, Map<String,Object> map,RedirectAttributes redirectAttributes) {
 	  try{
@@ -277,7 +410,8 @@ public class WaterConsumptionController {
 	        }
 	        return "forward:/endUserWaterConsumption";
 		
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -285,7 +419,7 @@ public class WaterConsumptionController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }			
 		 
 	 }

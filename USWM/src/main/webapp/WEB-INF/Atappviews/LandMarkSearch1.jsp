@@ -7,6 +7,7 @@
 <%@page import="com.team.app.dto.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
+<%@ page errorPage="error.jsp" %> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">

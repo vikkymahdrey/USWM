@@ -73,7 +73,8 @@ public class UserInfoController {
 					}
 						map.put("userInfos", userInfos);
 						return "userInfo";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -81,7 +82,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }			 
 	 }
 	
@@ -100,7 +101,8 @@ public class UserInfoController {
 					map.put("frames", frames);
 				}
 				return "frames";				
-			}catch(Exception e){		
+			}catch(Exception e){
+				e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -108,7 +110,7 @@ public class UserInfoController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 	 }
 	
@@ -126,7 +128,8 @@ public class UserInfoController {
 					map.put("frames", frames);
 				}
 			return "userFrames";
-	}catch(Exception e){		
+	}catch(Exception e){	
+		e.printStackTrace();
 		HttpSession s=request.getSession();
 	    s.setAttribute("statusLog",AppConstants.statusLog);
 		s.setAttribute("url", request.getRequestURL());
@@ -134,7 +137,7 @@ public class UserInfoController {
 		s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 		s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 		s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-	    return "redirect:/";
+	    return "redirect:/exception";
     }	
 			
 					
@@ -151,7 +154,8 @@ public class UserInfoController {
 				   List<Role> roles=userLoginService.getRoles();
 						map.put("roles", roles);
 							return "UserMgmt";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -159,7 +163,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 	}
@@ -173,7 +177,8 @@ public class UserInfoController {
 		   List<Role> roles=userLoginService.getRoles();
 					map.put("roles", roles);
 		   return "OrganisationUser";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -181,7 +186,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 	}
 	
@@ -196,7 +201,8 @@ public class UserInfoController {
 		   List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 				map.put("keyTypes",keyTypes);		
 		   return "AutoSync";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -204,7 +210,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 	}
@@ -489,7 +495,8 @@ public class UserInfoController {
 			   	List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 					map.put("keyTypes",keyTypes);	
 		   				return "deleteNode";
-			}catch(Exception e){		
+			}catch(Exception e){
+				e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -497,7 +504,7 @@ public class UserInfoController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 		
 	}
@@ -513,7 +520,8 @@ public class UserInfoController {
 		   		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 					map.put("keyTypes",keyTypes);	
 		   				return "deleteAllNode";
-			}catch(Exception e){		
+			}catch(Exception e){	
+				e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -521,7 +529,7 @@ public class UserInfoController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 		
 	}
@@ -722,7 +730,8 @@ public class UserInfoController {
 				map.put("subscribedUsers", "");	
 			}
 			return "userReport";
-		}catch(Exception e){		
+		}catch(Exception e){	
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -730,7 +739,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 		
@@ -749,7 +758,8 @@ public class UserInfoController {
 				}
 				
 				return "personalInfo";
-		}catch(Exception e){		
+		}catch(Exception e){	
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -757,7 +767,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 	 }
 	
@@ -786,7 +796,8 @@ public class UserInfoController {
 						"<div class=\"failure\" >Incorrect UserId!</div>");	
 			}
 			return "redirect:/personalInfo";	
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -794,7 +805,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 	 }
 	
@@ -809,7 +820,8 @@ public class UserInfoController {
 					 List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 							map.put("keyTypes",keyTypes);	
 						      return "addDevice";		
-			}catch(Exception e){		
+			}catch(Exception e){
+				e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -817,7 +829,7 @@ public class UserInfoController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 	 }
 	@RequestMapping(value= {"/UserSearch"}, method=RequestMethod.GET)
@@ -832,6 +844,7 @@ public class UserInfoController {
 				 return "UserSearch";
 		
 		}catch(Exception e){		
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -839,7 +852,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    } 
 	}
 	
@@ -1017,7 +1030,8 @@ public class UserInfoController {
 			TblUserInfo u=userLoginService.getUserByUserId(user.getId());
 			map.put("userInfo", u);
 					 return "UserDeviceMapping";
-		}catch(Exception e){		
+		}catch(Exception e){	
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -1025,7 +1039,7 @@ public class UserInfoController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 	}
 	

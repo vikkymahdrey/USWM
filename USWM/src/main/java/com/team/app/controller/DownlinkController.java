@@ -58,7 +58,8 @@ public class DownlinkController {
 				map.put("configs",configs);		
 				 return "downlinkConfig";
 	
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -66,7 +67,7 @@ public class DownlinkController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 			
 		
@@ -102,7 +103,8 @@ public class DownlinkController {
 			List<TblRetryConfig> retryConfig=downlinkService.getDownlinkForRetryConfig();
 				map.put("retryConfig",retryConfig);		
 				 return "retryConfig";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -110,7 +112,7 @@ public class DownlinkController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 				 
 		
@@ -260,7 +262,8 @@ public class DownlinkController {
 					List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
 						map.put("keyTypes",keyTypes);	
 					 	return "downlinkQueue";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -268,7 +271,7 @@ public class DownlinkController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }	 	
 		
 	}

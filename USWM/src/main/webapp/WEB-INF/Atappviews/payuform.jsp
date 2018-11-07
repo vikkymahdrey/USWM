@@ -3,6 +3,7 @@
 <%@ page import="java.security.*"%>
 <%@ page import="com.team.app.constant.*"%>
 <%@ page import="com.team.app.*"%>
+<%@ page errorPage="error.jsp" %> 
 
 
 <html lang="en">

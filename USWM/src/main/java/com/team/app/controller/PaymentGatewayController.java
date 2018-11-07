@@ -53,7 +53,8 @@ public class PaymentGatewayController {
 					map.put("paymentHistory", paymentHistory);					
 					
 						return "payuform";
-		}catch(Exception e){		
+		}catch(Exception e){	
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -61,7 +62,7 @@ public class PaymentGatewayController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 	}
@@ -356,7 +357,8 @@ public class PaymentGatewayController {
 			
 	        			return "paymentsuccess";
 		
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -364,7 +366,7 @@ public class PaymentGatewayController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }
 		
 		
@@ -546,7 +548,8 @@ public class PaymentGatewayController {
 	        			}
 			
 	        			return "paymentsuccess";
-			}catch(Exception e){		
+			}catch(Exception e){
+				e.printStackTrace();
 				HttpSession s=request.getSession();
 			    s.setAttribute("statusLog",AppConstants.statusLog);
 				s.setAttribute("url", request.getRequestURL());
@@ -554,7 +557,7 @@ public class PaymentGatewayController {
 				s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 				s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 				s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-			    return "redirect:/";
+			    return "redirect:/exception";
 		    }
 		
 		

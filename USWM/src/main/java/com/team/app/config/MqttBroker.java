@@ -3,6 +3,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import javax.transaction.Transactional;
 
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Service;
 import com.team.app.dao.DeviceInfoDao;
 import com.team.app.dao.DownlinkQueueDao;
 import com.team.app.dao.FrameDao;
+import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.LoraFrame;
+import com.team.app.domain.TblDeviceDetail;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.DownlinkService;
@@ -75,8 +78,6 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	    }
 	}    
 	
-	
-/*
 	@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
@@ -476,9 +477,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			e.printStackTrace();
 		}
 	}
-	*/
 	
-	@Transactional
+	
+	/*@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -558,7 +559,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 
 

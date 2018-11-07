@@ -28,6 +28,8 @@ public interface ConsumerInstrumentService {
 	public LoraFrame getLoraFrameByDevEUIAndAppID(String devId, String appId)throws Exception;
 	public Long getWaterConsumptionUnitsByCurMonth()throws Exception;
 	public Long getTotalWaterUnitsFrmToDate(String appId, String devNode, Date fromDate, Date toDate)throws Exception;
+	public Object[] getUserDashboardGraphsOnLoad(String appId, String devEUI, Date currDate)throws Exception;
+	public Object[] getUserDashboardGraphOnSubmit(String devId, Date fromDate, Date toDate)throws Exception;
 	
 	
 	

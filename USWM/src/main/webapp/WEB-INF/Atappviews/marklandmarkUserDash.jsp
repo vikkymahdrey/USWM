@@ -7,6 +7,7 @@
 <%@page import="com.team.app.dto.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
+<%@ page errorPage="error.jsp" %> 
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -18,7 +19,7 @@
     
 
   <%
-	List<Area> areas=(List<Area>)request.getAttribute("areas");
+	List<Area> areas=(List<Area>)request.getSession().getAttribute("areas");
 	%>  
   <script type="text/javascript">
 	 
@@ -31,6 +32,7 @@
 	  
 	 
 	function loadScript() {
+		
 			cityLat = document.getElementById("cityLat").value;
 			cityLon = document.getElementById("cityLon").value;
 			try {
@@ -64,7 +66,7 @@
 		    
 		  }); */
 		}catch(e){
-			aler(e);	
+			alert(e);	
 		}
 	}
 

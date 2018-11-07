@@ -1,7 +1,9 @@
 <%@page import="java.util.*"%>
 <%@page import="com.team.app.constant.*"%>
 <%@page import="com.team.app.domain.*"%>
+<%@ page errorPage="error.jsp" %> 
 <header class="main-header" >
+
    
 	    <a href="#" class="logo affix">
 			    <svg width="135px" height="50px" >

@@ -2,7 +2,7 @@
      Author     : Vikky
 --%>
 
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>

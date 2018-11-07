@@ -50,7 +50,8 @@ public class APLConfigController {
 				 map.put("areaList",areaList);
 			 }
 			 return "area";
-		}catch(Exception e){		
+		}catch(Exception e){	
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -58,7 +59,7 @@ public class APLConfigController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }		
 	}
 	
@@ -73,7 +74,8 @@ public class APLConfigController {
 				logger.debug("printing orgId as: ",orgId);
 			map.put("orgId", orgId);
 				 return "LandMarkSearch1";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -81,7 +83,7 @@ public class APLConfigController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }		
 		
 	}
@@ -107,7 +109,8 @@ public class APLConfigController {
 			map.put("areas",areaList);
 				
 			 return "marklandmark";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -115,7 +118,7 @@ public class APLConfigController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }		
 		
 	}
@@ -140,7 +143,8 @@ public class APLConfigController {
 			map.put("areas",areaList);
 				
 			 return "marklandmarkdash";
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -148,7 +152,7 @@ public class APLConfigController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	    }		
 		
 		
@@ -177,19 +181,20 @@ public class APLConfigController {
 			
 			map.put("areas",areaList);
 			map.put("landmarkId", user.getLandmark().getId());
-				
-			 return "marklandmarkUserDash";
-		}catch(Exception e){		
+			return "marklandmarkUserDash";
+			
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
-			s.setAttribute("exception", e.toString());				
+			s.setAttribute("exception",e.toString());				
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
-	    }		
-		
+		    return "redirect:/exception";
+	    }	
+		 
 	}
 	
 	
@@ -339,7 +344,8 @@ public class APLConfigController {
 						map.put("placeList",placeList);
 						map.put("areas", a);
 						return "place";	
-				}catch(Exception e){		
+				}catch(Exception e){
+					e.printStackTrace();
 					HttpSession s=request.getSession();
 				    s.setAttribute("statusLog",AppConstants.statusLog);
 					s.setAttribute("url", request.getRequestURL());
@@ -347,7 +353,7 @@ public class APLConfigController {
 					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-				    return "redirect:/";
+				    return "redirect:/exception";
 			    }			
 				
 			}
@@ -361,7 +367,8 @@ public class APLConfigController {
 					map.put("landmarkList",landmarkList);
 					map.put("place", place);
 					return "landmark";
-				}catch(Exception e){		
+				}catch(Exception e){
+					e.printStackTrace();
 					HttpSession s=request.getSession();
 				    s.setAttribute("statusLog",AppConstants.statusLog);
 					s.setAttribute("url", request.getRequestURL());
@@ -369,7 +376,7 @@ public class APLConfigController {
 					s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 					s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 					s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-				    return "redirect:/";
+				    return "redirect:/exception";
 			    }			
 			}
 			

@@ -7,6 +7,7 @@
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
+<%@ page errorPage="error.jsp" %>  
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -50,95 +51,246 @@
  	<script src="plugins/knob/jquery.knob.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC9Qem9w4qe_9EqmMXJql00Qvkv1yB9wcU&sensor=false" type="text/javascript"></script>
  	
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
  	
   <script type="text/javascript">
+  function reload(){
+	  alert("graph refresh");
+  }
+
   $(function () {
-	    /* jQueryKnob */
-	      $(".knob").knob({
-	      /*change : function (value) {
-	       //console.log("change : " + value);
-	       },
-	       release : function (value) {
-	       console.log("release : " + value);
-	       },
-	       cancel : function () {
-	       console.log("cancel : " + this.value);
-	       },*/
-	      draw: function () {
-
-	        // "tron" case
-	        if (this.$.data('skin') == 'tron') {
-
-	          var a = this.angle(this.cv)  // Angle
-	              , sa = this.startAngle          // Previous start angle
-	              , sat = this.startAngle         // Start angle
-	              , ea                            // Previous end angle
-	              , eat = sat + a                 // End angle
-	              , r = true;
-
-	          this.g.lineWidth = this.lineWidth;
-
-	          this.o.cursor
-	          && (sat = eat - 0.3)
-	          && (eat = eat + 0.3);
-
-	          if (this.o.displayPrevious) {
-	            ea = this.startAngle + this.angle(this.value);
-	            this.o.cursor
-	            && (sa = ea - 0.3)
-	            && (ea = ea + 0.3);
-	            this.g.beginPath();
-	            this.g.strokeStyle = this.previousColor;
-	            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-	            this.g.stroke();
-	          }
-
-	          this.g.beginPath();
-	          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-	          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-	          this.g.stroke();
-
-	          this.g.lineWidth = 2;
-	          this.g.beginPath();
-	          this.g.strokeStyle = this.o.fgColor;
-	          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-	          this.g.stroke();
-
-	          return false;
-	        }
-	      }
-	    });
-	    /* END JQUERY KNOB */
-	    
-	   
-	  });
-	 
+	  
+	   /*   $('#datetimepicker1').datetimepicker({maxDate: moment()});
+		  $('#datetimepicker2').datetimepicker({maxDate: moment()}); */
+	  $('#datetimepicker1').datetimepicker();
+	  $('#datetimepicker2').datetimepicker();
+	  
+  });	 
   
-  /*Calling for graph*/
-  function loadScript() {
-      var JSON = [
-                   { name: 'Pay Off',
-                     data: [500.0, 9.5, 14.5, 180.4, 21.5, 25.2, 206.5, 23.3, 180.3, 13.9, 900.6]
+  var jsonVal;
+  
+  function confirmValidate(){   
+	  
+	  	var devid=document.getElementById("devid").value;
+	  	var fromDate=document.getElementById("fromDate").value;
+	  	var toDate=document.getElementById("toDate").value;
+	  	
+	  		   	   
+	   if(devid=="0"){
+		   alert(devDesc);
+		   document.getElementById("devid").focus();
+		   return false;
+	   }else if ($("input[name=fromDate]").val() == "") {
+			alert("Choose FromDate");
+			document.getElementById("fromDate").focus();
+			return false;
+	   }else if ($("input[name=toDate]").val() == "") {
+			alert("Choose ToDate");
+			document.getElementById("toDate").focus();
+			return false;
+	   }else{
+		   
+		   $.ajax({
+               url: 'getGraphOnDemand',
+               type: 'POST',
+               data: jQuery.param({ devId : devid,fromDate : fromDate, toDate:toDate }) ,
+               success: function (data) {
+            	   var obj=eval("(function(){return " + data + ";})()");
+          		   var resultant=obj.result;
+          		 
+            	   if(resultant.length==0){
+            		   alert("FromDate is after ToDate! ' Incorrect dates '");            		
+            	   }
+            	   jsonVal=data;            	
+               			graphOnDemand();
                    },
+  		 		error: function(e){
+  	     			        alert('Error: ' + e);
+  	     		 }
+
+                  
+               }); 
+		  
+		   return false;
+		
+   		} 
+  }
+  
+  /*Calling to get graph onDemand*/  
+  function graphOnDemand() {
+	 var resultant;
+	 var JSON;
+	 var dateVal;
+	 var unitsVal;
+	 	 
+	 if( typeof this.jsonVal !== 'undefined' ) {
+		 //var obj=JSON.parse(jsonVal);
+		 var obj=eval("(function(){return " + jsonVal + ";})()");
+		 resultant=obj.result;
+		if(resultant==='No Content'){
+			alert('No Data Found!'); 
+			return;
+		 };
+		 
+		 dateVal=new Array(resultant.length);
+		 unitsVal=new Array(resultant.length);
+		 
+		 for (var i = 0; i <resultant.length; i++) {
+			dateVal[i]=resultant[i].xaxis;
+		    unitsVal[i]=resultant[i].units;
+		    
+		}	
+		 //alert('DateArr'+dateVal);
+		 //alert('UnitArr'+unitsVal);
+	 }else{
+		 dateVal=['FromDate..','ToDate']; 
+	 }
+	 
+	 
+			 
+	 if( typeof this.jsonVal !== 'undefined' ) {
+      	JSON = [                   
                    {
-                     name: 'Profit',
-                     data: [800.0, 402.2, 510.7, 820.5, 1100.9, 1520.2, 173.0, 164.6, 145.2, 10.3, 6.6, 4.8]
+                     name: 'WaterConsumedUnits',
+                     data: unitsVal
                    }
                  ];
+	 }else{
+		 JSON = [                   
+             {
+               name: 'WaterConsumedUnits',
+               data: [0, 0]
+             }
+           ];
+	 } 
       var options = {
                      chart: {
                               renderTo: 'container',
                               type: 'line'
                             },
                      title: {
-                              text: 'PayOff Curve'
+                              text: 'Water Consumption-Hourly'
                             },
                      xAxis: {
-                              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                              categories: dateVal
                               //type: 'datetime'
                             },
                      yAxis: {
                           	  min: 0,
+                          	  max:500,
+                              title: {
+                                text: 'Values'
+                              }                
+                            },
+                    legend: {
+                              layout: 'vertical',
+                              align: 'right',
+                              verticalAlign: 'middle'
+                            },
+               plotOptions: {
+                    	      line: {
+                     	      dataLabels: {
+                     	        enabled: true
+                     	      }
+                     	    }
+                     	  },
+                    series: []
+                   };
+
+                     options.series = JSON;
+
+                     // Create the chart
+                     var chart = new Highcharts.Chart(options);
+      }
+  
+ 
+  /*Calling to get graph on body onload*/  
+  function loadScript() {
+	 var resultant;
+	 var JSON;
+	 var dateVal;
+	 var unitsVal;
+	 var jsonOnLoad;
+	 
+	 $.ajax({
+         url: 'getGraphOnBodyLoad',
+         type: 'GET',
+         success: function (data) {
+      	   var obj=eval("(function(){return " + data + ";})()");
+    		   var resultant=obj.result;
+    		 
+      	   if(resultant.length==0){
+      		   alert("FromDate is after ToDate! ' Incorrect dates '");            		
+      	   }
+      	 	jsonOnLoad=data;      		
+           },
+	 		error: function(e){
+     			        alert('Error: ' + e);
+     		 }
+
+            
+         }); 
+	 
+	 if( typeof this.jsonOnLoad !== 'undefined' ) {
+		 //var obj=JSON.parse(jsonVal);
+		 var obj=eval("(function(){return " + jsonOnLoad + ";})()");
+		 resultant=obj.result;
+		if(resultant==='No Content'){
+			alert('No Data Found!'); 
+			return;
+		 };
+		 
+		 dateVal=new Array(resultant.length);
+		 unitsVal=new Array(resultant.length);
+		 
+		 for (var i = 0; i <resultant.length; i++) {
+			dateVal[i]=resultant[i].xaxis;
+		    unitsVal[i]=resultant[i].units;
+		    
+		}	
+		 //alert('DateArr'+dateVal);
+		 //alert('UnitArr'+unitsVal);
+	 }else{
+		 dateVal=['FromDate..','ToDate']; 
+	 }
+	 
+	 
+			 
+	 if( typeof this.jsonOnLoad !== 'undefined' ) {
+      	JSON = [                   
+                   {
+                     name: 'WaterConsumedUnits',
+                     data: unitsVal
+                   }
+                 ];
+	 }else{
+		 JSON = [                   
+             {
+               name: 'WaterConsumedUnits',
+               data: [0, 0]
+             }
+           ];
+	 } 
+      var options = {
+                     chart: {
+                              renderTo: 'container',
+                              type: 'line'
+                            },
+                     title: {
+                              text: 'Water Consumption-Hourly'
+                            },
+                     xAxis: {
+                              categories: dateVal
+                              //type: 'datetime'
+                            },
+                     yAxis: {
+                          	  min: 0,
+                          	  max:500,
                               title: {
                                 text: 'Values'
                               }                
@@ -172,7 +324,7 @@
   </head>
   
   <body class="hold-transition skin-blue sidebar-mini" onload="loadScript()">
-    			
+    	<%	List<UserDeviceMapping> udmList=(List<UserDeviceMapping>)request.getAttribute("udmList"); %>
 							 
   <div class="wrapper">  
   	
@@ -185,7 +337,7 @@
 		 		
 		 			<div class="row">
 							<div class="col-sm-12 text-right ">	
-							   <img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> 
+							   <img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%> , Date: <%=new Date() %></b> 
 							</div>
 													
 						</div><br/>
@@ -198,15 +350,71 @@
 								<div class="box-header with-border">
 								<i class="fa fa-area-chart"></i>
 									<h3 class="box-title">
-										<b>Water consumption in litres</b>
+										<b>Water Consumption in Litres-Hourly</b>
 									</h3>
+									
+									<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
+										
+								  <table class="table">
+															
+								  		
+								  <tr>      
+								       <td>
+								        <label>From Date</label>
+								        <div class='input-group date' id='datetimepicker1'>
+								          <input type='text' name="fromDate" id="fromDate" class="form-control" placeholder="Please choose"/>
+								            <span class="input-group-addon">
+								            	<span class="glyphicon glyphicon-calendar"></span>    
+								            </span>
+								         </div>
+								      </td>
+								      
+							           <td>
+							       		 <label>To Date</label>
+									        <div class='input-group date' id='datetimepicker2'>
+									          <input type='text' name="toDate" id="toDate" class="form-control" placeholder="Please choose" />
+									            <span class="input-group-addon">
+									            	<span class="glyphicon glyphicon-calendar"></span>
+									            </span>
+									        </div>
+							           </td>	           							           
+							            		
+							          	<td>
+							       		 <label>Water Meter</label>
+									        <div>
+									        	 <select name="devid" class="form-control" id="devid" >
+											    	<option value="0">Please Select Water Meter</option> 
+											    	<%if(udmList!=null && !udmList.isEmpty()){
+											    		for(UserDeviceMapping udm : udmList){%>	
+											    			<option value="<%=udm.getDevEUI()%>"><%=udm.getDevNode()+"->"+udm.getDevEUI()%></option>
+											    		<%} 
+											    	}%>
+											    </select> 
+									        </div>
+							           </td>					            
+							          
+							            
+							            <td>
+							       		 <label>Action</label>
+									        <div>
+									         <input type="submit"  class="form-control" style="background-color:#C0C0C0;" value="Submit"/>
+									            
+									        </div>
+							            </td>
+							            
+							            
+        							</tr>
+									
+									
+								</table>	
+							 </form>
 
 									<div class="box-tools pull-right">
 										<button type="button" class="btn btn-box-tool"
 											data-widget="collapse">
 											<i class="fa fa-minus"></i>
 										</button>
-										<button type="button" class="btn btn-default btn-sm">
+										<button type="button" class="btn btn-default btn-sm" onclick="reload()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -223,7 +431,7 @@
 																						
    												<p class="text-right">
 													<strong>X-axis Date</strong><br /> <strong>Y-axis
-														water units</strong><br />
+														Water Units</strong><br />
 												</p>
 											</div>
 											<!-- /.chart-responsive -->

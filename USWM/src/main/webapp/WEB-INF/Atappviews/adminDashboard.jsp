@@ -3,7 +3,7 @@
     Author     : Vikky
 --%>
 
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
@@ -547,7 +547,7 @@ function getDevEUIByAppID()
 		 		
 		 				<div class="row">
 							<div class="col-sm-12 text-right ">	
-							   <img src="images/user_iocn_header.png" />&nbsp;<b>Welcome <%=userSession.getUname()%></b> 
+							   <img src="images/user_iocn_header.png" />&nbsp;<b> Welcome <%=userSession.getUname()%> , Date: <%=new Date() %></b> 
 							</div>
 													
 						</div><br/>

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.team.app.constant.AppConstants;
 import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
+import com.team.app.domain.UserDeviceMapping;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.KeywordService;
@@ -44,7 +45,6 @@ public class LoginController {
 	@RequestMapping(value= {"/"})
 	public String defaultURL(HttpServletRequest request,HttpSession session,Map<String, Object> map) {
 		logger.debug("In / URL");
-		
 		String statusLog=(String)session.getAttribute("statusLog");		
 		if(statusLog!=null){
 				map.put("statusLog",statusLog);
@@ -53,27 +53,27 @@ public class LoginController {
 			 	map.put("className", String.valueOf(session.getAttribute("className")));
 			 	map.put("methodName",String.valueOf(session.getAttribute("methodName")));
 			 	map.put("lineNumber", String.valueOf(session.getAttribute("lineNumber")));
-			 	session.invalidate();			 			 	
+			 	session.invalidate();
 		}
-		
-		return "index";		
+			return "index";		
 	}
 	
 	
-	/*@RequestMapping(value= {"/exception"}, method=RequestMethod.GET)
+	@RequestMapping(value= {"/exception"}, method=RequestMethod.GET)
 	public String exceptionHandler(HttpServletRequest request,HttpSession session,Map<String, Object> map){
-		logger.debug("In / Exception");
-		String statusLog=request.getParameter("status");
+		logger.debug("In / Exception Handler");
+		String statusLog=(String)session.getAttribute("statusLog");		
 		if(statusLog!=null){
-			 logger.debug("In / status as ,",statusLog);
-			 	map.put("url",String.valueOf(session.getAttribute("url")));
+				map.put("statusLog",statusLog);
+				map.put("url",String.valueOf(session.getAttribute("url")));
 			 	map.put("exception",String.valueOf(session.getAttribute("exception")));
-			 	map.put("statusLog",statusLog);
-			 	session.invalidate();
-		}	
+			 	map.put("className", String.valueOf(session.getAttribute("className")));
+			 	map.put("methodName",String.valueOf(session.getAttribute("methodName")));
+			 	map.put("lineNumber", String.valueOf(session.getAttribute("lineNumber")));			 	 			 	
+		}
 			
 			 return "exception";		
-	}*/
+	}
 	
 		
 	
@@ -83,8 +83,8 @@ public class LoginController {
 		try{
 			String username = request.getParameter("uname") == null ? "" : request
 					.getParameter("uname");
-			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");		
-		
+			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");
+	
 	        TblUserInfo userInfo=null;
 	        boolean needToChangePwd=false;
 			
@@ -106,6 +106,7 @@ public class LoginController {
 	        
 	        if(userInfo!=null){
 	        	session.setAttribute("user", userInfo);
+	        	session.setAttribute("userId", userInfo.getId());
 	        	        	         	
 	        }
 	        
@@ -138,7 +139,8 @@ public class LoginController {
 	        	return new ModelAndView("redirect:/");
 	        }
 	        
-		}catch(Exception e){		
+		}catch(Exception e){
+			e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -177,7 +179,8 @@ public class LoginController {
 					logger.debug("userCount as: ",userCount);*/
 				
 			return "adminDashboard";
-	   }catch(Exception e){	
+	   }catch(Exception e){
+		    e.printStackTrace();
 			HttpSession s=request.getSession();
 		    s.setAttribute("statusLog",AppConstants.statusLog);
 			s.setAttribute("url", request.getRequestURL());
@@ -185,7 +188,7 @@ public class LoginController {
 			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
 			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
 			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
-		    return "redirect:/";
+		    return "redirect:/exception";
 	   }
 	}
 	    	
@@ -204,8 +207,28 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value= {"/userHome"},method=RequestMethod.GET)
-	public String userHome(Map<String,Object> map,HttpServletRequest request){
-		return "userHome";
+	public String userHome(Map<String,Object> map,HttpServletRequest request,HttpSession session){
+		String userId=(String) session.getAttribute("userId");
+		logger.debug("UserId as: ",userId);
+		try{		
+			TblUserInfo user=userLoginService.getUserByUId(userId);
+			if(user!=null){
+				List<UserDeviceMapping> udmList=user.getUserDeviceMappings();
+				map.put("udmList",udmList);
+			}
+			return "userHome";
+		}catch(Exception e){
+			e.printStackTrace();
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/exception";
+	   }
+		
 	}
 	
 	
@@ -256,33 +279,6 @@ public class LoginController {
 						
 				
 			}
-			
-			
-			/*@RequestMapping(value= {"/exception"}, method=RequestMethod.GET)
-			public ModelAndView handleEmployeeNotFoundException(HttpServletRequest request, HttpServletResponse response,Exception ex){
-				logger.error("Inside Exception Handler");				
-				logger.error("Requested URL="+request.getRequestURL());
-				logger.error("Exception Raised="+ex);
-								
-				ModelAndView modelAndView = new ModelAndView();
-			    modelAndView.addObject("exception", ex);
-			    modelAndView.addObject("url", request.getRequestURL());	
-			    if(request.getRequestURL().toString().contains("onSubmitlogin")){
-			    	logger.debug("In / URL");
-			    	modelAndView.setViewName("/");
-				}else{
-					logger.debug("In /exception URL");
-					modelAndView.setViewName("exception");
-				}
-			    
-			    return modelAndView;
-			}*/
-			
-		
-			
-			
-			
-			
 			
 			
 			

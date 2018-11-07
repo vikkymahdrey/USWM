@@ -4,6 +4,7 @@
 --%>
 
  <%@page import="java.util.*"%>
+ <%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.team.app.dto.*"%>
 <%@page import="org.displaytag.decorator.TotalTableDecorator"%>

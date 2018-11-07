@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Exception Page</title>
+  <title>Exception</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -18,6 +18,13 @@
   <!-- iCheck -->
   <link rel="stylesheet" href="css/blue.css">
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
     
 	  <!-- jQuery 2.2.3 -->
 	<script src="js/jquery-2.2.3.min.js"></script>
@@ -37,31 +44,63 @@
 	  });
 	</script>
 	
-	<script  type="text/javascript">	
-		 function loadScript(){		 
-			 var stsLog='<%=statusLog%>';		
-			 if(stsLog!='null'){			 
-				$("#loginAudit").modal(); 
-			 }
-			 
-		 }
- 
+<script  type="text/javascript">
 	
+	 function loadScript(){	
+	
+		 var statusLog='<%=statusLog%>';
+		 if(statusLog!='null'){			 
+			$("#loginAudit").modal(); 
+		 }
+		 
+	 }
 </script>
    
 	
 	
 </head>
 <body class="hold-transition login-page" onload="loadScript()">
-		<%String log=(String)request.getAttribute("statusLog");
+		<%String statusLogg=(String)request.getAttribute("statusLog");
 			String url=(String)request.getAttribute("url");
-				String exception=(String)request.getAttribute("exception");%>	
+				String exception=(String)request.getAttribute("exception");
+					String className=(String)request.getAttribute("className");
+						String methodName=(String)request.getAttribute("methodName");	
+							String lineNumber=(String)request.getAttribute("lineNumber");	
+				
+					
+				%>	
+<div class="wrapper">
+						<%
+						response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+						response.setHeader("Pragma", "co-cache");
+						response.setDateHeader("Expires", 0);
+  
+						String message="";
+						
+						try{
+							message=request.getParameter("message");
+							if(message!=null&&!message.equals(""))
+											{
+								System.out.println("Hello message");
+							}
+							else{						
+									message = "";
+									message = request.getAttribute("status").toString();
+									session.setAttribute("status", "");
+								}
+				
+							}catch(Exception e)
+							{
+								;
+							}
+					
+						%>	
+						 <div>
+						 
+							<p><b>Please contact to support team at vikky@unizentechnoglogies.com</b></p> 
+						 </div>
+							
 
-	<div class="wrapper">  
-	 	 <div class="content-wrapper">	
-				<section class="content">
-			 		<div class="content-wrap box box-primary">	
-									<!-- Modal -->
                                       <div class="modal fade" id="loginAudit" role="dialog">
                                       	<div class="modal-dialog ">    
                                       		<!-- Modal content-->
@@ -78,20 +117,38 @@
 																	    <thead>
 																	      <tr>
 																	        <th>URL</th>
-																	        <th>Exception_Message</th>																	      											        
+																	        <th>Status</th>
+																	        <th>Exception_Message</th>
+																	        <th>ClassName</th>
+																	        <th>MethodName</th>
+																	        <th>LineNumber</th>
+																	        																      											        
 																	      </tr>
 																	    </thead>
 																	    <tbody>	
 																	    <tr>
-																	    <%if(log!=null){%>																	    	
+																	    <%if(statusLogg!=null){%>																	    	
 																	   
 																		    <td>
 																		    	<%=url %>
+																		    </td>																		    
+																		    <td>
+																		      	<%=statusLogg %>
+																		    </td>																		   
+																		    <td>
+																		      	<%=exception%>
 																		    </td>
-																		    
 																		     <td>
-																		      	<%=exception %>
+																		      	<%=className%>
 																		    </td>
+																		     <td>
+																		      	<%=methodName%>
+																		     </td>
+																		     <td>
+																		      	<%=lineNumber%>
+																		     </td>
+																		    
+																		    
 																		  <% }%>  
 																	    </tr>												 
 																	    </tbody>
@@ -104,17 +161,16 @@
 						
 									  
 					     					  <div class="modal-footer">
-                         						<button type="submit" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
+                         						<button type="button" class="btn-default pull-right" data-dismiss="modal"> Cancel</button>
                          					  </div>
                          					  	  
 				      					  </div><!-- content close here -->
 			                           </div><!-- modal dialog close here -->					             			              
 					               </div><!-- modal close here -->		
-					</div>	
-				</section>	
-				<%@include file="Footer.jsp"%>  		
-		</div>	
-	</div>
+    
 
+  							</div>
+  
+		
 </body>
 </html>

@@ -115,6 +115,17 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	
+	public Object[] getUserDashboardGraphsOnLoad(String appId, String devEUI, Date currDate) throws Exception {
+		return frameDao.getUserDashboardGraphsOnLoad(appId,devEUI,currDate);
+	}
+
+
+	public Object[] getUserDashboardGraphOnSubmit(String devId, Date fromDate, Date toDate) throws Exception {
+		
+		return frameDao.getUserDashboardGraphOnSubmit(devId,fromDate,toDate);
+	}
+
+	
 	
 
 	
