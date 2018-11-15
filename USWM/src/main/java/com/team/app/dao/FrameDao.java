@@ -81,8 +81,8 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 	@Query(value = "CALL user_dashboard(?1,?2,?3)", nativeQuery = true)
 	Object[] getUserDashboardGraphsOnLoad(@Param("appId") String appId, @Param("devEUI") String devEUI,@Param("currDate") Date currDate);
 
-	@Query(value = "CALL user_dashboard_date_filter(?1,?2,?3)", nativeQuery = true)
-	Object[] getUserDashboardGraphOnSubmit(@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
+	@Query(value = "CALL user_dashboard_date_filter(?1,?2,?3,?4)", nativeQuery = true)
+	Object[] getUserDashboardGraphOnSubmit(@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate,@Param("type") String type);
 	
 	
 	

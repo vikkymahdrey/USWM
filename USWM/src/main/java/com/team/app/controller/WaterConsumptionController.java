@@ -261,6 +261,7 @@ public class WaterConsumptionController {
 		String devId=request.getParameter("devId");
 		String fDate=request.getParameter("fromDate");		
 		String tDate=request.getParameter("toDate");
+		String type=request.getParameter("type");
 			
 		logger.debug("devNode",devId);
 		logger.debug("fromDate",fDate);
@@ -291,7 +292,7 @@ public class WaterConsumptionController {
 		        
 		        
 		        
-		        Object[] frames=consumerInstrumentServiceImpl.getUserDashboardGraphOnSubmit(devId,fromDate,toDate);
+		        Object[] frames=consumerInstrumentServiceImpl.getUserDashboardGraphOnSubmit(devId,fromDate,toDate,type);
 		        logger.debug("resultant",frames[0]);
 		      
 		       if(String.valueOf(frames[0])!=null && !String.valueOf(frames[0]).isEmpty()){
@@ -341,36 +342,64 @@ public class WaterConsumptionController {
 					dateUnitArr=new JSONArray();
 					
 				JSONObject json=null;	
-					json=new JSONObject();				
+					json=new JSONObject();	
+					
+				JSONObject js=null;
+   						
 			
-				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 		        Date currDate=DATE_FORMAT.parse(DATE_FORMAT.format(new Date())); 
 		        	logger.debug("Date as:",currDate);
 		        List<UserDeviceMapping> udmList=user.getUserDeviceMappings();
 		       if(udmList!=null){
+		    	   int m=0;
+		    	   js=new JSONObject();
 		    	   for(UserDeviceMapping udm: udmList){
 		    		   Object[] frames=consumerInstrumentServiceImpl.getUserDashboardGraphsOnLoad(udm.getAppId(),udm.getDevEUI(),currDate);
 		    		   
 		    		   logger.debug("resultant",frames[0]);
-		    		   
+		    		   				JSONObject jsn=null;
+		    		   					jsn=new JSONObject();	    		   					
+		    		   				
+		    		   					
+		    		   				JSONArray jsnArr=null;
+		    		   					jsnArr=new JSONArray();   
+		    		   					
+		    		   				JSONArray jsArr=null;
+		    		   					jsArr=new JSONArray();	
+		    		   					
+		    		   					
 			    		   if(String.valueOf(frames[0])!=null && !String.valueOf(frames[0]).isEmpty()){
 			   				String[] result=String.valueOf(frames[0]).split(",");
-			   				logger.debug("result length",result.length);
-			   						   					
-			   					for(int i=0;i<result.length;i++){							
+			   				logger.debug("result length",result.length);  
+			   								   				
+				   				for(int i=0;i<result.length;i++){							
 			   						String[] jsonVal=result[i].split("&");
-			   						JSONObject js=null;
-			   							js=new JSONObject();
-			   							js.put("xaxis", jsonVal[0]);
-			   							js.put("units", Integer.parseInt(jsonVal[1]));
-			   							dateUnitArr.add(js);
-			   																		
-			   					}		   	       
+			   							jsArr.add(jsonVal[0]);
+			   								jsnArr.add(Integer.parseInt(jsonVal[1]));			   																		
+			   					}
+				   				
+				   				if(m==0){
+				   					js.put("categories", jsArr);
+				   					m++;
+				   				}
+				   								   								   				
+				   				jsn.put("name",udm.getDevNode()+"->"+udm.getDevEUI());
+				   				jsn.put("data", jsnArr);  				
+				   				   				
+				   				dateUnitArr.add(jsn);
+				   				
+			   						   				
+			   				
 			    	       }					
 		             }
 		    	   
-		    	   	json.put("result",dateUnitArr);
- 					returnVal=JsonUtil.objToJson(json);
+		    	   	json.put("xAxis", js);
+		    	   	json.put("units",dateUnitArr);
+		    	   	JSONObject res=null;
+		    	   		res=new JSONObject();
+		    	   			res.put("result", json);
+		    	   	returnVal=JsonUtil.objToJson(res);
   				    logger.debug("Resultant JSON String ",returnVal);
 		      }else{
 	   	    	   json.put("result","No Content");

@@ -60,7 +60,7 @@
  	
   <script type="text/javascript">
   function reload(){
-	  alert("graph refresh");
+	  location.reload();
   }
 
   $(function () {
@@ -79,6 +79,7 @@
 	  	var devid=document.getElementById("devid").value;
 	  	var fromDate=document.getElementById("fromDate").value;
 	  	var toDate=document.getElementById("toDate").value;
+	  	var filter=document.getElementById("filter").value;
 	  	
 	  		   	   
 	   if(devid=="0"){
@@ -93,12 +94,16 @@
 			alert("Choose ToDate");
 			document.getElementById("toDate").focus();
 			return false;
+	   }else if ($("input[name=filter]").val() == "") {
+			alert("Choose filter");
+			document.getElementById("filter").focus();
+			return false;
 	   }else{
 		   
 		   $.ajax({
                url: 'getGraphOnDemand',
                type: 'POST',
-               data: jQuery.param({ devId : devid,fromDate : fromDate, toDate:toDate }) ,
+               data: jQuery.param({ devId : devid,fromDate : fromDate, toDate:toDate,type: filter}) ,
                success: function (data) {
             	   var obj=eval("(function(){return " + data + ";})()");
           		   var resultant=obj.result;
@@ -129,8 +134,7 @@
 	 var unitsVal;
 	 	 
 	 if( typeof this.jsonVal !== 'undefined' ) {
-		 //var obj=JSON.parse(jsonVal);
-		 var obj=eval("(function(){return " + jsonVal + ";})()");
+	    var obj=eval("(function(){return " + jsonVal + ";})()");
 		 resultant=obj.result;
 		if(resultant==='No Content'){
 			alert('No Data Found!'); 
@@ -145,10 +149,8 @@
 		    unitsVal[i]=resultant[i].units;
 		    
 		}	
-		 //alert('DateArr'+dateVal);
-		 //alert('UnitArr'+unitsVal);
-	 }else{
-		 dateVal=['FromDate..','ToDate']; 
+		 
+		 
 	 }
 	 
 	 
@@ -210,64 +212,47 @@
   
  
   /*Calling to get graph on body onload*/  
-  function loadScript() {
+  
+  	var jsonOnLoad;
+   function loadScript() {
+	   $.ajax({
+	         url: 'getGraphOnBodyLoad',
+	         type: 'GET',
+	         success: function (data) {
+	        	jsonOnLoad=data;
+	      	 	getGraphAsPerBodyLoad();
+	           },
+		 		error: function(e){
+	     			        alert('Error: ' + e);
+	     		 }
+
+	            
+	         }); 
+  	}
+  
+  function getGraphAsPerBodyLoad() {
 	 var resultant;
 	 var JSON;
 	 var dateVal;
-	 var unitsVal;
-	 var jsonOnLoad;
-	 
-	 $.ajax({
-         url: 'getGraphOnBodyLoad',
-         type: 'GET',
-         success: function (data) {
-      	   var obj=eval("(function(){return " + data + ";})()");
-    		   var resultant=obj.result;
-    		 
-      	   if(resultant.length==0){
-      		   alert("FromDate is after ToDate! ' Incorrect dates '");            		
-      	   }
-      	 	jsonOnLoad=data;      		
-           },
-	 		error: function(e){
-     			        alert('Error: ' + e);
-     		 }
-
-            
-         }); 
+	 var unitsVal;  
 	 
 	 if( typeof this.jsonOnLoad !== 'undefined' ) {
-		 //var obj=JSON.parse(jsonVal);
 		 var obj=eval("(function(){return " + jsonOnLoad + ";})()");
 		 resultant=obj.result;
 		if(resultant==='No Content'){
 			alert('No Data Found!'); 
 			return;
-		 };
+		}else{
+			unitsVal=resultant.units;
+			dateVal=resultant.xAxis;
+		};
 		 
-		 dateVal=new Array(resultant.length);
-		 unitsVal=new Array(resultant.length);
-		 
-		 for (var i = 0; i <resultant.length; i++) {
-			dateVal[i]=resultant[i].xaxis;
-		    unitsVal[i]=resultant[i].units;
-		    
-		}	
-		 //alert('DateArr'+dateVal);
-		 //alert('UnitArr'+unitsVal);
-	 }else{
-		 dateVal=['FromDate..','ToDate']; 
+		
 	 }
-	 
 	 
 			 
 	 if( typeof this.jsonOnLoad !== 'undefined' ) {
-      	JSON = [                   
-                   {
-                     name: 'WaterConsumedUnits',
-                     data: unitsVal
-                   }
-                 ];
+      	JSON = unitsVal;
 	 }else{
 		 JSON = [                   
              {
@@ -275,19 +260,18 @@
                data: [0, 0]
              }
            ];
-	 } 
+	 }
+	 
+	 
       var options = {
                      chart: {
                               renderTo: 'container',
                               type: 'line'
                             },
                      title: {
-                              text: 'Water Consumption-Hourly'
+                              text: 'Water Consumption-Current Day (Hourly)'
                             },
-                     xAxis: {
-                              categories: dateVal
-                              //type: 'datetime'
-                            },
+                     xAxis: dateVal,
                      yAxis: {
                           	  min: 0,
                           	  max:500,
@@ -341,6 +325,50 @@
 							</div>
 													
 						</div><br/>
+						
+						
+					<div class="row">
+					  <div class="col-md-12">					       
+					    <div class="box box-solid">
+					        <div class="box-header">
+					            <i class="fa fa-user"></i>
+								<h3 class="box-title">
+									<b>User-Device Details</b>
+								</h3>				           
+					
+					            <div class="box-tools pull-right">
+					                <button type="button" class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+					                </button>
+					                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+					            </div>
+					        </div>
+					           
+					            <div class="box-body">	       
+					              	    							
+									   
+									   <div class="info-box col-sm-6 mar-top-25" >											
+										  	<span class="info-box-icon bg-yellow"><i class="fa fa-edit"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">EDIT USER INFO</span><br/>
+											    <a href="personalInfo"><span class="fa fa-edit"> EDIT</span></a>											   
+										 	</div>
+									   </div>
+									   
+									    <div class="info-box col-sm-6 mar-top-25" >											
+										  	<span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">Water Meter Devices</span>
+											    <span class="info-box-number"><b>2</b></span> 
+											    
+										 	</div>
+									  </div> 
+									   
+									   
+							   </div>
+						   </div>
+						 </div>
+					  </div>
+									   
 		 		
 						 
 		 		
@@ -391,7 +419,20 @@
 											    	}%>
 											    </select> 
 									        </div>
-							           </td>					            
+							           </td>
+							           
+							           <td>
+							       		 <label>Filter By</label>
+									        <div>
+									          <select name="filter" id="filter" class="form-control">
+									            <!-- <option value="0">Select Filter</option> -->
+										    	<option value="hourly">Hourly</option>
+										    	<option value="days">Days</option>
+										    	
+										      </select> 
+									            
+									        </div>
+							            </td>					            
 							          
 							            
 							            <td>
