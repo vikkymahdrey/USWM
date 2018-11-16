@@ -180,17 +180,10 @@ public class DownlinkServiceImpl implements DownlinkService {
 		try{
 			TblDownlinkHoulyConfig pkts=getDownlinkPktPerDayByID(pktId);
 			if(pkts!=null){					
-					String pkt="";
-					if(pkts.getPerday().equals("2")){
-						pkt="12";
-					}else if(pkts.getPerday().equals("4")){
-						pkt="6";
-					}else if(pkts.getPerday().equals("1")){
-						pkt="24";
-					}
+										
 					byte[] byteArr = new byte[2];
 					byteArr[0]=Byte.valueOf(AppConstants.MPDU);
-						int packet=Integer.parseInt(pkt);
+						int packet=Integer.parseInt(pkts.getPerday());
 						int pktlng=Integer.parseInt(packetlength);
 						logger.debug("pkt...",packet);
 						logger.debug("pktlng...",pktlng);
@@ -537,6 +530,17 @@ public class DownlinkServiceImpl implements DownlinkService {
 			
 		}
 		
+	}
+
+
+	public List<DownlinkQueue> getDownlinkQueue() throws Exception {
+		return downlinkQueueDao.getDownlinkQueue();
+	}
+
+
+	
+	public List<DownlinkQueue> getDownlinkByDevEUIAndAppId(String applicationID, String devEUI) throws Exception {
+		return downlinkQueueDao.getDownlinkByDevEUIAndAppId(applicationID,devEUI);
 	}
 	
 }

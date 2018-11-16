@@ -2,7 +2,7 @@
      Author     : Vikky
 --%>
 
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Remove Water Meter</title>
+    <title>Remove Water Meter Data</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -278,7 +278,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-recycle"></span>&nbsp;&nbsp;<b>Remove Water Meter </b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-recycle"></span>&nbsp;&nbsp;<b>Remove Water Meter Data </b></h5>
        
    				</div><!-- /.box-header -->
 		 							

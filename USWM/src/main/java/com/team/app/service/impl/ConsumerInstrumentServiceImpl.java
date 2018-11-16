@@ -105,6 +105,27 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	
+	public Long getWaterConsumptionUnitsByCurMonth() throws Exception {
+		return frameDao.getWaterConsumptionUnitsByCurMonth();
+	}
+
+
+	public Long getTotalWaterUnitsFrmToDate(String appId, String devNode, Date fromDate, Date toDate) throws Exception {
+		return frameDao.getTotalWaterUnitsFrmToDate(appId,devNode,fromDate,toDate);
+	}
+
+	
+	public Object[] getUserDashboardGraphsOnLoad(String appId, String devEUI, Date currDate) throws Exception {
+		return frameDao.getUserDashboardGraphsOnLoad(appId,devEUI,currDate);
+	}
+
+
+	public Object[] getUserDashboardGraphOnSubmit(String devId, Date fromDate, Date toDate,String type) throws Exception {
+		
+		return frameDao.getUserDashboardGraphOnSubmit(devId,fromDate,toDate,type);
+	}
+
+	
 	
 
 	

@@ -2,7 +2,7 @@
     Author     : Vikky
 --%>
 
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.constant.AppConstants"%>
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
@@ -407,7 +407,7 @@ function getDevEUIByAppID()
 									
 									
 									<tr>	
-									   <td align="right"><b>Packets per day</b></td>
+									   <td align="right"><b>Hourly Packets</b></td>
 									   
 										 <td>
 										 	<select name="hourly" class="form-control" id="hourly" onchange="getPacketByHourly()" >

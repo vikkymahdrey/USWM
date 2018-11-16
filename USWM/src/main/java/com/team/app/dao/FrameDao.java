@@ -71,6 +71,18 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 
 	@Query(value="Select f.* from lora_frames f where f.applicationID=?1 and f.devEUI=?2 and f.devMapId=?3 order by f.id desc limit 1,1",nativeQuery=true)
 	LoraFrame getSecLastLoraFrameByDevEUIAndDeviceId(@Param("applicationID") String applicationID, @Param("devEUI") String devEUI, @Param("devMapId") String devMapId);
+
+	@Query(value="SELECT sum(f.waterltr) as total_waterltr FROM lora_frames f where date_format(f.created_at, '%Y-%m')=date_format(now(), '%Y-%m')",nativeQuery=true)
+	Long getWaterConsumptionUnitsByCurMonth();
+
+	@Query("Select sum(f.waterltr) as total_waterunits FROM LoraFrame f where f.applicationID=:appId and f.devEUI=:devEUI and f.createdAt between :fromDate and :toDate")
+	Long getTotalWaterUnitsFrmToDate(@Param("appId") String appId,@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
+
+	@Query(value = "CALL user_dashboard(?1,?2,?3)", nativeQuery = true)
+	Object[] getUserDashboardGraphsOnLoad(@Param("appId") String appId, @Param("devEUI") String devEUI,@Param("currDate") Date currDate);
+
+	@Query(value = "CALL user_dashboard_date_filter(?1,?2,?3,?4)", nativeQuery = true)
+	Object[] getUserDashboardGraphOnSubmit(@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate,@Param("type") String type);
 	
 	
 	

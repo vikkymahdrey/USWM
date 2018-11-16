@@ -2,7 +2,7 @@
     Document   : User Report
     Author     : Vikky
 --%>
-
+<%@ page errorPage="error.jsp" %> 
  <%@page import="java.util.*"%>
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.team.app.dto.*"%>

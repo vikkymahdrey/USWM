@@ -1,7 +1,9 @@
 <%@page import="java.util.*"%>
 <%@page import="com.team.app.constant.*"%>
 <%@page import="com.team.app.domain.*"%>
+<%@ page errorPage="error.jsp" %> 
 <header class="main-header" >
+
    
 	    <a href="#" class="logo affix">
 			    <svg width="135px" height="50px" >
@@ -113,14 +115,15 @@
            
           </ul> -->
            <ul class="treeview-menu">
-            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Remove Water Meter</b></a></li>
+            <li><a href="delDevEUI"><i class="fa fa-recycle"></i><b>Remove Water Meter Data</b></a></li>
              <li><a href="addDevice"><i class="fa fa-user-plus"></i><b>Add Water Meter</b></a></li>
+              <li><a href="deleteNode"><i class="fa fa-recycle"></i><b>Delete Node</b></a></li>
            
           </ul>
           
         </li>
         
-         <li class="treeview"> 
+         <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-cc-visa"></i>
             <span><b>Pay Bills</b></span>
@@ -133,7 +136,7 @@
           </ul>
           
              
-        </li>
+        </li> -->
         
          <li class="treeview">
           <a href="#">
@@ -153,6 +156,22 @@
            
           </ul>
           
+        </li>
+        
+         <li class="treeview"> 
+          <a href="#">
+            <i class="fa fa-upload"></i>
+            <span><b>Upload</b></span>
+            <span class="pull-right-container">
+              <span class="label label-primary pull-right">1</span>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="uploadUserSubscription"><i class="fa fa-circle-o"></i><b>User Upload</b></a></li>
+                       
+          </ul>
+          
+             
         </li>
         
         
@@ -210,7 +229,7 @@
         </li>
         
         
-       <li class="treeview">
+       <!-- <li class="treeview">
           <a href="personalInfo">
             <i class="fa fa-edit"></i>
             <span><b>Edit Information</b></span>
@@ -219,7 +238,7 @@
           </a>
               
           
-        </li>
+        </li> -->
         
         <!-- <li class="treeview">
           <a href="#">
@@ -235,7 +254,7 @@
         
         
         
-         <li class="treeview">
+         <!-- <li class="treeview">
           <a href="#">
             <i class="fa fa-arrow-right"></i>
             <span><b>Reports</b></span>
@@ -251,7 +270,7 @@
                        
           </ul>
           
-        </li>
+        </li> -->
         
         
         <li class="treeview"> 
@@ -271,7 +290,7 @@
              
         </li>
         
-        <li class="treeview"> 
+        <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-cc-visa"></i>
             <span><b>Payment</b></span>
@@ -285,7 +304,9 @@
           </ul>
           
              
-        </li>
+        </li> -->
+        
+       
         
         
         

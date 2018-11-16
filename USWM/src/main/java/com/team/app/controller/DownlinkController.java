@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.team.app.constant.AppConstants;
+import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblDownlinkHoulyConfig;
 import com.team.app.domain.TblDownlinkPacketConfig;
@@ -45,69 +47,102 @@ public class DownlinkController {
 	private ConsumerInstrumentService  consumerInstrumentService;
 	
 	@RequestMapping(value= {"/downlinkConfig"}, method=RequestMethod.GET)
-	public String downlinkConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /downlinkConfig");		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-		List<TblDownlinkHoulyConfig> configs=downlinkService.getDownlinkHourlyConfig();
-			map.put("configs",configs);		
-			 return "downlinkConfig";
+	public String downlinkConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map){
+		logger.debug("Inside /downlinkConfig");	
+		try{
+				Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+				List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);
+				List<TblDownlinkHoulyConfig> configs=downlinkService.getDownlinkHourlyConfig();
+				map.put("configs",configs);		
+				 return "downlinkConfig";
+	
+		}catch(Exception e){
+			e.printStackTrace();
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/exception";
+	    }
+			
+		
 	}
 	
 	@RequestMapping(value= {"/getPacketByHourly"}, method=RequestMethod.POST)
-	public @ResponseBody String getPacketByHourlyHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /getPacketByHourly");
-		String hourly=request.getParameter("hourly").trim();
-		String returnVal="";
-		
-		List<TblDownlinkPacketConfig> packets=downlinkService.getDownlinkPacketByHourlyID(hourly);
-		if(packets!=null && !packets.isEmpty()){
-			for(TblDownlinkPacketConfig p : packets){
-					returnVal+="<option value="+p.getPacket()+">"+ p.getPacket() + "</option>";
+	public @ResponseBody String getPacketByHourlyHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
+		logger.debug("Inside /getPacketByHourly");		
+			
+			String hourly=request.getParameter("hourly").trim();
+			String returnVal="";			
+			List<TblDownlinkPacketConfig> packets=downlinkService.getDownlinkPacketByHourlyID(hourly);
+			if(packets!=null && !packets.isEmpty()){
+				for(TblDownlinkPacketConfig p : packets){
+						returnVal+="<option value="+p.getPacket()+">"+ p.getPacket() + "</option>";
 				}
-		}
+			}			
+			return returnVal;
+				
 		
-			 return returnVal;
 	}
 	
 	
 	
 	@RequestMapping(value= {"/retryConfig"}, method=RequestMethod.GET)
-	public String uplinkRetryConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /retryConfig");		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-		List<TblRetryConfig> retryConfig=downlinkService.getDownlinkForRetryConfig();
-			map.put("retryConfig",retryConfig);		
-			 return "retryConfig";
+	public String uplinkRetryConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
+		logger.debug("Inside /retryConfig");			
+		try{	
+			Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+				map.put("organisations", orgMapped);
+			List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+				map.put("keyTypes",keyTypes);
+			List<TblRetryConfig> retryConfig=downlinkService.getDownlinkForRetryConfig();
+				map.put("retryConfig",retryConfig);		
+				 return "retryConfig";
+		}catch(Exception e){
+			e.printStackTrace();
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/exception";
+	    }
+				 
+		
 	}
 	
 	
 	@RequestMapping(value= {"/getIntervalOfRetry"}, method=RequestMethod.POST)
-	public @ResponseBody String getIntervalOfRetryHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public @ResponseBody String getIntervalOfRetryHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception {
 		logger.debug("Inside /getIntervalOfRetry");
-		String retryId=request.getParameter("retryId").trim();
-		String returnVal="";
 		
-		TblRetryConfig retry=downlinkService.getRetryConfigById(retryId);
-		if(retry!=null){
-			List<TblRetryIntervalMap> retryIntervals=retry.getTblRetryIntervalMaps();
-			if(retryIntervals!=null && !retryIntervals.isEmpty()){
-				for(TblRetryIntervalMap r : retryIntervals){
-						returnVal+="<option value="+r.getInterval()+">"+ r.getInterval() + "</option>";
-					}
+		
+			String retryId=request.getParameter("retryId").trim();
+			String returnVal="";
+			
+			TblRetryConfig retry=downlinkService.getRetryConfigById(retryId);
+			if(retry!=null){
+				List<TblRetryIntervalMap> retryIntervals=retry.getTblRetryIntervalMaps();
+				if(retryIntervals!=null && !retryIntervals.isEmpty()){
+					for(TblRetryIntervalMap r : retryIntervals){
+							returnVal+="<option value="+r.getInterval()+">"+ r.getInterval() + "</option>";
+						}
+				}
 			}
-		}
+			
+				 return returnVal;
 		
-			 return returnVal;
 	}
 	
 	@RequestMapping(value= {"/downlinkSetting"}, method=RequestMethod.POST)
-	public @ResponseBody String downlinkSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
+	public @ResponseBody String downlinkSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map){
 		logger.debug("Inside /downlinkSetting");
 		String orgs=request.getParameter("orgId").trim();
 		String[] orgArr=orgs.split(":");
@@ -196,126 +231,52 @@ public class DownlinkController {
 	
 	
 	
-	/*@RequestMapping(value= {"/dateConfig"}, method=RequestMethod.GET)
-	public String dateConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /dateConfig");	
+	@RequestMapping(value= {"/downlinkQueue"}, method={RequestMethod.GET,RequestMethod.POST})
+	public String dateConfigHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) {
+		logger.debug("Inside /downlinkQueue");	
+		try{
+				String devEUI=request.getParameter("devname");
+				String appIdName=request.getParameter("appname");
+				List<DownlinkQueue> queueList=null;
+				
+				if(devEUI!=null && appIdName!=null){
+					String[] appArr=appIdName.split(":");
+					String appId=appArr[0];		
+					
+					logger.debug("Check devEUI ",devEUI);
+						logger.debug("Check appId ",appId);
+						
+					queueList=downlinkService.getDownlinkByDevEUIAndAppId(appId.trim(),devEUI.trim());	
+					
+					logger.debug("Check Size",queueList.size());
+				}
+				
+			
+				
+					   
+						map.put("downlinkQueueList", queueList);
+					
+					Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
+						map.put("organisations", orgMapped);
+						
+					List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
+						map.put("keyTypes",keyTypes);	
+					 	return "downlinkQueue";
+		}catch(Exception e){
+			e.printStackTrace();
+			HttpSession s=request.getSession();
+		    s.setAttribute("statusLog",AppConstants.statusLog);
+			s.setAttribute("url", request.getRequestURL());
+			s.setAttribute("exception", e.toString());				
+			s.setAttribute("className",Thread.currentThread().getStackTrace()[1].getClassName());
+			s.setAttribute("methodName",Thread.currentThread().getStackTrace()[1].getMethodName());
+			s.setAttribute("lineNumber",Thread.currentThread().getStackTrace()[1].getLineNumber());		       
+		    return "redirect:/exception";
+	    }	 	
 		
-		Map<String,Object> orgMapped=organisationService.getLoraServerOrganisation();	   
-			map.put("organisations", orgMapped);
-		List<TblKeywordType> keyTypes= keywordService.getKeywordTypes(); 
-			map.put("keyTypes",keyTypes);
-			 return "dateConfig";
 	}
 	
 	
 	
-	@RequestMapping(value= {"/dateSetting"}, method=RequestMethod.POST)
-	public @ResponseBody String dateSettingHandler(HttpSession session,HttpServletRequest request,Map<String,Object> map) throws Exception{
-		logger.debug("Inside /downlinkSetting");
-		String orgs=request.getParameter("orgId").trim();
-		String[] orgArr=orgs.split(":");
-		String orgId=orgArr[0];
-		String apps=request.getParameter("appId").trim();
-		String[] appArr=apps.split(":");
-		String appId=appArr[0];
-		String appName=appArr[1];
-		String devId=request.getParameter("devId").trim();
-		String fromDate=request.getParameter("fromDate").trim();
-		
-		
-		logger.debug("orgID as ",orgId);
-		logger.debug("appId as ",appId);
-		logger.debug("appName as ",appName);
-		logger.debug("devId as ",devId);
-		logger.debug("fromDate as ",fromDate);
-
-		String returnVal="";
-						
-		try{			
-			LoraFrame frm=consumerInstrumentService.getLoraFrameByDevEUIAndAppID(devId,appId);
-			if(frm!=null){				
-					byte[] byteArr = new byte[4];
-					
-					 SimpleDateFormat formatDay = new SimpleDateFormat("dd");
-					 SimpleDateFormat formatMonth = new SimpleDateFormat("MM");
-					 SimpleDateFormat formatYear = new SimpleDateFormat("YY");
-
-					   String currentDay = formatDay.format(new Date(fromDate));
-					    String currentMonth = formatMonth.format(new Date(fromDate));
-					    String currentYear = formatYear.format(new Date(fromDate));
-					
-					
-				
-					byteArr[0]=Byte.valueOf(AppConstants.date);
-					byteArr[1]=Byte.valueOf(currentYear);
-					byteArr[2]=Byte.valueOf(currentMonth);
-					byteArr[3]=Byte.valueOf(currentDay);
-									
-					
-					logger.debug("/byteArr[0] ",byteArr[0]);				
-					logger.debug("/byteArr[1] ",byteArr[1]);
-					logger.debug("/byteArr[2] ",byteArr[2]);
-					logger.debug("/byteArr[2] ",byteArr[3]);
-					
-					int fPort=0;
-					try{
-						fPort=Integer.parseInt(frm.getFPort());
-					}catch(Exception e){
-						;
-					}
-					
-					 logger.debug("/fPort printing int ",fPort);			 
-					 logger.debug("Base64 resultant",Base64.encodeBase64String(byteArr));
-					 
-					 JSONObject jsonObj=null;
-		 				jsonObj=new JSONObject();
-		 				jsonObj.put("confirmed",true);
-		 				jsonObj.put("data",Base64.encodeBase64String(byteArr));
-		 				jsonObj.put("devEUI",devId);
-		 				jsonObj.put("fPort",fPort);
-		 				jsonObj.put("reference","DateSetting");
-	 	
-					
-	 				String jsonData=jsonObj.toString(); 			
-							
-	 				String url=AppConstants.domain+"/api/nodes/"+devId+"/queue";
-		    				logger.debug("URLConn",url);	    				
-		    				URL obj1 = new URL(url);
-		    				HttpURLConnection con = (HttpURLConnection) obj1.openConnection();
-		    				con.setDoOutput(true);
-		    				con.setRequestMethod("POST");
-		    				con.setRequestProperty("accept", "application/json");
-		    				con.setRequestProperty("Content-Type", "application/json");
-		    				con.setRequestProperty("Grpc-Metadata-Authorization",AppConstants.jwtToken);
-		    				
-		    				OutputStream os = con.getOutputStream();
-		    		        os.write(jsonData.getBytes());
-		    		        os.flush();
-		    		        os.close();
-		    		        
-		    				int responseCode = con.getResponseCode();
-		    					logger.debug("POST Response Code :: " + responseCode);
-		    						logger.debug("POST Response message :: " + con.getResponseMessage());
-		    				
-		    				if(responseCode == HttpURLConnection.HTTP_OK) {
-		    					returnVal="success";	
-		    				}else{
-		    					returnVal="failed";
-		    				}							
-						
-				
-				
-			}else{
-				logger.debug("No Data Found!");
-				returnVal="No Data Found!";
-			}	
-				
-		}catch(Exception e){
-			logger.error(e);
-		}
-		
-		
-		return returnVal;
-	}*/
-
+	
 }

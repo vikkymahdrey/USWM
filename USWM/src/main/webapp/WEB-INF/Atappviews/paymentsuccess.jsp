@@ -3,6 +3,7 @@
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
+<%@ page errorPage="error.jsp" %> 
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -16,7 +17,8 @@
     
 	  <link href="css/bootstrap.min.css" rel="stylesheet">
 	  <link href="css/custom_siemens.css" rel="stylesheet">
-	  <link href="css/marquees.css" rel="stylesheet">	       
+	  <link href="css/marquees.css" rel="stylesheet">	
+	        
     
    
 	  <!-- Font Awesome -->

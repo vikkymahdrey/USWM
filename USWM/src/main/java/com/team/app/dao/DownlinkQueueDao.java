@@ -1,6 +1,7 @@
 package com.team.app.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -24,5 +25,11 @@ public interface DownlinkQueueDao  extends JpaRepository<DownlinkQueue, Serializ
 	@Query(value="UPDATE downlink_queue f SET f.flag='1' WHERE f.applicationID=?1 and f.dev_eui=?2 and f.deviceId=?3 and f.flag='0' ", nativeQuery = true)
 	@Transactional
 	void updateDownlinkQueueFlag(@Param("applicationID") String applicationID, @Param("devEUI") String devEUI,@Param("deviceId") String deviceId);
+
+	@Query("From DownlinkQueue d ")
+	List<DownlinkQueue> getDownlinkQueue();
+
+	@Query("From DownlinkQueue d where d.applicationID=:applicationID and d.devEui=:devEUI")
+	List<DownlinkQueue> getDownlinkByDevEUIAndAppId(@Param("applicationID") String applicationID, @Param("devEUI") String devEUI);
 
 }

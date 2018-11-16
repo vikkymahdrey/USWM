@@ -5,12 +5,6 @@
 <%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.constant.AppConstants"%>
 <%@page import="com.team.app.domain.*"%>
-<%@page import="org.displaytag.decorator.TotalTableDecorator"%>
-<%@page import="org.displaytag.decorator.MultilevelTotalTableDecorator"%>
-<%@page import="com.itextpdf.text.log.SysoLogger"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 <%@page import="java.util.List"%>
 <html lang="en">
   <head>
@@ -18,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Downlink Queue View</title>
+    <title>Upload User Subscription</title>
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -37,11 +31,10 @@
 	  <link rel="stylesheet" href="css/AdminLTE.min.css">
 	  <link rel="stylesheet" href="css/AdminLTE.css">
 	  <link rel="stylesheet" href="css/skins/_all-skins.min.css">
-	   <link href="css/styling.css" rel="stylesheet">
 	 
 
 	<script src="js/app.min.js"></script>
-	 <script src="js/demo.js"></script>
+	<script src="js/demo.js"></script>
 	
 <!-- Pie Charts... -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -71,7 +64,27 @@
 		   alert(devDesc);
 		   document.getElementById("devid").focus();
 		   return false;
-	   }
+	   }else{		   
+			   $.ajax({
+	               url: 'syncDev',
+	               type: 'POST',
+	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
+	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid}) ,
+	               success: function (data) {
+	               alert(data);
+	               window.location.reload();
+	            	   //$(".success").html(data);
+	                   	
+	                   },
+	  		 		error: function(e){
+	  	     			        alert('Error: ' + e);
+	  	     		 }
+	
+	                  
+	               });
+			   
+			  return false;
+	   		} 
 	   		
    }
    
@@ -230,13 +243,8 @@ function getDevEUIByAppID()
   <body class="hold-transition skin-blue sidebar-mini">
   
   			<% 
-	  			String fname1=("DownlinkQueue :").concat(new Date().toString()).concat(".csv");
-				String fname2=("DownlinkQueue :").concat(new Date().toString()).concat(".xls");
-				String fname3=("DownlinkQueue :").concat(new Date().toString()).concat(".xml");
-  			
   				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
   				List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
-  				List<DownlinkQueue> downlinkQueueList=(List<DownlinkQueue>)request.getAttribute("downlinkQueueList");
   			%>
   			
 							 
@@ -257,7 +265,7 @@ function getDevEUIByAppID()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-dashboard"></span>&nbsp;&nbsp;<b>Downlink Queue View </b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-upload"></span>&nbsp;&nbsp;<b>User Subscription Upload </b></h5>
        
    				</div><!-- /.box-header -->
 		 							
@@ -265,7 +273,7 @@ function getDevEUIByAppID()
    						  <div class="row" >
     				    	<div class="col-sm-6">	
     				    	
-    				    	<form name="form1" action="downlinkQueue" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
 								  <tr>								  		
@@ -336,7 +344,7 @@ function getDevEUIByAppID()
 										</td>
 									</tr>
 									
-									<tr>	
+									<%--  <tr>	
 									   <td id="dId" align="right"><b><%=(String)request.getAttribute("devN")%></b></td>
 									   
 										 <td>
@@ -344,42 +352,18 @@ function getDevEUIByAppID()
 										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
-									</tr>
+									</tr>  --%>
+									
+									
 									<tr>	
-										<td align="right"></td>
-											<td> <input type="submit"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="View"/></td>
-										 
+											<td></td>								
+											<td align="right"> <input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Download"/>
+											 	<input type="button"  class="form-control text-bold " style="background-color:#3c8dbc;color:white; " value="Upload"/></td>										 
 									</tr>	
 								</table>	
 							 </form> 
 							</div>	
-					   	</div>
-					   	
-					   	
-					   	<div class="row" style="overflow-y: auto;">
-							<div class="col-sm-12 ">
-												
-					     	<display:table  class="table table-hover  text-center"  name="<%=downlinkQueueList%>" id="row"
-									export="true" requestURI="" defaultsort="1" defaultorder="descending" pagesize="100">
-							<display:column  property="id" title="ID" sortable="true" headerClass="sortable" />
-							<display:column  property="devEui" title="DevEUI" sortable="true"  />
-							<display:column  property="deviceId" title="DeviceId" sortable="true"  />
-							<display:column  property="applicationID" title="ApplicationID" sortable="true"  />
-							<display:column  property="flag" title="Flag" sortable="true"  />
-							<display:column  property="downlinkID" title="DownlinkID" sortable="true"  />
-							<display:column  property="fport" title="Fport" sortable="true"  />
-							<display:column  property="data" title="Data" sortable="true"  />
-							<display:column  property="mpdu" title="MPDU" sortable="true"  />
-							<display:column  property="pdu" title="PDU" sortable="true"  />
-							<display:column  property="createdAt" title="CreatedDt"  sortable="true"  />
-									
-								     		   
-						 	<display:setProperty name="export.csv.filename" value="<%=fname1%>" />
-							<display:setProperty name="export.excel.filename" value="<%=fname2%>" />
-							<display:setProperty name="export.xml.filename" value="<%=fname3%>" /> 
-							</display:table> 
-							</div>
-						</div>	
+					   </div>
 										
 					</div>	
 			</section>	

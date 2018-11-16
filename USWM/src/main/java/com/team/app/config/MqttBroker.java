@@ -78,8 +78,6 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	    }
 	}    
 	
-	
-
 	@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");

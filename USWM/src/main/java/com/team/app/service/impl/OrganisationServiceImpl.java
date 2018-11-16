@@ -288,11 +288,8 @@ public class OrganisationServiceImpl implements OrganisationService {
 					if(dtos!=null && !dtos.isEmpty()){
 						for(ApplicationDto a : dtos){
 							logger.debug("DevEUI DevEUI..",a.getDevEUI());
-							List<LoraFrame> frms=consumerInstrumentServiceImpl.getDeviceIdByDevEUI(a.getDevEUI());
-							if(frms!=null && !frms.isEmpty()){
-								logger.debug("Size Size..",frms.size());
-								returnVal+="<option value="+a.getDevEUI()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
-							}	
+									returnVal+="<option value="+a.getDevEUI()+">"+a.getDevName()+"-"+ a.getDevEUI() + "</option>";
+								
 						}
 					}
 				}

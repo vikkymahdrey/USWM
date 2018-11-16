@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 //import org.aspectj.lang.annotation.After;
 //import org.aspectj.lang.annotation.Around;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.team.app.dao.DbAuditDao;
 import com.team.app.dao.UserAuditDao;
@@ -60,41 +62,41 @@ public class UserActionAudit {
 	@SuppressWarnings("unused")
 	@Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
 	public Object urlAccessed(ProceedingJoinPoint jp) {
-
+		logger.debug("In Aspect");
 	
-		String user = "", url = "", ipaddress = "",message = "";;
+		String user = null, url = "", ipaddress = "";
 		Object returnobj = null;
+		Object returnType = null;
 		Date responsetime;
 		Date requesttime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");
 		ActionsAudit actionsAudit = new ActionsAudit();
-		try {
+		HttpServletRequest servletRequest=null;
+		
 			RequestMapping requestMapping = ((MethodSignature) jp.getSignature()).getMethod()
 					.getAnnotation(RequestMapping.class);
+			
 			for (Object o : jp.getArgs()) {
 				if (o instanceof HttpServletRequest) {
-					HttpServletRequest servletRequest = (HttpServletRequest) o;
-					
-					ipaddress = (servletRequest.getRemoteAddr());
-					HttpSession session = servletRequest.getSession();	
-
-					logger.debug("Status msg ",(String)session.getAttribute("msg"));
-					if((String)session.getAttribute("msg") != null && (String)session.getAttribute("msg") != ""){
-						message = (String)session.getAttribute("msg");	
-						session.invalidate();
-					}
-					
-					try {
-						if (session != null) {
-							user = (((TblUserInfo) session.getAttribute("user")).getId());							
-							
-						} else {
+					 servletRequest = (HttpServletRequest) o;
+					 ipaddress = (servletRequest.getRemoteAddr());
+					 HttpSession session =null;
+						session=servletRequest.getSession();		
+										
+					try{
+						/*Session checker*/
+						if (session != null ) {
+							user = (((TblUserInfo) session.getAttribute("user")).getId());						
+						}else {
 							user = "NO SESSION FOUND";
 						}
-					} catch (Exception e) {
-
+					
+					}catch(Exception e){
+							;
 					}
+					
 				}
 			}
+			
 			for (String annotationvalue : requestMapping.value()) {
 
 				url = annotationvalue;
@@ -102,45 +104,50 @@ public class UserActionAudit {
 			}
 
 			try {
-				returnobj = jp.proceed();
-				responsetime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			actionsAudit.setRequestTime(requesttime);
-			actionsAudit.setResponseTime(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
-			if (user != null) {
-				actionsAudit.setUserid(Integer.parseInt(user));
-			}
-			actionsAudit.setUrl(url);
-			actionsAudit.setIpaddress(ipaddress);
-			actionsAudit.setMessage(message);
-			auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
-
-		} catch (Exception e) {
-			logger.error("Exception In ",e);
-			actionsAudit = new ActionsAudit();
-			actionsAudit.setRequestTime(requesttime);
-			actionsAudit.setUrl(url);
-			actionsAudit.setIpaddress(ipaddress);
-			actionsAudit.setException(e.toString());
-			actionsAudit.setMessage(message);
-			auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();
-
-			try {
-				returnobj = jp.proceed();
-			} catch (Throwable e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+				logger.debug("Printing Signature : ",jp.getSignature().toString());
+				
+				if(jp.getSignature().toString().contains("ModelAndView")){
+					returnType=new ModelAndView("redirect:/");
+				}else{
+					returnType="redirect:/";
+				}
+				
+				returnobj = jp.proceed();				
+				
+				responsetime = DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss");				
+				actionsAudit.setRequestTime(requesttime);
+				actionsAudit.setResponseTime(DateUtil.getCurrentDateTimeIST("yyyy-MM-dd HH:mm:ss"));
+					if (user != null) {
+						actionsAudit.setUserid(Integer.parseInt(user));
+					}
+				actionsAudit.setUrl(url);
+				actionsAudit.setIpaddress(ipaddress);			
+				auditid = ((ActionsAudit) userAuditDao.save(actionsAudit)).getId();				
+				
+			} catch (Throwable e){
+				logger.debug("In catch Audit log");
+				actionsAudit = new ActionsAudit();
+				actionsAudit.setRequestTime(requesttime);
+				actionsAudit.setUrl(url);
+				actionsAudit.setIpaddress(ipaddress);
+				actionsAudit.setException(e.toString()+" Line "+Thread.currentThread().getStackTrace()[1].getLineNumber());
+				ActionsAudit auditAction=userAuditDao.save(actionsAudit);
+				auditid = auditAction.getId();								
+					        	
+				//returnobj=returnType;		
+			}			
 
 		return returnobj;
 
 	}
 
+	
+	@AfterThrowing(pointcut="within(com.team.app..*)",throwing="ex")
+	public void exceptionsAudit(Exception ex){		
+		logger.debug("Exception in AfterThrowing",ex);		
+	}
+	
+	
 	@Around("execution(* com.team.app.dao.*.save(..))")
 	public Object dabaseCrudAuditSave(ProceedingJoinPoint jp) {
 
@@ -149,6 +156,7 @@ public class UserActionAudit {
 
 		try {
 			returnObject = jp.proceed();
+			
 						if (returnObject instanceof Area) {
 				String rowid = ((Area)returnObject).getId();
 							dataaudit = new DatabaseAudit();

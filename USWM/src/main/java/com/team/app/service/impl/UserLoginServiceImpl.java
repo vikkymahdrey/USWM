@@ -326,4 +326,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 		return userDeviceMappingDao.getDeviceByEUI(devEUI);
 	}
 
+
+
+	
+	public void deleteDevLoraNode(String appId, String devEUI,String userId) throws Exception {
+		userDeviceMappingDao.deleteDevLoraNode(appId,devEUI,userId);
+		
+	}
+
 }

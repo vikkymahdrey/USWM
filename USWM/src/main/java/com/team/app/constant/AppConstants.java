@@ -46,6 +46,8 @@ public class AppConstants {
 	public static final String app_url =domain+"/api/applications?limit=500";
 	public static final String user_url=domain+"/api/users?limit=500";
 	public static final String status="Y";
+	
+	public static final String statusLog="Failed";
 	public static final String noportdomain ="139.59.14.31";
 	
 	public static final String timeZone="Asia/Kolkata";
@@ -86,9 +88,12 @@ public class AppConstants {
 	
 	
 	
+	//Feedback status
 	
-	
-	
+	public static final String open = "Open";
+	public static final String close = "Close";
+	public static final String pending = "Pending";
+	public static final String reopen = "ReOpen";
 	
 	
 	

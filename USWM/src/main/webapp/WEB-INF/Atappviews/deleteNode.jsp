@@ -1,9 +1,8 @@
 <%--
-    Document   : home page
-    Author     : Vikky
+     Author     : Vikky
 --%>
 
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.itextpdf.text.log.SysoLogger"%>
 <%@page import="java.util.List"%>
@@ -17,8 +16,7 @@
     
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    
+    <script src="js/bootstrap.min.js"></script>    
 	  <link href="css/bootstrap.min.css" rel="stylesheet">
 	  <link href="css/custom_siemens.css" rel="stylesheet">
 	   <link href="css/marquees.css" rel="stylesheet">
@@ -48,45 +46,86 @@
 	   var orgid=document.getElementById("orgid").value;
  	  	var appid=document.getElementById("appid").value;
  	  	var devid=document.getElementById("devid").value;
- 		var deviceid=document.getElementById("deviceid").value;
- 		
+ 	  	var orgDesc=document.getElementById("orgN").value;
+	  	var appDesc=document.getElementById("appN").value;
+	  	var devDesc=document.getElementById("devN").value;
+ 		 		
 	   	   
 	   if(orgid=="0"){
-		   alert("Please select organisation!");
+		   alert(orgDesc);
+		   document.getElementById("orgid").focus();
 		   return false;
 	   }else if(appid=="0"){
-		   alert("Please select application!");
+		   alert(appDesc);
+		   document.getElementById("appid").focus();
 		   return false;
 	   }else if(devid=="0"){
-		   alert("Please select devEUI!");
-		   return false;
-	   }else if(deviceid=="0"){
-		   alert("Please select device id!");
+		   alert(devDesc);
+		   document.getElementById("devid").focus();
 		   return false;
 	   }
 	   else{		   
-			    $.ajax({
-	               url: 'deleteDev',
-	               type: 'POST',
-	               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
-	               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid,deviceid : deviceid}) ,
-	               success: function (data) {
-	               alert(data);
-	               //$(".success").html(data);
-	               window.location.reload();
-	                   },
-	  		 		error: function(e){
-	  	     			        alert('Error: ' + e);
-	  	     		 }
-	
-	                  
-	               }); 
+		   $.ajax({
+               url: 'deleteLoraNode',
+               type: 'POST',
+               //data: 'orgId='+orgid+'&appId='+appid+'&devId='+devid,
+               data: jQuery.param({ orgId: orgid, appId : appid, devId : devid}) ,
+               success: function (data) {
+               alert(data);
+               //$(".success").html(data);
+               window.location.reload();
+                   },
+  		 		error: function(e){
+  	     			        alert('Error: ' + e);
+  	     		 }
+
+                  
+               }); 
+		  
+		   return false;
+		
+   		} 
 			  
-			   return false;
-			
-	   		} 
 	   		
    }
+   
+   function getKeywords(){	  
+	   var typeId=document.getElementById("typeId").value;
+	     
+	   $.ajax({
+           url: 'getKeywordByTypeId',
+           type: 'POST',
+           data: jQuery.param({ typeId: typeId }) ,
+           success: function (data) {
+        	       var obj=eval("(function(){return " + data + ";})()");
+      		       var resultant=obj.result;        		
+	        	   if(resultant.length==0){
+	        		   alert("Data not found!");            		
+	        	   }else{
+	        		   for (var i = 0; i <resultant.length; i++) {
+	        			    if(resultant[i].organisation!==undefined){
+	        			    	
+	        				     document.getElementById("oId").innerHTML="<b>"+resultant[i].organisation+"</b>";  
+	        				     document.getElementById("orgN").value=resultant[i].desc; 
+	        				}else if(resultant[i].application!==undefined){
+								 document.getElementById("aId").innerHTML="<b>"+resultant[i].application+"</b>"; 
+								 document.getElementById("appN").value=resultant[i].desc; 
+							}else if(resultant[i].device!==undefined){
+								 document.getElementById("dId").innerHTML="<b>"+resultant[i].device+"</b>";
+								 document.getElementById("devN").value=resultant[i].desc; 
+							}       			    
+	        			}	  
+	        	   }
+        	
+               },
+		 		error: function(e){
+	     			        alert('Error: ' + e);
+	     		 }
+
+              
+           }); 
+	   
+  }  
    
 function getAppByOrgID()
 {    
@@ -97,8 +136,9 @@ function getAppByOrgID()
             	
                 	var appid=document.getElementById("appid");
                 	var devid=document.getElementById("devid");
-                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >--Choose Application--</option></select>';
-                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+                		appid.innerHTML='<select name="appname" id="appid" onchange="getDevEUIByAppID()"> <option value="0" >Please Choose</option></select>';
+                	var devid=document.getElementById("devid");
+                		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
                 		return;
                 	}
                 else
@@ -121,14 +161,16 @@ function getAppByOrgID()
 function getDevEUIByAppID()
 {     
 	var appid=document.getElementById("appid").value;	
+	//devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
 	if(appid=="0")
     	{                	
     	var devid=document.getElementById("devid");
-    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >--Choose Device EUI--</option></select>';
+    		devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
     	return;
     	}
     else
     	{
+    	
     var url="getDevEUI?appId="+appid;                                    
     xmlHttp=GetXmlHttpObj()
     if (xmlHttp==null)
@@ -144,32 +186,7 @@ function getDevEUIByAppID()
 }
 
 
-function getDevIDByDeviceEUI()
-{    
-	
-	var devid=document.getElementById("devid").value;
-	
-	if(devid=="0")
-    	{                	
-    	var deviceid=document.getElementById("deviceid");
-    		deviceid.innerHTML='<select name="devicename" id="deviceid"> <option value="0" >--Choose Device ID--</option></select>';
-    	return;
-    	}
-    else
-    	{
-    var url="getDevId?devId="+devid;                                    
-    xmlHttp=GetXmlHttpObj()
-    if (xmlHttp==null)
-    {
-        alert ("Browser does not support HTTP Request");
-        return
-    }                    
-    xmlHttp.onreadystatechange=setDevID;	
-    xmlHttp.open("GET",url,true);                
-    xmlHttp.send(null);
-    
-    	}
-}
+
                 
             function GetXmlHttpObject()
             {
@@ -208,7 +225,10 @@ function getDevIDByDeviceEUI()
                 { 
                     var returnText=xmlHttp.responseText;
                     var appid=document.getElementById("appid");
-                    appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">--Choose Application--</Option>'+returnText+'</select>';                                             
+                    	appid.innerHTML='<select  name="appname" id="appid" onchange="getDevEUIByAppID()"><Option value="0">Please Choose</Option>'+returnText+'</select>';
+                    var devid=document.getElementById("devid");
+            			devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>';
+            	
                 }
             }
             
@@ -217,32 +237,18 @@ function getDevIDByDeviceEUI()
                 if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
                 { 
                     var returnText=xmlHttp.responseText;
-                    if(returnText!=""){
-                	  
                     var devid=document.getElementById("devid");
-                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">--Choose Device EUI--</Option>'+returnText+'</select>';      
+                    if(returnText!=""){ 	  
+                    
+                    devid.innerHTML='<select  name="devname" id="devid"><Option value="0">Please Choose</Option>'+returnText+'</select>';      
                    }else{
-                	   alert("DeviceEUI not associated with deviceId");
+                	   alert("No LoRa Node Found!");
+                	    devid.innerHTML='<select name="devname" id="devid"> <option value="0" >Please Choose</option></select>'
                    }	
                 }
             }
             
-            function setDevID() 
-            {                      
-                if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
-                { 
-                    var returnText=xmlHttp.responseText;
-                    if(returnText=='Empty'){
-                    	alert("No Devices found!");
-                    	var deviceid=document.getElementById("deviceid");
-                    	deviceid.innerHTML='<select name="devicename" id="deviceid"> <option value="0" >--Choose Device ID--</option></select>';
-                        
-                    }else{
-                    	var deviceid=document.getElementById("deviceid");
-                   	 	deviceid.innerHTML='<select  name="devicename" id="deviceid"><Option value="0">--Choose Device ID--</Option>'+returnText+'</select>';   
-                    }
-                }
-            }
+           
      </script>       
      
   </head>
@@ -251,12 +257,13 @@ function getDevIDByDeviceEUI()
   
   			<% 
   				Map<String,Object> organisations=(Map<String,Object>)request.getAttribute("organisations");
+  			    List<TblKeywordType> keyTypes=(List<TblKeywordType>)request.getAttribute("keyTypes");
   			%>
   			
 							 
   <div class="wrapper">  
-  	
- <%@include file="Header.jsp"%>  
+  	<%@include file="Header.jsp"%>  
+ 
 	<div class="content-wrapper">
 		
 			<section class="content">
@@ -271,29 +278,58 @@ function getDevIDByDeviceEUI()
 				</div>
 		 		
 		 		<div class="box-header with-border">
-  					  <h5 class="text-blue text-left "><span class="fa fa-recycle"></span>&nbsp;&nbsp;<b>Remove LoRa Device </b></h5>
+  					  <h5 class="text-blue text-left "><span class="fa fa-recycle"></span>&nbsp;&nbsp;<b>Delete LoRa Node </b></h5>
        
    				</div><!-- /.box-header -->
 		 							
    						
    						  <div class="row" >
-    				    	<div class="col-sm-12">	
+    				    	<div class="col-sm-6">	
     				    	
-    				    	<form name="form1" action="deleteNode" onsubmit="return confirmValidate();" method="post">
+    				    	<form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
 										
 								  <table class="table">
-															
-								 	
+									 <tr>								  		
+										<td align="right"><b>Housing Type</b></td>
+										<td>	
+											 	<select name="typeId" class="form-control" id="typeId" onchange="getKeywords()">
+											    	<!-- <option value="0">Select Housing Type</option> -->
+											    	<%if(keyTypes!=null && !keyTypes.isEmpty()){
+											    		for(TblKeywordType type :keyTypes){%>	
+											    			<option value="<%=type.getId()%>"><%=type.getType()%></option>
+											    		<%} 
+											    	}%>
+											    </select> 
+											    <%
+											    for(TblKeyword key : keyTypes.get(0).getTblKeywords()){
+											    	if(key.getKey().equalsIgnoreCase(AppConstants.orgName)){
+											    	   	request.setAttribute("orgN", key.getValue());%>											    	
+											    	     <input type="hidden" name="orgN" id="orgN" value="<%=key.getDesc()%>"/> 
+											    	     
+				 									<%}else if(key.getKey().equalsIgnoreCase(AppConstants.appName)){ 
+				 										request.setAttribute("appN", key.getValue());%>
+				 										<input type="hidden" name="appN" id="appN" value="<%=key.getDesc()%>"/>
+				 										
+				 									<%}else if(key.getKey().equalsIgnoreCase(AppConstants.devName)){
+				 										request.setAttribute("devN", key.getValue());%>
+				 										<input type="hidden" name="devN" id="devN" value="<%=key.getDesc()%>"/>
+				 										
+				 									<%}%>	
+				 								<%} %>	
+			 																	    
+										</td>
+																	  		
+								    </tr>						 	
 								  	<tr>
-								  		<td align="right"><b>Organization</b></td>								  											
-																
+								  		<td id="oId" align="right"><b><%=(String)request.getAttribute("orgN")%></b></td>
+								  											
 										<td>
-										 <select name="orgname" id="orgid" onchange="getAppByOrgID()">
-										    <option value="0">--Choose Organisation--</option>	
+										 <select name="orgname" class="form-control" id="orgid" onchange="getAppByOrgID()">
+										    <option value="0">Please Choose</option>	
 										    <%if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.superAdmin)){										    
 											    if(organisations!=null && !organisations.isEmpty()){
 											    	for(Map.Entry<String,Object> map :organisations.entrySet()){%>
-											    	    <option value="<%=map.getKey()%>"><%=map.getValue()%></option>
+											    	    <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
 											    	<%}
 											    }
 										    }else if(userSession.getRoleBean().getType().equalsIgnoreCase(AppConstants.admin)){
@@ -301,7 +337,7 @@ function getDevIDByDeviceEUI()
 											    	for(Map.Entry<String,Object> map :organisations.entrySet()){
 											    		for(UserDeviceMapping udm : userSession.getUserDeviceMappings()){
 											    		   if(udm.getOrgId().equals(map.getKey())){%>
-											    	    	 <option value="<%=map.getKey()%>"><%=map.getValue()%></option>
+											    	    	 <option value="<%=map.getKey()+":"+map.getValue()%>"><%=map.getValue()%></option>
 											    		   <%}
 											    		} 
 											    	}
@@ -309,43 +345,34 @@ function getDevIDByDeviceEUI()
 										    }%>
 										 </select> 
 										</td>
-										
 									</tr>
 									<tr>	
-									   <td align="right"><b>Applications</b></td>
+									   <td id="aId" align="right"><b><%=(String)request.getAttribute("appN")%></b></td>
 									   
 										 <td>
-										 	<select name="appname" id="appid" onchange="getDevEUIByAppID()">
-										    	<option value="0">--Choose Application--</option>	
+										 	<select name="appname" class="form-control" id="appid" onchange="getDevEUIByAppID()">
+										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
 									</tr>
 									
 									<tr>	
-									   <td align="right"><b>Device EUI</b></td>
+									   <td id="dId" align="right"><b><%=(String)request.getAttribute("devN")%></b></td>
 									   
 										 <td>
-										 	<select name="devname" id="devid" onchange="getDevIDByDeviceEUI()">
-										    	<option value="0">--Choose Device EUI--</option>	
+										 	<select name="devname" class="form-control" id="devid">
+										    	<option value="0">Please Choose</option>	
 										    </select> 
 										</td>
 									</tr>
 									
-									<tr>	
-									   <td align="right"><b>Device ID</b></td>
-									   
-										 <td>
-										 	<select name="devicename" id="deviceid" >
-										    	<option value="0">--Choose Device ID--</option>	
-										    </select> 
-										</td>
-									</tr>
+									
 									<tr>	
 										<td align="right"></td>
-											<td> <input type="submit"  class="formbutton text-bold " style="background-color:#3c8dbc; " value="Delete"/></td>
+											<td> <input type="submit"  class="form-control" style="background-color:#3c8dbc;color:white; " value="Remove"/></td>
 										 
 									</tr>	
-								</table>	
+								 </table>	
 							 </form> 
 							</div>	
 					   </div>

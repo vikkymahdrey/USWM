@@ -2,7 +2,7 @@
     Document   : Water Consumption Unit
     Author     : Vikky
 --%>
-
+<%@ page errorPage="error.jsp" %> 
 <%@page import="java.util.*"%>
 <%@page import="com.team.app.domain.*"%>
 <%@page import="com.team.app.dto.*"%>
@@ -13,6 +13,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+
 
 <!DOCTYPE html >
 <html lang="en">
@@ -33,6 +34,7 @@
  <!--  AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="css/skins/_all-skins.min.css">
+   <link href="css/styling.css" rel="stylesheet">
   
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>

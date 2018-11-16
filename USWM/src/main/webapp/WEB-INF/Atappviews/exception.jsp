@@ -1,10 +1,9 @@
-<%@ page errorPage="error.jsp" %> 
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Log in</title>
+  <title>Exception</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -45,63 +44,16 @@
 	  });
 	</script>
 	
-	<script  type="text/javascript">
+<script  type="text/javascript">
 	
 	 function loadScript(){	
 	
 		 var statusLog='<%=statusLog%>';
-		
 		 if(statusLog!='null'){			 
 			$("#loginAudit").modal(); 
 		 }
 		 
 	 }
- 
-	
-function browserIdentity()
-{
-	if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
-		 var ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
-		  
-		   if (ieversion<=7)
-		 	 alert("You are using older version of Internet Explorer. Please upgrade your browser.");
-		 
-}
-}
-  $(document).ready(function() {
-	  alert("hello");
-	$( "#uname" ).click(function() {
-		var passvalid= document.getElementById("sts").value;
-		
-		if(passvalid=="" || passvalid=="null"){
-			return true;
-		}else{
-			window.location.reload();
-		}
-			
-		});
-	});  
-
-function validate() {
-	var uname = document.getElementById("uname").value;
-	var password = document.getElementById("pass").value;
-	document.getElementById("namevalid").innerHTML = "";
-	document.getElementById("passvalid").innerHTML = "";
-	
-	
-	 if (uname.length < 1) {
-		document.getElementById("namevalid").innerHTML = "Please enter Username!";
-		document.getElementById("uname").focus(); 
-		return false;
-	}else if (password.length < 1) {
-		document.getElementById("passvalid").innerHTML = "Please enter Password!";
-		document.getElementById("pass").focus(); 
-		return false;
-	} 
-		return true;
-	
-	
-}
 </script>
    
 	
@@ -118,7 +70,7 @@ function validate() {
 					
 				%>	
 <div class="wrapper">
-<%
+						<%
 						response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
 						response.setHeader("Pragma", "co-cache");
 						response.setDateHeader("Expires", 0);
@@ -142,50 +94,13 @@ function validate() {
 								;
 							}
 					
-					%>	
+						%>	
+						 <div>
+						 
+							<p><b>Please contact to support team at vikky@unizentechnoglogies.com</b></p> 
+						 </div>
+							
 
-<div class="login-box">
-  <div class="login-logo">
-    <h3><b>Unizen</b>SWM Sol.</h3>
-  </div>
-  <!-- /.login-logo -->
-  <div class="login-box-body">
-    <p class="login-box-msg"><b>Please Sign-in</b></p>
-
-    <form action="onSubmitlogin" name="user_validation_form" id="user_validation_form" method="post" onsubmit="return validate()">
-    
-			      <div class="form-group has-feedback">
-			      	<input type="text" name="uname" id="uname" class="form-control" placeholder="Username"/>
-			      	<span class="fa fa-user form-control-feedback"></span>
-			        <span id="namevalid" style="color: red;"></span>
-			      </div>
-			      
-			      <div class="form-group has-feedback">
-			        <input type="password" name="pass" id="pass" class="form-control" placeholder="Password">
-			        <span class="fa fa-lock form-control-feedback"></span>
-			        
-			        <span id="passvalid" style="color: red;" ><%=message %></span>
-					<input type="hidden" name="sts" id="sts" value="<%=(String)request.getAttribute("status")%>">
-			      </div>
-			      
-			     			        
-			      <div class="row" style="text-align:center;">
-				   				        
-				        <!-- /.col -->
-				        <div class="col-xs-4">
-				          <button type="submit" style="margin-left: 135%;" class="btn btn-primary btn-block btn-flat text-bold">Sign In</button>
-				        </div>
-				        <!-- /.col -->
-			      </div>
-    </form>
-
-   
-    <!-- /.social-auth-links -->
-
-    <!-- <a href="#">I forgot my password</a><br> -->
-    
-    <!-- Calling StatusLog Modal -->
-    <!-- Modal -->
                                       <div class="modal fade" id="loginAudit" role="dialog">
                                       	<div class="modal-dialog ">    
                                       		<!-- Modal content-->
@@ -254,12 +169,8 @@ function validate() {
 					               </div><!-- modal close here -->		
     
 
-  </div>
-  <!-- /.login-box-body -->
-</div>
-</div>
-<!-- /.login-box -->
-
-
+  							</div>
+  
+		
 </body>
 </html>
