@@ -123,7 +123,7 @@
           
         </li>
         
-         <li class="treeview"> 
+         <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-cc-visa"></i>
             <span><b>Pay Bills</b></span>
@@ -136,7 +136,7 @@
           </ul>
           
              
-        </li>
+        </li> -->
         
          <li class="treeview">
           <a href="#">
@@ -229,7 +229,7 @@
         </li>
         
         
-       <li class="treeview">
+       <!-- <li class="treeview">
           <a href="personalInfo">
             <i class="fa fa-edit"></i>
             <span><b>Edit Information</b></span>
@@ -238,7 +238,7 @@
           </a>
               
           
-        </li>
+        </li> -->
         
         <!-- <li class="treeview">
           <a href="#">
@@ -254,7 +254,7 @@
         
         
         
-         <li class="treeview">
+         <!-- <li class="treeview">
           <a href="#">
             <i class="fa fa-arrow-right"></i>
             <span><b>Reports</b></span>
@@ -270,7 +270,7 @@
                        
           </ul>
           
-        </li>
+        </li> -->
         
         
         <li class="treeview"> 
@@ -290,7 +290,7 @@
              
         </li>
         
-        <li class="treeview"> 
+        <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-cc-visa"></i>
             <span><b>Payment</b></span>
@@ -304,7 +304,7 @@
           </ul>
           
              
-        </li>
+        </li> -->
         
        
         

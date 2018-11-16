@@ -339,26 +339,74 @@
 					            <div class="box-tools pull-right">
 					                <button type="button" class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
 					                </button>
-					                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+					                <button type="button" class="btn btn-default btn-sm"></i></button>
 					            </div>
 					        </div>
 					           
 					            <div class="box-body">	       
 					              	    							
 									   
-									   <div class="info-box col-sm-6 mar-top-25" >											
+									   <div class="info-box col-sm-4 mar-top-25" >											
 										  	<span class="info-box-icon bg-yellow"><i class="fa fa-edit"></i></span>
 										  	<div class="info-box-content">
 											    <span class="info-box-text">EDIT USER INFO</span><br/>
-											    <a href="personalInfo"><span class="fa fa-edit"> EDIT</span></a>											   
+											    <a href="personalInfo"><span class="fa fa-edit"> <b>EDIT</b></span></a>											   
 										 	</div>
 									   </div>
 									   
-									    <div class="info-box col-sm-6 mar-top-25" >											
-										  	<span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
+									    <div class="info-box col-sm-4 mar-top-25" >											
+										  	<span class="info-box-icon bg-green"><i class="fa fa-tint"></i></span>
 										  	<div class="info-box-content">
-											    <span class="info-box-text">Water Meter Devices</span>
-											    <span class="info-box-number"><b>2</b></span> 
+											    <span class="info-box-text">Water-Consumption</span><br/>
+											     <a href="endUserWaterConsumption"><span class="fa fa-tint"> <b>Report</b></span></a>	
+											    
+											    
+										 	</div>
+									    </div> 
+									    
+									    <div class="info-box col-sm-4 mar-top-25" >											
+										  	<span class="info-box-icon bg-blue"><i class="fa fa-file"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">User-Device</span><br/>
+											     <a href="userDeviceMapped"><span class="fa fa-file"> <b>Mapping</b></span></a>	
+											    
+											    
+										 	</div>
+									    </div>
+									   
+									   
+							   </div>
+						   </div>
+						 </div>
+					  </div>
+					  
+					  
+					  <div class="row">
+					  <div class="col-md-12">					       
+					    <div class="box box-solid">
+					        <div class="box-header">
+					            <i class="fa fa-cc-visa"></i>
+								<h3 class="box-title">
+									<b>Make A Payment</b>
+								</h3>				           
+					
+					            <div class="box-tools pull-right">
+					                <button type="button" class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+					                </button>
+					                <button type="button" class="btn btn-default btn-sm"></i></button>
+					            </div>
+					        </div>
+					           
+					            <div class="box-body">	       
+					              	    							
+									 
+									   
+									    <div class="info-box col-sm-6 mar-top-25" >											
+										  	<span class="info-box-icon bg-red"><i class="fa fa-user"></i></span>
+										  	<div class="info-box-content">
+											    <span class="info-box-text">Make a payment</span><br/>
+											    <!-- <span class="info-box-number"><b>2</b></span>  -->
+											    <a href="payUBills"><span class="fa fa-cc-visa"> <b>Pay Bills</b></span></a>
 											    
 										 	</div>
 									  </div> 
