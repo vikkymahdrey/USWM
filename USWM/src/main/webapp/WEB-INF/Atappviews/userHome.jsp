@@ -111,7 +111,8 @@
             	   if(resultant.length==0){
             		   alert("FromDate is after ToDate! ' Incorrect dates '");            		
             	   }
-            	   jsonVal=data;            	
+            	   jsonVal=data; 
+            	   console.log(jsonVal)
                			graphOnDemand();
                    },
   		 		error: function(e){
