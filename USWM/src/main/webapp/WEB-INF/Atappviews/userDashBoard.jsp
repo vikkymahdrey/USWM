@@ -91,7 +91,7 @@
 							<div class="icon">
 								<i class="ion ion-stats-bars"></i>
 							</div>
-							<a href="#" class="small-box-footer">More info <i
+							<a href="#" class="small-box-footer"><!--  More info --><i
 								class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
@@ -880,16 +880,21 @@
 	<script>
 		var dayreportjson = {}
 		var totalConsumption = {}
-		var totalBoxClasses = ['bg-green','bg-yellow','bg-red','bg-blue','bg-orange']
+		//var totalBoxClasses = ['bg-green','bg-yellow','bg-red','bg-blue','bg-orange']
 
-		var staticlineColors = [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
+		
+function getLineColors(){
+			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
 				'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ]
-
+			
+			return staticlineColors[Math.floor(Math.random() * 3)]
+		
+		}
 		
 		function getBoxColor(){
 			
 			var totalBoxClasses = ['bg-green','bg-yellow','bg-red','bg-blue','bg-orange']
-			return totalBoxClasses[Math.floor(Math.random() * 5)]
+			return totalBoxClasses[Math.floor(Math.random() * 3)]
 			
 		}
 		
@@ -983,7 +988,7 @@
 
 					ykeys.push(config[k].name);
 					labels.push(config[k].name);
-					lineColors.push(staticlineColors[k])
+					lineColors.push(getLineColors())
 
 				}
 
