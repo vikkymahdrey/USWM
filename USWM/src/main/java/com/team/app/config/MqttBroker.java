@@ -20,12 +20,15 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team.app.constant.AppConstants;
 import com.team.app.dao.DeviceInfoDao;
 import com.team.app.dao.DownlinkQueueDao;
 import com.team.app.dao.FrameDao;
+import com.team.app.dao.LoraConsoildatedPktDao;
 import com.team.app.domain.DownlinkQueue;
 import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblDeviceDetail;
+import com.team.app.domain.TblLoraConsoildatedPkt;
 import com.team.app.logger.AtLogger;
 import com.team.app.service.ConsumerInstrumentService;
 import com.team.app.service.DownlinkService;
@@ -50,6 +53,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	
 	@Autowired
 	private ConsumerInstrumentService  consumerInstrumentService;
+	
+	@Autowired
+	private LoraConsoildatedPktDao  loraConsoildatedPktDao;
 		
 	MqttClient client;
 	
@@ -78,7 +84,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 	    }
 	}    
 	
-	/*@Transactional
+	@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -142,6 +148,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				     		 		String battrey_info="";
 				     		 		int hourly=-1;
 				     		 		int n=0;
+				     		 		int consoildatedUnits=0;
 				     		 		int mpdu=0;
 				     		 		int packetLength=0;
 				     		 		long millseconds=System.currentTimeMillis();
@@ -151,9 +158,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 				     		 				if(n>0){
 				     		 					frm=new LoraFrame();
 				     		 					n=0;	
-			     		 		   				temp=0;
-			     		 		   				
+			     		 		   				temp=0;			     		 		   				
 			     		 		   				waterLtr="";
+			     		 		   				consoildatedUnits=0;
 			     		 		   				
 			     		 		   			}
 				     		 			  if(i==0){
@@ -268,11 +275,18 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 					     		 			 				}
 						     		 			 			
 						     		 			 		}else if(packetType.equals("6")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);
-						     		 			 			logger.debug("consoildated packet ");
+						     		 			 			logger.debug("Packet Type as " ,packetType);						     		 			 			
 						     		 			 			break;
 						     		 			 		}else if(packetType.equals("7")){
 						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			logger.debug("consoildated packet ");
+						     		 			 			int devMapCombination=0;
+						     		 			 			if(decodeBinary.length()>1){
+						     		 			 				devMapCombination=Integer.parseInt(devMapId+decodeBinary,16);
+						     		 			 			}else{
+						     		 			 				devMapCombination=Integer.parseInt(devMapId+"0"+decodeBinary,16);
+						     		 			 			}
+						     		 			 			devMapId=String.valueOf(devMapCombination);
 						     		 			 			break;
 						     		 			 		}else if(packetType.equals("8")){
 						     		 			 			logger.debug("Packet Type as " ,packetType);
@@ -297,6 +311,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 				   
 						     		 					//Calculating Packet Length						     		 					
 						     		 					packetLength=Integer.parseInt(decodeBinary.substring(1),16);
+						     		 				}else if(packetType.equals("7")) {
+						     		 					logger.debug("printing i==2,consoildated");
+						     		 					consoildatedUnits=Integer.parseInt(decodeBinary,16);
 						     		 				}else if(packetType.equals("8")){
 					     		 			 			logger.debug("Packet Type as " ,packetType);
 					     		 			 			TblDeviceDetail existBattreySwInfo=deviceInfoDao.getDeviceInfoByDevEUI(frame.getDevEUI());
@@ -385,8 +402,49 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 									     		 		    millseconds=millseconds+TimeUnit.HOURS.toMillis(1);									     		 		    
 							     		 					n++;							     		 					
 									     		 		    
-							     		 				}else{
-							     		 					logger.debug("Packet Type as ",packetType);	
+							     		 				}else if(packetType.equals("7")) {
+							     		 					logger.debug("printing i>2,consoildated");
+							     		 					consoildatedUnits=consoildatedUnits+Integer.parseInt(decodeBinary,16);
+							     		 					if(i<5) {
+							     		 						i++;
+							     		 						continue;
+							     		 					}
+							     		 					
+							     		 					TblLoraConsoildatedPkt pkt=null;
+							     		 						pkt=new TblLoraConsoildatedPkt();
+							     		 						
+							     		 						pkt.setCreatedDt(formatter.parse(formatter.format(new Date(millseconds))));
+							     		 						pkt.setUpdatedDt(formatter.parse(formatter.format(new Date(millseconds))));						     		 					
+							     		 						pkt.setWaterltr(String.valueOf(consoildatedUnits));
+							     		 						pkt.setApplicationId(frame.getApplicationID());									     		 		 
+							     		 						pkt.setNodeName(frame.getNodeName());
+							     		 						pkt.setDevEUI(frame.getDevEUI());
+							     		 						pkt.setStatus(AppConstants.IND_A);
+							     		 						
+							     		 						TblLoraConsoildatedPkt consPkt=loraConsoildatedPktDao.save(pkt);
+							     		 						if(consPkt!=null) {
+							     		 							Long l=frameDao.getWaterConsumptionsUnitForEndUser(consPkt.getApplicationId(),consPkt.getDevEUI());
+							     		 							if(l!=null) {
+							     		 									logger.debug("IN Long ,",l);
+							     		 									logger.debug("IN Long1 ,",Long.parseLong(consPkt.getWaterltr()));
+							     		 								if(l!=Long.parseLong(consPkt.getWaterltr()) && Long.parseLong(consPkt.getWaterltr())>=l) {
+							     		 									logger.debug("IN if condition");
+							     		 									LoraFrame fm=frameDao.getLoraFrameByDevEUIAndAppID(consPkt.getDevEUI(),consPkt.getApplicationId());
+							     		 									if(fm!=null) {
+							     		 										logger.debug("IN if condition fm");
+							     		 										fm.setWaterltr(String.valueOf(Long.parseLong(consPkt.getWaterltr())-l));
+							     		 										fm.setUpdatedAt(formatter.parse(formatter.format(new Date(millseconds))));
+							     		 										frameDao.save(fm);
+							     		 										
+							     		 										consPkt.setStatus(AppConstants.IND_D);
+							     		 										loraConsoildatedPktDao.save(consPkt);
+							     		 									}
+							     		 								}
+							     		 							}
+							     		 						}
+							     		 						
+									     		 		 		
+									     		 		    n++;
 							     		 				}
 						     		 				//}
 							     		 		i++;							     		 			  
@@ -476,10 +534,10 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	
-	@Transactional
+	/*@Transactional
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		logger.debug("Inside messageArrived");
 		try{
@@ -559,7 +617,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 			logger.error("Error",e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 
 
