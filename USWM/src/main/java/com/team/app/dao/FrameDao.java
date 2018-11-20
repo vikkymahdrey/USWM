@@ -83,6 +83,9 @@ public interface FrameDao extends JpaRepository<LoraFrame, Serializable> {
 
 	@Query(value = "CALL user_dashboard_date_filter(?1,?2,?3,?4)", nativeQuery = true)
 	Object[] getUserDashboardGraphOnSubmit(@Param("devEUI") String devEUI,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate,@Param("type") String type);
+
+	@Query(value="SELECT sum(f.waterltr) as total_waterltr FROM lora_frames f where f.applicationID=?1 and f.devEUI=?2",nativeQuery=true)
+	Long getWaterConsumptionsUnitForEndUser(@Param("appId") String appId,@Param("devEUI") String devEUI);
 	
 	
 	

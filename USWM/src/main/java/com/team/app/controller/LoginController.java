@@ -1,6 +1,8 @@
 package com.team.app.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.constant.AppConstants;
+import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
@@ -78,9 +81,10 @@ public class LoginController {
 		
 	
 	@RequestMapping(value= {"/onSubmitlogin"}, method=RequestMethod.POST)
-	public ModelAndView loginUser(HttpServletRequest request, HttpSession session, HttpServletResponse response,RedirectAttributes redirectAttributes) {
+	public ModelAndView loginUser(HttpServletRequest request, HttpServletResponse response,HttpSession session,RedirectAttributes redirectAttributes) {
 		logger.debug("in /onSubmitlogin");
 		try{
+						
 			String username = request.getParameter("uname") == null ? "" : request
 					.getParameter("uname");
 			String password = request.getParameter("pass") == null ? "" : request.getParameter("pass");
@@ -105,8 +109,22 @@ public class LoginController {
 			}
 	        
 	        if(userInfo!=null){
-	        	session.setAttribute("user", userInfo);
-	        	session.setAttribute("userId", userInfo.getId());
+	          		String userId=(String) session.getAttribute("userId");
+	        		logger.debug("UserId as ::",userId);
+	        		if(userId!=null){
+	        			if(userInfo.getId().equals(userId)) {
+	        				session.setAttribute("user", userInfo);
+				        	session.setAttribute("userId", userInfo.getId());
+		        		}else {
+		        			logger.debug("In else session");
+		        			request.getSession(true).invalidate();	        			
+		        		}
+	        		}else {
+	        			session.setAttribute("user", userInfo);
+			        	session.setAttribute("userId", userInfo.getId());
+	        		}
+	        	
+	        	        	       	
 	        	        	         	
 	        }
 	        
@@ -210,12 +228,27 @@ public class LoginController {
 	public String userHome(Map<String,Object> map,HttpServletRequest request,HttpSession session){
 		String userId=(String) session.getAttribute("userId");
 		logger.debug("UserId as: ",userId);
-		try{		
+		try{
+			Map<String,Object> frms=null;
+				frms=new HashMap<String,Object>();
 			TblUserInfo user=userLoginService.getUserByUId(userId);
 			if(user!=null){
 				List<UserDeviceMapping> udmList=user.getUserDeviceMappings();
 				map.put("udmList",udmList);
+				if(udmList!=null && !udmList.isEmpty()) {
+					for(UserDeviceMapping udm : udmList) {
+						Long units=consumerInstrumentServiceImpl.getWaterConsumptionsUnitForEndUser(udm.getAppId(),udm.getDevEUI());
+						if(units!=null) {
+							frms.put(udm.getDevNode()+"->"+udm.getDevEUI(), units);
+						}else {
+							frms.put(udm.getDevNode()+"->"+udm.getDevEUI(), 0);
+						}
+						
+						
+					}
+				}
 			}
+			map.put("waterConsumptionDetails", frms);
 			return "userHome";
 		}catch(Exception e){
 			e.printStackTrace();

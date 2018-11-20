@@ -1,6 +1,6 @@
-<%--
+<%-- <%-- 
     Author     : Vikky
---%>
+
 
 <%@ page errorPage="error.jsp" %> 
 <%@page import="com.team.app.constant.AppConstants"%>
@@ -301,7 +301,7 @@ function getDevEUIByAppID()
 								    </tr>
 								  	<tr>
 								  		<td id="oId" align="right"><b><%=(String)request.getAttribute("orgN")%></b></td>
-								  			<%-- <td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>--%>
+								  			<td><input type="text" value="<%=orgName%>"  class="formbutton" id="<%=orgId%>" name="orgName" /></td>
 										
 										<td>
 										 <select name="orgname" class="form-control" id="orgid" onchange="getAppByOrgID()">
@@ -388,4 +388,4 @@ function getDevEUIByAppID()
 	</div>
 			
   </body>
-</html>
+</html> --%> --%>

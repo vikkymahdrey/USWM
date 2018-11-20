@@ -126,6 +126,12 @@ public class ConsumerInstrumentServiceImpl implements ConsumerInstrumentService 
 	}
 
 	
+	public Long getWaterConsumptionsUnitForEndUser(String appId, String devEUI) throws Exception {
+		// TODO Auto-generated method stub
+		return frameDao.getWaterConsumptionsUnitForEndUser(appId,devEUI);
+	}
+
+	
 	
 
 	

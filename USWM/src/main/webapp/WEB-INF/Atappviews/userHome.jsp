@@ -308,7 +308,8 @@
   </head>
   
   <body class="hold-transition skin-blue sidebar-mini" onload="loadScript()">
-    	<%	List<UserDeviceMapping> udmList=(List<UserDeviceMapping>)request.getAttribute("udmList"); %>
+    	<%	List<UserDeviceMapping> udmList=(List<UserDeviceMapping>)request.getAttribute("udmList"); 
+    		Map<String,Object> waterConsumptionUnits=(Map<String,Object>)request.getAttribute("waterConsumptionDetails");%>
 							 
   <div class="wrapper">  
   	
@@ -365,7 +366,7 @@
 									    </div> 
 									    
 									    <div class="info-box col-sm-4 mar-top-25" >											
-										  	<span class="info-box-icon bg-blue"><i class="fa fa-file"></i></span>
+										  	<span class="info-box-icon bg-orange"><i class="fa fa-file"></i></span>
 										  	<div class="info-box-content">
 											    <span class="info-box-text">User-Device</span><br/>
 											     <a href="userDeviceMapped"><span class="fa fa-file"> <b>Mapping</b></span></a>	
@@ -379,6 +380,108 @@
 						   </div>
 						 </div>
 					  </div>
+					  
+					  <div class="row">
+						<div class="col-md-12">
+							<div class="box box-success">
+								<div class="box-header with-border">
+								<i class="fa fa-area-chart"></i>
+									<h3 class="box-title">
+										<b>Total Water Consumptions</b>
+									</h3>
+									
+									<%-- <form name="form1" action="#" onsubmit="return confirmValidate();" method="post">
+										
+								  <table class="table">
+															
+								  		
+								  <tr>      
+								       <td>
+								        <label>From Date</label>
+								        <div class='input-group date' id='datetimepicker1'>
+								          <input type='text' name="fromDate" id="fromDate" class="form-control" placeholder="Please choose"/>
+								            <span class="input-group-addon">
+								            	<span class="glyphicon glyphicon-calendar"></span>    
+								            </span>
+								         </div>
+								      </td>
+								      
+							           <td>
+							       		 <label>To Date</label>
+									        <div class='input-group date' id='datetimepicker2'>
+									          <input type='text' name="toDate" id="toDate" class="form-control" placeholder="Please choose" />
+									            <span class="input-group-addon">
+									            	<span class="glyphicon glyphicon-calendar"></span>
+									            </span>
+									        </div>
+							           </td>	           							           
+							            		
+							          	<td>
+							       		 <label>Water Meter</label>
+									        <div>
+									        	 <select name="devid" class="form-control" id="devid" >
+											    	<option value="0">Please Select Water Meter</option> 
+											    	<%if(udmList!=null && !udmList.isEmpty()){
+											    		for(UserDeviceMapping udm : udmList){%>	
+											    			<option value="<%=udm.getDevEUI()%>"><%=udm.getDevNode()+"->"+udm.getDevEUI()%></option>
+											    		<%} 
+											    	}%>
+											    </select> 
+									        </div>
+							           </td>
+							           
+							           				            
+							          
+							            
+							            <td>
+							       		 <label>Action</label>
+									        <div>
+									         <input type="submit"  class="form-control" style="background-color:#C0C0C0;" value="Submit"/>
+									            
+									        </div>
+							            </td>
+							            
+							            
+        							</tr>
+									
+									
+								</table>	
+							 </form> --%>
+
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool"
+											data-widget="collapse">
+											<i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-default btn-sm" onclick="reload()">
+											<i class="fa fa-refresh"></i>
+										</button>
+									</div>
+								</div>
+								<!-- /.box-header -->
+								<%//if(!waterConsumptionUnits.isEmpty()){ 
+								for(Map.Entry<String,Object> map : waterConsumptionUnits.entrySet()){%>
+								<div class="box-body">
+									<div class="info-box col-sm-6 mar-top-25">
+										<span class="info-box-icon bg-blue"><i
+											class="fa fa-tint"></i></span>
+										<div class="info-box-content">
+											<span class="info-box-text"><%=map.getKey()%></span>
+											<span class="info-box-number"><b><%=map.getValue()%></b></span>
+										</div>
+									</div>
+									
+								</div>
+								<%//} 
+									}%>
+
+								<!-- /.box-footer -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
 					  
 					  
 					  <div class="row">
@@ -540,6 +643,10 @@
 						<!-- /.col -->
 					</div>
 					<!-- /.row -->
+					
+					
+					
+					
 					
 					
 					

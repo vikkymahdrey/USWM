@@ -30,6 +30,7 @@ public interface ConsumerInstrumentService {
 	public Long getTotalWaterUnitsFrmToDate(String appId, String devNode, Date fromDate, Date toDate)throws Exception;
 	public Object[] getUserDashboardGraphsOnLoad(String appId, String devEUI, Date currDate)throws Exception;
 	public Object[] getUserDashboardGraphOnSubmit(String devId, Date fromDate, Date toDate, String type)throws Exception;
+	public Long getWaterConsumptionsUnitForEndUser(String appId, String devEUI)throws Exception;
 	
 	
 	
