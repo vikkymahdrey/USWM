@@ -880,8 +880,142 @@
 	<script>
 		var dayreportjson = {}
 		var totalConsumption = {}
-		//var totalBoxClasses = ['bg-green','bg-yellow','bg-red','bg-blue','bg-orange']
+		var dateJSON={"FirstMonth":{from:" ",to:" "},"SecondMonth":{from:" ",to:" "},"ThiredMonth":{from:" ",to:" "}};
 
+		var monthconsumtion = {"FirstMonth":'',"SecondMonth":'',"ThiredMonth":''}
+		
+//{ devId : '1200000000002345',fromDate : '11/20/2018 12:12 PM', toDate:'11/22/2018 12:12 PM',type: 'days'}
+		
+		function lastFirstmonthdonut(){
+			console.log(monthconsumtion.FirstMonth)
+			var donut = new Morris.Donut({
+				element : 'sales-chart1',
+				resize : true,
+				colors : [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
+					'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ],
+				data :monthconsumtion.FirstMonth,
+				hideHover : 'auto'
+			});
+			
+		}
+
+		function lastSecondmonthdonut(){
+			console.log(monthconsumtion.SecondMonth)
+			var donut = new Morris.Donut({
+				element : 'sales-chart2',
+				resize : true,
+				colors : [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
+					'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ],
+				data :monthconsumtion.SecondMonth,
+				hideHover : 'auto'
+			});
+			
+		}
+
+		function lastThirdmonthdonut(){
+			var donut = new Morris.Donut({
+				element : 'sales-chart3',
+				resize : true,
+				colors : [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
+					'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ],
+				data : monthconsumtion.ThiredMonth,
+				hideHover : 'auto'
+			});
+			
+		}
+
+function createdonotjson(){
+	
+		
+	
+	for(var i in dateJSON){
+		
+		
+		var consuptionref = [];
+		
+		for(var device in totalConsumption){
+			
+			
+			var responsejson = JSON.parse(getConsumtion(device.split("->")[1],dateJSON[i].from,dateJSON[i].to,null))
+		
+			var result = responsejson.result;
+			
+			var tempconsumtion = 0;
+			for(var obj in result){
+				
+				tempconsumtion = tempconsumtion + result[obj].units;
+				
+			}
+			var devicedataref = {label:device.split("->")[1],value:tempconsumtion}
+			consuptionref.push(devicedataref);
+			
+		}
+		
+		var consumptiontest = 0;
+		for(var index in consuptionref){
+			
+			consumptiontest = consumptiontest + consuptionref[index].value
+		}
+		
+		if(consumptiontest > 0){
+			monthconsumtion[i] = consuptionref;
+		}else {
+			
+			monthconsumtion[i] = [{label:'Water Consumption ',value:0}]
+			
+		}
+		
+	
+	}
+	
+	console.log(monthconsumtion);
+
+	
+ 	
+}
+
+
+
+
+function getConsumtion(devid,fromDate,toDate,filter){
+	
+	var jsonVal;
+	
+	   $.ajax({
+           url: 'getGraphOnDemand',
+           async: false,
+           type: 'POST',
+           data: jQuery.param({ devId : devid,fromDate : fromDate, toDate:toDate,type: 'days'}) ,
+           success: function (data) {
+        	   jsonVal=data; 
+        	  
+        	
+           			
+               },
+		 		error: function(e){
+	     			        alert('Error: ' + e);
+	     		 }
+
+              
+           }); 
+
+
+	   return jsonVal;
+
+}
+
+
+$(function() {
+	getcurrebtDaysReport();
+	getMonthDates();
+	createdonotjson();
+	lastFirstmonthdonut()
+	lastSecondmonthdonut()
+	lastThirdmonthdonut()
+});
+
+
+		
 		
 function getLineColors(){
 			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
@@ -902,6 +1036,7 @@ function getLineColors(){
 
 			$.ajax({
 				url : 'getGraphOnBodyLoad',
+				async: false,
 				type : 'GET',
 				success : function(data) {
 					dayreportjson = JSON.parse(data);
@@ -916,9 +1051,13 @@ function getLineColors(){
 
 			$.ajax({
 				url : 'totalWaterConsumedByUser',
+				async: false,
 				type : 'GET',
 				success : function(data) {
-					totalConsumption = data
+					totalConsumption = data;
+					
+					console.log(totalConsumption)
+					
 					plotTotalConsuption()
 
 				},
@@ -931,7 +1070,8 @@ function getLineColors(){
 		}
 
 		function plotTotalConsuption() {
-
+			
+			
 			var refdiv = document.getElementById('refTotal')
 
 			var devicesCount = Object.keys(totalConsumption).length;
@@ -1037,64 +1177,37 @@ function getLineColors(){
 			});
 
 		}
+		
+		
+		
+		
+		
+		function getMonthDates()
+		{
 
-		$(function() {
-			getcurrebtDaysReport();
-		});
+		   var date = new Date();
+		   var year = date.getFullYear(), month = date.getMonth();
 
+		   dateJSON.FirstMonth.from = new Date(year, month, 1).toLocaleDateString();
+		   dateJSON.FirstMonth.to = new Date(year, month + 1, 0).toLocaleDateString();
+		   
+		   dateJSON.SecondMonth.from = new Date(year, month-1, 1).toLocaleDateString();
+		   dateJSON.SecondMonth.to = new Date(year, (month-1) + 1, 0).toLocaleDateString();
+		   
+		   dateJSON.ThiredMonth.from = new Date(year, month-2, 1).toLocaleDateString();
+		   dateJSON.ThiredMonth.to= new Date(year, (month-2) + 1, 0).toLocaleDateString();
+		   
+		}
+		
+		
 		$(function() {
 			"use strict";
+			
+			
+			
+		
 
-			var donut = new Morris.Donut({
-				element : 'sales-chart1',
-				resize : true,
-				colors : [ '#F58C1F', '#64B246', '#91191C' ],
-				data : [ {
-					label : "Download Sales",
-					value : 12
-				}, {
-					label : "In-Store Sales",
-					value : 30
-				}, {
-					label : "Mail-Order Sales",
-					value : 20
-				} ],
-				hideHover : 'auto'
-			});
-
-			var donut = new Morris.Donut({
-				element : 'sales-chart2',
-				resize : true,
-				colors : [ '#F58C1F', '#64B246', '#91191C' ],
-				data : [ {
-					label : "Download Sales",
-					value : 12
-				}, {
-					label : "In-Store Sales",
-					value : 30
-				}, {
-					label : "Mail-Order Sales",
-					value : 20
-				} ],
-				hideHover : 'auto'
-			});
-
-			var donut = new Morris.Donut({
-				element : 'sales-chart3',
-				resize : true,
-				colors : [ '#F58C1F', '#64B246', '#91191C' ],
-				data : [ {
-					label : "Download Sales",
-					value : 12
-				}, {
-					label : "In-Store Sales",
-					value : 100
-				}, {
-					label : "Mail-Order Sales",
-					value : 20
-				} ],
-				hideHover : 'auto'
-			});
+			
 
 			var bar = new Morris.Bar({
 				element : 'bar-chart',

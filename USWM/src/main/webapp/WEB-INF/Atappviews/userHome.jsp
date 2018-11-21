@@ -81,7 +81,12 @@
 	  	var toDate=document.getElementById("toDate").value;
 	  	var filter=document.getElementById("filter").value;
 	  	
-	  		   	   
+	  		
+	  	console.log(devid);
+	  	console.log(fromDate);
+	  	console.log(toDate);
+	  	console.log(filter);
+	  	
 	   if(devid=="0"){
 		   alert(devDesc);
 		   document.getElementById("devid").focus();
