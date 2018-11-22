@@ -878,16 +878,110 @@
 	<!-- AdminLTE for demo purposes -->
 
 	<script>
+	
+	
+	
+	
+	$(function() {
+		getcurrebtDaysReport();
+		getMonthDates();
+		createdonotjson();
+		lastFirstmonthdonut();
+		lastSecondmonthdonut();
+		lastThirdmonthdonut();
+		getWeeksDates();
+		drawbarchart();
+	});
 		var dayreportjson = {}
 		var totalConsumption = {}
 		var dateJSON={"FirstMonth":{from:" ",to:" "},"SecondMonth":{from:" ",to:" "},"ThiredMonth":{from:" ",to:" "}};
 
 		var monthconsumtion = {"FirstMonth":'',"SecondMonth":'',"ThiredMonth":''}
 		
-//{ devId : '1200000000002345',fromDate : '11/20/2018 12:12 PM', toDate:'11/22/2018 12:12 PM',type: 'days'}
+		//{ devId : '1200000000002345',fromDate : '11/20/2018 12:12 PM', toDate:'11/22/2018 12:12 PM',type: 'days'}
+		
+		var weekJSON={"FirstWeek":{from:" ",to:" "},"SecondWeek":{from:" ",to:" "},"ThirdWeek":{from:" ",to:" "},"FourthWeek":{from:" ",to:" "}};
+
+		
+		function drawbarchart(){
+			
+var tempdata = []
+var ykeys = []
+
+
+
+for(var device in totalConsumption){
+
+ykeys.push(device.split("->")[1])
+}
+
+			
+			for(var week in weekJSON){
+				
+				var consuptionref = {y:''+weekJSON[week].from+'-'+weekJSON[week].to};
+				for(var device in totalConsumption){
+					
+					
+					var responsejson = JSON.parse(getConsumtion(device.split("->")[1],weekJSON[week].from,weekJSON[week].to,null))
+					
+					
+					var result = responsejson.result;
+					
+					var tempconsumtion = 0;
+					
+					for(var obj in result){
+						
+						tempconsumtion = tempconsumtion + result[obj].units;
+						
+					}
+					
+					consuptionref[''+device.split("->")[1]+''] = tempconsumtion
+					
+
+				}
+				tempdata.push(consuptionref)
+			}
+			
+			
+			var bar = new Morris.Bar({
+				element : 'bar-chart',
+				resize : true,
+				data : tempdata,
+				barColors : [ '#F58C1F', '#64B246', '#91191C' ],
+				xkey : 'y',
+				ykeys : ykeys,
+				labels : ykeys,
+				hideHover : 'auto'
+			});
+			
+			
+		}
+		
+		
+		function getWeeksDates()
+		{
+		
+			
+		   var date = new Date();
+		   var year = date.getFullYear(), month = date.getMonth();
+
+		   weekJSON.FirstWeek.from = new Date(year, month, 1).toLocaleDateString();
+		   weekJSON.FirstWeek.to=new Date(year, month, 7).toLocaleDateString();
+		       
+		   weekJSON.SecondWeek.from = new Date(year, month, 8).toLocaleDateString();
+		   weekJSON.SecondWeek.to=new Date(year, month, 14).toLocaleDateString();
+		       
+		   weekJSON.ThirdWeek.from= new Date(year, month, 15).toLocaleDateString();
+		   weekJSON.ThirdWeek.to=new Date(year, month, 21).toLocaleDateString();
+		       
+		   weekJSON.FourthWeek.from = new Date(year, month, 22).toLocaleDateString();
+		   weekJSON.FourthWeek.to=new Date(year, month + 1, 0).toLocaleDateString();      
+		
+			
+		}
 		
 		function lastFirstmonthdonut(){
-			console.log(monthconsumtion.FirstMonth)
+			//console.log(monthconsumtion.FirstMonth)
 			var donut = new Morris.Donut({
 				element : 'sales-chart1',
 				resize : true,
@@ -900,7 +994,7 @@
 		}
 
 		function lastSecondmonthdonut(){
-			console.log(monthconsumtion.SecondMonth)
+			//console.log(monthconsumtion.SecondMonth)
 			var donut = new Morris.Donut({
 				element : 'sales-chart2',
 				resize : true,
@@ -926,21 +1020,18 @@
 
 function createdonotjson(){
 	
-		
-	
 	for(var i in dateJSON){
-		
 		
 		var consuptionref = [];
 		
 		for(var device in totalConsumption){
-			
 			
 			var responsejson = JSON.parse(getConsumtion(device.split("->")[1],dateJSON[i].from,dateJSON[i].to,null))
 		
 			var result = responsejson.result;
 			
 			var tempconsumtion = 0;
+			
 			for(var obj in result){
 				
 				tempconsumtion = tempconsumtion + result[obj].units;
@@ -965,16 +1056,10 @@ function createdonotjson(){
 			
 		}
 		
-	
 	}
 	
-	console.log(monthconsumtion);
-
-	
- 	
+	//console.log(monthconsumtion);
 }
-
-
 
 
 function getConsumtion(devid,fromDate,toDate,filter){
@@ -1005,18 +1090,6 @@ function getConsumtion(devid,fromDate,toDate,filter){
 }
 
 
-$(function() {
-	getcurrebtDaysReport();
-	getMonthDates();
-	createdonotjson();
-	lastFirstmonthdonut()
-	lastSecondmonthdonut()
-	lastThirdmonthdonut()
-});
-
-
-		
-		
 function getLineColors(){
 			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
 				'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ]
@@ -1056,7 +1129,7 @@ function getLineColors(){
 				success : function(data) {
 					totalConsumption = data;
 					
-					console.log(totalConsumption)
+					//console.log(totalConsumption)
 					
 					plotTotalConsuption()
 
@@ -1102,7 +1175,7 @@ function getLineColors(){
 				innerval.getElementsByTagName("div")[0].classList.add(getBoxColor())
 				
 
-				innerval.getElementsByTagName("h3")[0].innerHTML = totalConsumption[i] + " <small>Ltrs</small>";
+				innerval.getElementsByTagName("h3")[0].innerHTML = totalConsumption[i] + "<small>Ltrs</small>";
 				document.getElementById('totalConsumption').appendChild(
 						innerval);
 
@@ -1178,11 +1251,7 @@ function getLineColors(){
 
 		}
 		
-		
-		
-		
-		
-		function getMonthDates()
+			function getMonthDates()
 		{
 
 		   var date = new Date();
@@ -1200,54 +1269,7 @@ function getLineColors(){
 		}
 		
 		
-		$(function() {
-			"use strict";
-			
-			
-			
-		
-
-			
-
-			var bar = new Morris.Bar({
-				element : 'bar-chart',
-				resize : true,
-				data : [ {
-					y : 'January',
-					a : 100,
-					b : 90,
-					c : 100
-				}, {
-					y : 'February',
-					a : 75,
-					b : 65,
-					c : 30
-				}, {
-					y : 'March',
-					a : 50,
-					b : 40,
-					c : 20
-				}, {
-					y : 'April',
-					a : 50,
-					b : 40,
-					c : 20
-				}, {
-					y : 'May',
-					a : 75,
-					b : 65,
-					c : 140
-				}
-
-				],
-				barColors : [ '#F58C1F', '#64B246', '#91191C' ],
-				xkey : 'y',
-				ykeys : [ 'a', 'b', 'c' ],
-				labels : [ 'CPU', 'DISK', 'TEST' ],
-				hideHover : 'auto'
-			});
-		});
-	</script>
+</script>
 
 </body>
 </html>
