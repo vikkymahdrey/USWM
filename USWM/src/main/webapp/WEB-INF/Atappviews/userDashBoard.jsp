@@ -50,7 +50,7 @@
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" onload="loadData()">
 	<div class="wrapper">
 
 
@@ -67,18 +67,16 @@
 					Total Water Consumed <small>by user</small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+					<li><a href="#"><i class="fa fa-dashboard" onclick="loadData()"></i> Home</a></li>
 					<li class="active">Dashboard</li>
 				</ol>
 			</section>
 
 			<!-- Main content -->
 			<section class="content">
-				<!-- Small boxes (Stat box) -->
-				<div id="totalConsumption" class="row">
-
-					<!-- ./col -->
-					<div id="refTotal" style="display: none" class="col-lg-4 col-xs-6">
+				<!-- Donot delete this tab -->
+				
+				<div id="refTotal" style="display: none" class="col-lg-4 col-xs-6">
 						<!-- small box -->
 						<div class="small-box bg-green">
 							<div class="inner">
@@ -95,6 +93,11 @@
 								class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
+				
+				<div id="totalConsumption" class="row">
+
+					<!-- ./col -->
+					
 					<!-- ./col -->
 					<!--   <div class="col-lg-4 col-xs-6">
           small box
@@ -197,7 +200,7 @@
 						<!-- BAR CHART -->
 						<div class="box box-success">
 							<div class="box-header with-border">
-								<h3 class="box-title">Bar Chart</h3>
+								<h3 class="box-title">Current Month Consumption </h3>
 
 								<div class="box-tools pull-right">
 									<button type="button" class="btn btn-box-tool"
@@ -213,167 +216,7 @@
 							<div class="box-body chart-responsive">
 								<div class="chart" id="bar-chart"
 									style="height: 300px; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-									<svg height="300" version="1.1" width="748"
-										xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink"
-										style="overflow: hidden; position: relative; left: -0.5px;">
-										<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.2.0</desc>
-										<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-										<text x="32.84375" y="261" text-anchor="end"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">0</tspan></text>
-										<path fill="none" stroke="#aaaaaa" d="M45.34375,261H723"
-											stroke-width="0.5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="32.84375" y="202" text-anchor="end"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">25</tspan></text>
-										<path fill="none" stroke="#aaaaaa" d="M45.34375,202H723"
-											stroke-width="0.5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="32.84375" y="143" text-anchor="end"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">50</tspan></text>
-										<path fill="none" stroke="#aaaaaa" d="M45.34375,143H723"
-											stroke-width="0.5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="32.84375" y="84" text-anchor="end"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">75</tspan></text>
-										<path fill="none" stroke="#aaaaaa" d="M45.34375,84H723"
-											stroke-width="0.5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="32.84375" y="25" text-anchor="end"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">100</tspan></text>
-										<path fill="none" stroke="#aaaaaa" d="M45.34375,25H723"
-											stroke-width="0.5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="674.5959821428571" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2012</tspan></text>
-										<text x="577.7879464285714" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2011</tspan></text>
-										<text x="480.9799107142857" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2010</tspan></text>
-										<text x="384.171875" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2009</tspan></text>
-										<text x="287.3638392857143" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2008</tspan></text>
-										<text x="190.55580357142858" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2007</tspan></text>
-										<text x="93.74776785714286" y="273.5" text-anchor="middle"
-											font-family="sans-serif" font-size="12px" stroke="none"
-											fill="#888888"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: sans-serif; font-size: 12px; font-weight: normal;"
-											font-weight="normal" transform="matrix(1,0,0,1,0,7)">
-										<tspan dy="4"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2006</tspan></text>
-										<rect x="57.444754464285715" y="25" width="34.80301339285714"
-											height="236" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="95.24776785714286" y="48.60000000000002"
-											width="34.80301339285714" height="212.39999999999998" rx="0"
-											ry="0" fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="154.25279017857144" y="84" width="34.80301339285714"
-											height="177" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="192.05580357142858" y="107.6"
-											width="34.80301339285714" height="153.4" rx="0" ry="0"
-											fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="251.06082589285714" y="143" width="34.80301339285714"
-											height="118" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="288.8638392857143" y="166.60000000000002"
-											width="34.80301339285714" height="94.39999999999998" rx="0"
-											ry="0" fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="347.86886160714283" y="84" width="34.80301339285714"
-											height="177" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="385.671875" y="107.6" width="34.80301339285714"
-											height="153.4" rx="0" ry="0" fill="#f56954" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="444.67689732142856" y="143" width="34.80301339285714"
-											height="118" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="482.47991071428567" y="166.60000000000002"
-											width="34.80301339285714" height="94.39999999999998" rx="0"
-											ry="0" fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="541.4849330357142" y="84" width="34.80301339285714"
-											height="177" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="579.2879464285713" y="107.6"
-											width="34.80301339285714" height="153.4" rx="0" ry="0"
-											fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="638.2929687499999" y="25" width="34.80301339285714"
-											height="236" rx="0" ry="0" fill="#00a65a" stroke="none"
-											fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
-										<rect x="676.095982142857" y="48.60000000000002"
-											width="34.80301339285714" height="212.39999999999998" rx="0"
-											ry="0" fill="#f56954" stroke="none" fill-opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect></svg>
+								
 									<div class="morris-hover morris-default-style"
 										style="left: 981.852px; top: 112px; display: none;">
 										<div class="morris-hover-row-label">2011</div>
@@ -425,53 +268,7 @@
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart1"
 									style="height: 300px; position: relative;">
-									<svg height="300" version="1.1" width="215.984"
-										xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink"
-										style="overflow: hidden; position: relative;">
-										<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.2.0</desc>
-										<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-										<path fill="none" stroke="#3c8dbc"
-											d="M107.992,215.328A65.328,65.328,0,0,0,169.94875565556106,170.7149224627346"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#3c8dbc" stroke="#ffffff"
-											d="M107.992,218.328A68.328,68.328,0,0,0,172.7939409814042,171.66619553688662L196.18515794026962,179.48692857051515A92.992,92.992,0,0,1,107.992,242.99200000000002Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#f56954"
-											d="M169.94875565556106,170.7149224627346A65.328,65.328,0,0,0,49.41758994238674,121.0727451976069"
-											stroke-width="2" opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1;"></path>
-										<path fill="#f56954" stroke="#ffffff"
-											d="M172.7939409814042,171.66619553688662A68.328,68.328,0,0,0,46.72772908375277,119.7443444443743L20.1303849135801,106.60911779641036A97.992,97.992,0,0,1,200.92713348334155,181.07238369410186Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#00a65a"
-											d="M49.41758994238674,121.0727451976069A65.328,65.328,0,0,0,107.97147660385023,215.32799677619244"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#00a65a" stroke="#ffffff"
-											d="M46.72772908375277,119.7443444443743A68.328,68.328,0,0,0,107.97053412606967,218.32799662814838L107.96278570207632,242.99199541102877A92.992,92.992,0,0,1,24.613486344636712,108.82311905179803Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="107.992" y="140" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="15px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 15px; font-weight: 800;"
-											font-weight="800"
-											transform="matrix(1.0204,0,0,1.0204,-2.2076,-3.0873)"
-											stroke-width="0.979964138228971">
-										<tspan dy="6"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">In-Store Sales</tspan></text>
-										<text x="107.992" y="160" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="14px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 14px;"
-											transform="matrix(1.361,0,0,1.361,-39.0218,-54.872)"
-											stroke-width="0.7347538574577517">
-										<tspan dy="5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">30</tspan></text></svg>
+									
 								</div>
 							</div>
 							<!-- /.box-body -->
@@ -506,53 +303,7 @@
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart2"
 									style="height: 300px; position: relative;">
-									<svg height="300" version="1.1" width="349"
-										xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink"
-										style="overflow: hidden; position: relative;">
-										<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.2.0</desc>
-										<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-										<path fill="none" stroke="#3c8dbc"
-											d="M174.5,243.33333333333331A93.33333333333333,93.33333333333333,0,0,0,262.7277551949771,180.44625304313007"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#3c8dbc" stroke="#ffffff"
-											d="M174.5,246.33333333333331A96.33333333333333,96.33333333333333,0,0,0,265.56364732624417,181.4248826052307L302.1151459070204,194.03833029452744A135,135,0,0,1,174.5,285Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#f56954"
-											d="M262.7277551949771,180.44625304313007A93.33333333333333,93.33333333333333,0,0,0,90.78484627831412,108.73398312817662"
-											stroke-width="2" opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1;"></path>
-										<path fill="#f56954" stroke="#ffffff"
-											d="M265.56364732624417,181.4248826052307A96.33333333333333,96.33333333333333,0,0,0,88.09400205154564,107.40757544301087L48.927269417471166,88.10097469226493A140,140,0,0,1,306.8416327924656,195.6693795646951Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#00a65a"
-											d="M90.78484627831412,108.73398312817662A93.33333333333333,93.33333333333333,0,0,0,174.47067846904883,243.333328727518"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#00a65a" stroke="#ffffff"
-											d="M88.09400205154564,107.40757544301087A96.33333333333333,96.33333333333333,0,0,0,174.46973599126827,246.3333285794739L174.4575884998742,284.9999933380171A135,135,0,0,1,53.412009795418626,90.31165416754118Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="174.5" y="140" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="15px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 15px; font-weight: 800;"
-											font-weight="800"
-											transform="matrix(1.4579,0,0,1.4579,-79.8997,-69.1426)"
-											stroke-width="0.6859188988095237">
-										<tspan dy="6"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">In-Store Sales</tspan></text>
-										<text x="174.5" y="160" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="14px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 14px;"
-											transform="matrix(1.9444,0,0,1.9444,-164.8941,-143.5556)"
-											stroke-width="0.5142857142857143">
-										<tspan dy="5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">30</tspan></text></svg>
+									
 								</div>
 							</div>
 							<!-- /.box-body -->
@@ -584,54 +335,7 @@
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart3"
 									style="height: 300px; position: relative;">
-									<svg height="300" version="1.1" width="349"
-										xmlns="http://www.w3.org/2000/svg"
-										xmlns:xlink="http://www.w3.org/1999/xlink"
-										style="overflow: hidden; position: relative;">
-										<desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.2.0</desc>
-										<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-										<path fill="none" stroke="#3c8dbc"
-											d="M174.5,243.33333333333331A93.33333333333333,93.33333333333333,0,0,0,262.7277551949771,180.44625304313007"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#3c8dbc" stroke="#ffffff"
-											d="M174.5,246.33333333333331A96.33333333333333,96.33333333333333,0,0,0,265.56364732624417,181.4248826052307L302.1151459070204,194.03833029452744A135,135,0,0,1,174.5,285Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#f56954"
-											d="M262.7277551949771,180.44625304313007A93.33333333333333,93.33333333333333,0,0,0,90.78484627831412,108.73398312817662"
-											stroke-width="2" opacity="1"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1;"></path>
-										<path fill="#f56954" stroke="#ffffff"
-											d="M265.56364732624417,181.4248826052307A96.33333333333333,96.33333333333333,0,0,0,88.09400205154564,107.40757544301087L48.927269417471166,88.10097469226493A140,140,0,0,1,306.8416327924656,195.6693795646951Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<path fill="none" stroke="#00a65a"
-											d="M90.78484627831412,108.73398312817662A93.33333333333333,93.33333333333333,0,0,0,174.47067846904883,243.333328727518"
-											stroke-width="2" opacity="0"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></path>
-										<path fill="#00a65a" stroke="#ffffff"
-											d="M88.09400205154564,107.40757544301087A96.33333333333333,96.33333333333333,0,0,0,174.46973599126827,246.3333285794739L174.4575884998742,284.9999933380171A135,135,0,0,1,53.412009795418626,90.31165416754118Z"
-											stroke-width="3"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-										<text x="174.5" y="140" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="15px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 15px; font-weight: 800;"
-											font-weight="800"
-											transform="matrix(1.4579,0,0,1.4579,-79.8997,-69.1426)"
-											stroke-width="0.6859188988095237">
-										<tspan dy="6"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">In-Store Sales</tspan></text>
-										<text x="174.5" y="160" text-anchor="middle"
-											font-family="&quot;Arial&quot;" font-size="14px"
-											stroke="none" fill="#000000"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: middle; font-family: Arial; font-size: 14px;"
-											transform="matrix(1.9444,0,0,1.9444,-164.8941,-143.5556)"
-											stroke-width="0.5142857142857143">
-										<tspan dy="5"
-											style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">30</tspan></text></svg>
-								</div>
+																	</div>
 							</div>
 							<!-- /.box-body -->
 						</div>
@@ -879,10 +583,7 @@
 
 	<script>
 	
-	
-	
-	
-	$(function() {
+	function loadData(){
 		getcurrebtDaysReport();
 		getMonthDates();
 		createdonotjson();
@@ -891,7 +592,20 @@
 		lastThirdmonthdonut();
 		getWeeksDates();
 		drawbarchart();
-	});
+		
+	}
+	
+	
+	/* $(function() {
+		getcurrebtDaysReport();
+		getMonthDates();
+		createdonotjson();
+		lastFirstmonthdonut();
+		lastSecondmonthdonut();
+		lastThirdmonthdonut();
+		getWeeksDates();
+		drawbarchart();
+	}); */
 		var dayreportjson = {}
 		var totalConsumption = {}
 		var dateJSON={"FirstMonth":{from:" ",to:" "},"SecondMonth":{from:" ",to:" "},"ThiredMonth":{from:" ",to:" "}};
@@ -901,7 +615,9 @@
 		//{ devId : '1200000000002345',fromDate : '11/20/2018 12:12 PM', toDate:'11/22/2018 12:12 PM',type: 'days'}
 		
 		var weekJSON={"FirstWeek":{from:" ",to:" "},"SecondWeek":{from:" ",to:" "},"ThirdWeek":{from:" ",to:" "},"FourthWeek":{from:" ",to:" "}};
-
+		const monthNames = ["January", "February", "March", "April", "May", "June",
+			  "July", "August", "September", "October", "November", "December"
+			];
 		
 		function drawbarchart(){
 			
@@ -981,7 +697,9 @@ ykeys.push(device.split("->")[1])
 		}
 		
 		function lastFirstmonthdonut(){
-			//console.log(monthconsumtion.FirstMonth)
+			var tempmonth = JSON.stringify(dateJSON.FirstMonth.from).split('"')[1].split("/")[0]
+			document.getElementById('sales-chart1').parentElement.parentElement.getElementsByTagName('h3')[0].innerHTML =monthNames[parseInt(tempmonth)-1]//(dateJSON.FirstMonth.from +' to '+ dateJSON.FirstMonth.to)
+			
 			var donut = new Morris.Donut({
 				element : 'sales-chart1',
 				resize : true,
@@ -994,7 +712,9 @@ ykeys.push(device.split("->")[1])
 		}
 
 		function lastSecondmonthdonut(){
-			//console.log(monthconsumtion.SecondMonth)
+			var tempmonth = JSON.stringify(dateJSON.SecondMonth.from).split('"')[1].split("/")[0]
+			document.getElementById('sales-chart2').parentElement.parentElement.getElementsByTagName('h3')[0].innerHTML = monthNames[parseInt(tempmonth)-1]
+			
 			var donut = new Morris.Donut({
 				element : 'sales-chart2',
 				resize : true,
@@ -1007,6 +727,11 @@ ykeys.push(device.split("->")[1])
 		}
 
 		function lastThirdmonthdonut(){
+			var tempmonth = JSON.stringify(dateJSON.ThiredMonth.from).split('"')[1].split("/")[0]
+			
+			document.getElementById('sales-chart3').parentElement.parentElement.getElementsByTagName('h3')[0].innerHTML = monthNames[parseInt(tempmonth)-1]
+			
+			
 			var donut = new Morris.Donut({
 				element : 'sales-chart3',
 				resize : true,
@@ -1091,8 +816,7 @@ function getConsumtion(devid,fromDate,toDate,filter){
 
 
 function getLineColors(){
-			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
-				'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ]
+			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C']
 			
 			return staticlineColors[Math.floor(Math.random() * 3)]
 		
@@ -1149,6 +873,8 @@ function getLineColors(){
 
 			var devicesCount = Object.keys(totalConsumption).length;
 			
+			document.getElementById('totalConsumption').innerHTML = "";
+			
 			for ( var i in totalConsumption) {
 
 				var innerval = refdiv.cloneNode(true);
@@ -1176,6 +902,7 @@ function getLineColors(){
 				
 
 				innerval.getElementsByTagName("h3")[0].innerHTML = totalConsumption[i] + "<small>Ltrs</small>";
+				
 				document.getElementById('totalConsumption').appendChild(
 						innerval);
 
