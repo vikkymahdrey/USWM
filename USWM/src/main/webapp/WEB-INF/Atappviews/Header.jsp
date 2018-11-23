@@ -274,7 +274,7 @@
         </li> -->
         
         
-        <li class="treeview"> 
+        <!-- <li class="treeview"> 
           <a href="#">
             <i class="fa fa-files-o"></i>
             <span><b>Logs</b></span>
@@ -283,13 +283,13 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <!-- <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li> -->
+            <li><a href="userInfoHistory"><i class="fa fa-circle-o"></i><b>Admin User</b></a></li>
             <li><a href="userFrameInfos"><i class="fa fa-circle-o"></i> <b>Uplink Log</b></a></li>
                    
           </ul>
           
              
-        </li>
+        </li> -->
         
         <!-- <li class="treeview"> 
           <a href="#">

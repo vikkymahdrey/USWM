@@ -327,8 +327,8 @@ function getDevEUIByAppID()
 											 	<select name="typeId" class="form-control" id="typeId" onchange="getKeywords()">
 											    	<!-- <option value="0">Select Housing Type</option> -->
 											    	<%if(keyTypes!=null && !keyTypes.isEmpty()){
-											    		for(TblKeywordType type :keyTypes){%>	
-											    			<option value="<%=type.getId()%>"><%=type.getType()%></option>
+											    		for(TblKeywordType t :keyTypes){%>	
+											    			<option value="<%=t.getId()%>"><%=t.getType()%></option>
 											    		<%} 
 											    	}%>
 											    </select> 

@@ -190,7 +190,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 logger.debug("decodeBinary i=1 :",decodeBinary);
 							     		 			//if(!decodeBinary.equalsIgnoreCase("11111111111111111111111111111111")){
 						     		 			 		if(packetType.equals("1")){
-						     		 			 			logger.debug("Packet Type 0 in i=1");
+						     		 			 			logger.debug("Packet Type 1 in i=1");
 						     		 			 			int devMapCombination=0;
 						     		 			 			if(decodeBinary.length()>1){
 						     		 			 				devMapCombination=Integer.parseInt(devMapId+decodeBinary,16);
@@ -199,7 +199,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 			}
 						     		 			 			devMapId=String.valueOf(devMapCombination);
 						     		 			 		}else if(packetType.equals("2")){
-						     		 			 		 logger.debug("Packet Type 1 as in i=1",packetType);
+						     		 			 		 logger.debug("Packet Type 2 as in i=1",packetType);
 							     		 			 		 
 							     		 			 		int devMapCombination=0;
 						     		 			 			if(decodeBinary.length()>1){
@@ -227,10 +227,10 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 				
 						     		 			 			}
 						     		 			 		}else if(packetType.equals("3")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			logger.debug("Packet Type as 3" ,packetType);
 						     		 			 			break;
 						     		 			 		}else if(packetType.equals("4")){
-						     		 			 				logger.debug("Packet Type as " ,packetType);
+						     		 			 				logger.debug("Packet Type as 4" ,packetType);
 						     		 			 				TblDeviceDetail existBattreyInfo=deviceInfoDao.getDeviceInfoByDevEUI(frame.getDevEUI());
 						     		 			 				if(existBattreyInfo!=null){
 						     		 			 					existBattreyInfo.setBattreyPerc(String.valueOf(Integer.parseInt(decodeBinary,16)));
@@ -252,7 +252,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 				}
 						     		 			 			
 						     		 			 		}else if(packetType.equals("5")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			logger.debug("Packet Type as 5" ,packetType);
 						     		 			 			
 						     		 			 			TblDeviceDetail existTempInfo=deviceInfoDao.getDeviceInfoByDevEUI(frame.getDevEUI());
 					     		 			 				if(existTempInfo!=null){
@@ -275,10 +275,10 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 					     		 			 				}
 						     		 			 			
 						     		 			 		}else if(packetType.equals("6")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);						     		 			 			
+						     		 			 			logger.debug("Packet Type as 6" ,packetType);						     		 			 			
 						     		 			 			break;
 						     		 			 		}else if(packetType.equals("7")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			logger.debug("Packet Type as 7" ,packetType);
 						     		 			 			logger.debug("consoildated packet ");
 						     		 			 			int devMapCombination=0;
 						     		 			 			if(decodeBinary.length()>1){
@@ -287,9 +287,9 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 						     		 			 				devMapCombination=Integer.parseInt(devMapId+"0"+decodeBinary,16);
 						     		 			 			}
 						     		 			 			devMapId=String.valueOf(devMapCombination);
-						     		 			 			break;
+						     		 			 		
 						     		 			 		}else if(packetType.equals("8")){
-						     		 			 			logger.debug("Packet Type as " ,packetType);
+						     		 			 			logger.debug("Packet Type as 8" ,packetType);
 						     		 			 			battrey_info=String.valueOf(Integer.parseInt(decodeBinary,16));
 						     		 			 		}
 							     		 			//}
@@ -386,7 +386,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 									     		 		 	frm.setUpdatedAt(formatter.parse(formatter.format(new Date(millseconds))));						     		 					
 									     		 		 	frm.setDevMapId(devMapId);
 									     		 		 	//frm.setWaterltr(String.format("%02X ", Integer.toBinaryString(Integer.parseInt(waterLtr))));
-									     		 		 	frm.setWaterltr(String.valueOf(Integer.parseInt(waterLtr,16)));
+									     		 		 	frm.setWaterltr(String.valueOf(Integer.parseInt(waterLtr,16)*10));
 									     		 		 	frm.setApplicationID(frame.getApplicationID());
 									     		 		 	frm.setApplicationName(frame.getApplicationName());
 									     		 		 	frm.setNodeName(frame.getNodeName());
@@ -432,7 +432,7 @@ public class MqttBroker implements MqttCallback,MqttIntrf {
 							     		 									LoraFrame fm=frameDao.getLoraFrameByDevEUIAndAppID(consPkt.getDevEUI(),consPkt.getApplicationId());
 							     		 									if(fm!=null) {
 							     		 										logger.debug("IN if condition fm");
-							     		 										fm.setWaterltr(String.valueOf(Long.parseLong(consPkt.getWaterltr())-l));
+							     		 										fm.setWaterltr(String.valueOf(Long.parseLong(consPkt.getWaterltr())*10-l));
 							     		 										fm.setUpdatedAt(formatter.parse(formatter.format(new Date(millseconds))));
 							     		 										frameDao.save(fm);
 							     		 										

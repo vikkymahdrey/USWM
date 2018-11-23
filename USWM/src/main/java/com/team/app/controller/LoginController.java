@@ -1,6 +1,5 @@
 package com.team.app.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.team.app.constant.AppConstants;
-import com.team.app.domain.LoraFrame;
 import com.team.app.domain.TblKeywordType;
 import com.team.app.domain.TblUserInfo;
 import com.team.app.domain.UserDeviceMapping;
@@ -108,24 +106,9 @@ public class LoginController {
 				} 
 			}
 	        
-	        if(userInfo!=null){
-	          		String userId=(String) session.getAttribute("userId");
-	        		logger.debug("UserId as ::",userId);
-	        		if(userId!=null){
-	        			if(userInfo.getId().equals(userId)) {
-	        				session.setAttribute("user", userInfo);
-				        	session.setAttribute("userId", userInfo.getId());
-		        		}else {
-		        			logger.debug("In else session");
-		        			request.getSession(true).invalidate();	        			
-		        		}
-	        		}else {
-	        			session.setAttribute("user", userInfo);
-			        	session.setAttribute("userId", userInfo.getId());
-	        		}
-	        	
-	        	        	       	
-	        	        	         	
+	        if(userInfo!=null){	          	
+	        		session.setAttribute("user", userInfo);
+		        	session.setAttribute("userId", userInfo.getId());        	        	         	
 	        }
 	        
 	        

@@ -38,7 +38,7 @@ public class PaymentGatewayController {
 		
 	@RequestMapping(value= {"/payUBills"}, method={RequestMethod.GET,RequestMethod.POST})
 	public String payUBillsHandler(HttpServletRequest request, HttpSession session, Map<String, Object> map){
-		logger.debug("In /payUBills");	
+		logger.debug("In /payUBill");	
 		try{
 				TblUserInfo user=(TblUserInfo) session.getAttribute("user");
 				
