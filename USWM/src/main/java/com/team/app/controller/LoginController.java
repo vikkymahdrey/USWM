@@ -207,6 +207,9 @@ public class LoginController {
 		return "forgotPassword";
 	}
 	
+	
+	
+	
 	@RequestMapping(value= {"/userHome"},method=RequestMethod.GET)
 	public String userHome(Map<String,Object> map,HttpServletRequest request,HttpSession session){
 		String userId=(String) session.getAttribute("userId");
