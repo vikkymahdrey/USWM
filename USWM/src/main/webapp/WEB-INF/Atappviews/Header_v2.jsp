@@ -300,6 +300,14 @@
             </span>
           </a>
         </li>
+        <li>
+          <a href="invoice">
+           <i class="fa fa-credit-card-alt"></i>  <span>Invoice</span>
+            <span class="pull-right-container">
+             <!--  <small class="label pull-right bg-green">new</small> -->
+            </span>
+          </a>
+        </li>
        <li>
           <a href="logout">
             <i class="fa fa-sign-out"></i> <span>Sign Out</span>
