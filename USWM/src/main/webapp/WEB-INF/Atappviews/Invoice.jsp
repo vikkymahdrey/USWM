@@ -28,7 +28,7 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue skin-black sidebar-mini">
 <div class="wrapper">
 
   <%@include file="Header_v2.jsp"%>
@@ -46,7 +46,6 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Examples</a></li>
         <li class="active">Invoice</li>
       </ol>
     </section>
@@ -64,8 +63,25 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="page-header">
-            <i class="fa fa-globe"></i> AdminLTE, Inc.
-            <small class="pull-right">Date: 2/10/2014</small>
+            <i class="fa fa-globe"></i> Unizen Technologies Pvt. Ltd
+            <small class="pull-right">Date : <span id="datetime"></span>
+             <script>
+ 
+             var today = new Date();
+             var dd = today.getDate();
+             var mm = today.getMonth() + 1;
+             var yyyy = today.getFullYear();
+             if (dd < 10) {
+               dd = '0' + dd;
+             } 
+             if (mm < 10) {
+               mm = '0' + mm;
+             } 
+             var today = yyyy + '-' + mm + '-' + dd;
+             document.getElementById('datetime').innerHTML = today;
+             
+             </script>
+             </small>
           </h2>
         </div>
         <!-- /.col -->
@@ -75,11 +91,13 @@
         <div class="col-sm-4 invoice-col">
           From
           <address>
-            <strong>Admin, Inc.</strong><br>
-            795 Folsom Ave, Suite 600<br>
-            San Francisco, CA 94107<br>
-            Phone: (804) 123-5432<br>
-            Email: info@almasaeedstudio.com
+            <strong>Unizen Technologies Pvt. Ltd</strong><br>
+            577/B, 2nd Floor, Near Silk Board<br>
+            Adjacent to Skoda Showroom<br>
+            Santhosapuram, Sector 6, HSR Layout<br> 
+            Bengaluru, Karnataka 560102<br>
+            Phone: (+91)-9888998889<br>
+            Email: info@unizentechnologies.com
           </address>
         </div>
         <!-- /.col -->
@@ -95,10 +113,9 @@
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-          <b>Invoice #007612</b><br>
           <br>
-          <b>Order ID:</b> 4F3S8J<br>
-          <b>Payment Due:</b> 2/22/2014<br>
+          <br>
+          <br>
           <b>Account:</b> 968-34567
         </div>
         <!-- /.col -->
@@ -111,41 +128,50 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>Qty</th>
+              <th>Serial No.</th>
               <th>Product</th>
-              <th>Serial #</th>
-              <th>Description</th>
-              <th>Subtotal</th>
+              <th>Slab 1</th>
+              <th>Slab 1 price</th>
+              <th>Slab 2</th>
+              <th>Slab 2 price</th>
+              <th>Slab 3</th>
+              <th>Slab 3 price</th>
+              <th>Sub-Total</th>
             </tr>
             </thead>
             <tbody>
             <tr>
               <td>1</td>
-              <td>Call of Duty</td>
-              <td>455-981-221</td>
-              <td>El snort testosterone trophy driving gloves handsome</td>
-              <td>$64.50</td>
+              <td>1234567</td>
+              <td>345</td>
+              <td>Rs.230</td>
+              <td>265</td>
+              <td>Rs.180</td>
+              <td>500</td>
+              <td>Rs.330</td>
+              <td>Rs.740</td>
             </tr>
             <tr>
-              <td>1</td>
-              <td>Need for Speed IV</td>
-              <td>247-925-726</td>
-              <td>Wes Anderson umami biodiesel</td>
-              <td>$50.00</td>
+              <td>2</td>
+              <td>1234789</td>
+              <td>100</td>
+              <td>Rs.100</td>
+              <td>454</td>
+              <td>Rs.280</td>
+              <td>321</td>
+              <td>Rs.200</td>
+              <td>Rs.580</td>
             </tr>
             <tr>
-              <td>1</td>
-              <td>Monsters DVD</td>
-              <td>735-845-642</td>
-              <td>Terry Richardson helvetica tousled street art master</td>
-              <td>$10.70</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Grown Ups Blue Ray</td>
-              <td>422-568-642</td>
-              <td>Tousled lomo letterpress</td>
-              <td>$25.99</td>
+              <td>3</td>
+              <td>1235678</td>
+              <td>600</td>
+              <td>Rs.370</td>
+              <td>150</td>
+              <td>Rs.110</td>
+              <td>420</td>
+              <td>Rs.260</td>
+              <td>Rs.640</td>
             </tr>
             </tbody>
           </table>
@@ -176,19 +202,19 @@
             <table class="table">
               <tr>
                 <th style="width:50%">Subtotal:</th>
-                <td>$250.30</td>
+                <td>Rs.1960</td>
               </tr>
               <tr>
-                <th>Tax (9.3%)</th>
-                <td>$10.34</td>
+                <th>Tax (10%)</th>
+                <td>Rs.196</td>
               </tr>
               <tr>
-                <th>Shipping:</th>
-                <td>$5.80</td>
+                <th>GST + CGST (10%):</th>
+                <td>Rs.196</td>
               </tr>
               <tr>
                 <th>Total:</th>
-                <td>$265.24</td>
+                <td>Rs.2352</td>
               </tr>
             </table>
           </div>
@@ -200,7 +226,7 @@
       <!-- this row will not appear when printing -->
       <div class="row no-print">
         <div class="col-xs-12">
-          <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+         <!--<a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>-->
           <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal-info">
           <i class="fa fa-credit-card"></i> Submit Payment
           </button>
@@ -440,12 +466,15 @@
                 
                 <div class="form-group">
                   <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                  <input type="email" class="form-control" id="exampleInputEmail1" name="email" 
+                  pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+                  placeholder="Enter email" required>
                 </div>
                 
                 <div class="form-group">
-                  <label>Phone Number</label>
-                  <input type="text" class="form-control" placeholder="Enter Number">
+                  <label for="phone">Phone Number</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" pattern="[1-9][0-9]{9}" 
+                  placeholder="Enter Number" required>
                 </div>
                 
                 <div class="form-group">
@@ -457,16 +486,15 @@
                 <label>
                   <input type="checkbox" class="minimal" required>
                   I have read and agree to the terms and conditions.
-                </label>
-              </div>
-                
-                </form>
+                </label> 
                 </div>
+               </div>
                 
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline">Proceed To Pay</button>
+                <input type="submit" class="btn btn-outline" value="Proceed To Pay">
               </div>
+              </form>
             </div>
             <!-- /.modal-content -->
           </div>
