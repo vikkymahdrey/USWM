@@ -76,6 +76,13 @@ public class LoginController {
 			 return "exception";		
 	}
 	
+	@RequestMapping(value= {"/loginv2"}, method=RequestMethod.GET)
+	public String InvoceResponce(HttpServletRequest request, HttpServletResponse response)
+	{
+		
+		return "login";
+	}
+	
 		
 	
 	@RequestMapping(value= {"/onSubmitlogin"}, method=RequestMethod.POST)
