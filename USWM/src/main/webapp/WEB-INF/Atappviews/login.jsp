@@ -27,19 +27,25 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page" style="background-image:url('dashboard/dist/img/loginbackground1.jpg')">
+<body class="hold-transition login-page" style="background-image:url('dashboard/dist/img/Background.jpg');background-size: 100%">
+
+  <img src="dashboard/dist/img/UnizenLogo.png" class="user-image" alt="User Image" width="50px" height="50px" style="opacity:0.5">
+  
+
 <div class="login-box">
-  <div class="login-logo">
+  <div class="login-logo" style="padding-top:80px;">
   
-  <img src="dashboard/dist/img/LoginLogo.png" class="user-image" alt="User Image"><br>
   
-    <a href="dashboard/index2.html">
-    <img src="dashboard/dist/img/UnizenLogo.png" class="user-image" alt="User Image" width="40px" height="40px">
-    <b style="color:white">Easy Count</b></a>
+   
   </div>
   <!-- /.login-logo -->
-  <div class="login-box-body" style="background-color:#235E93">
-    <p class="login-box-msg" style="color:white">Sign in to start your session</p>
+  <div class="login-box-body" style="border-radius: 25px;border-style: solid;border-width: thin;border-color:white;background-color:#235E93">
+    <p class="login-box-msg" style="color:white">
+     <a href="dashboard/index2.html">
+    <img src="dashboard/dist/img/LoginLogo.png" class="user-image" alt="User Image" width="50px" height="50px">
+    <b style="color:white;font-family:Gabriola;font-size:24px">Easy Count</b></a>
+    
+    </p>
 
     <form action="dashboard/index2.html" method="post">
       <div class="form-group has-feedback">
@@ -51,15 +57,29 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-3">
          
-          <a href="#">I forgot my password</a><br>
-
+         
         </div>
         <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+        <div class="col-xs-6">
+          <button type="submit" class="btn btn-primary btn-block btn-flat" style="border-radius: 10px;background-color:#64B246">Sign In</button>
         </div>
+        <!-- /.col -->
+      </div>
+      
+      
+      
+       <div class="row" style="color:white;padding-top:10px">
+        <div class="col-xs-4">
+         
+         
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-8">
+         
+         <a href="#" style="color:white;">forgot password ?</a>
+           </div>
         <!-- /.col -->
       </div>
     </form>
