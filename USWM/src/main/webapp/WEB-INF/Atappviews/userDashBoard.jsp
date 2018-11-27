@@ -33,6 +33,8 @@
 <link rel="stylesheet"
 	href="dashboard/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 <!-- bootstrap wysihtml5 - text editor -->
+<link rel="stylesheet"
+	href="dashboard/customcolors/unizencolors.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +47,47 @@
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini" onload="loadData()">
+<body class="hold-transition skin-blue skin-black" onload="loadData()">
+
+<div class="modal" id="modal-info" style="display: none;">
+              
+              <div class="modal-body">
+              <div class="row">
+            <div class="col-sm-4 col-md-2">
+              
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 col-md-2">
+              
+            </div> <div class="col-sm-4 col-md-2">
+              
+            </div>
+            <!-- /.col -->
+           
+            <!-- /.col -->
+            <div class="col-sm-4 col-md-2">
+             
+             <i class="fa fa-spinner fa-spin" style="font-size:100px;color:#235E93"></i>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 col-md-2">
+              
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 col-md-2">
+             
+              
+            </div>
+            
+            <!-- /.col -->
+          </div>
+              </div>
+            
+            <!-- /.modal-content -->
+         
+          <!-- /.modal-dialog -->
+        </div>
+
 	<div class="wrapper">
 
 
@@ -62,7 +104,7 @@
 					Total Water Consumed <small>by user</small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard" onclick="loadData()"></i> Home</a></li>
+					<li><a href="#"><i class="fa fa-refresh fa-spin" style="font-size:24px;" onclick="loadData()"></i> Home</a></li>
 					<li class="active">Dashboard</li>
 				</ol>
 			</section>
@@ -137,16 +179,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">Day Report</h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
+							
 							</div>
 							<div class="tab-content no-padding">
 								<!-- Morris chart - Sales -->
@@ -197,16 +230,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">Current Month Consumption </h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
+								
 							</div>
 							<div class="box-body chart-responsive">
 								<div class="chart" id="bar-chart"
@@ -249,16 +273,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">Donut Chart</h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
+								
 							</div>
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart1"
@@ -284,16 +299,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">Donut Chart</h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
+								
 							</div>
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart2"
@@ -316,16 +322,7 @@
 							<div class="box-header with-border">
 								<h3 class="box-title">Donut Chart</h3>
 
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool"
-										data-widget="collapse">
-										<i class="fa fa-minus"></i>
-									</button>
-									<button type="button" class="btn btn-box-tool"
-										data-widget="remove">
-										<i class="fa fa-times"></i>
-									</button>
-								</div>
+								
 							</div>
 							<div class="box-body chart-responsive">
 								<div class="chart" id="sales-chart3"
@@ -570,7 +567,28 @@
 
 	<script>
 	
+	var loader = document.getElementById("modal-info");
+	
+	
+//	setInterval(loadData, 60000);
+	//setInterval(loaderz, 59000);
+	
+	
+	var load = false;
+	function loaderz(){
+		
+		if(load == false){
+			loader.setAttribute("style","display:block");
+			load = true;	
+		}else{
+			loader.setAttribute("style","display:none");
+			load = false;
+		}
+		
+	}
+	
 	function loadData(){
+	
 		getcurrebtDaysReport();
 		getMonthDates();
 		createdonotjson();
@@ -578,10 +596,12 @@
 		lastSecondmonthdonut();
 		lastThirdmonthdonut();
 		getWeeksDates();
-		drawbarchart();
+		drawbarchart();		
 		
 	}
 	
+	
+
 	
 	/* $(function() {
 		getcurrebtDaysReport();
@@ -650,7 +670,7 @@ ykeys.push(device.split("->")[1])
 				element : 'bar-chart',
 				resize : true,
 				data : tempdata,
-				barColors : [ '#F58C1F', '#64B246', '#91191C' ],
+				barColors :  [ '#235E93', '#64B246', '#91191C','#F58C1F','#235E93', '#64B246', '#91191C','#F58C1F'],
 				xkey : 'y',
 				ykeys : ykeys,
 				labels : ykeys,
@@ -690,8 +710,7 @@ ykeys.push(device.split("->")[1])
 			var donut = new Morris.Donut({
 				element : 'sales-chart1',
 				resize : true,
-				colors : [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
-					'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ],
+				colors : [ '#235E93', '#64B246', '#91191C','#F58C1F','#235E93', '#64B246', '#91191C','#F58C1F'],
 				data :monthconsumtion.FirstMonth,
 				hideHover : 'auto'
 			});
@@ -705,8 +724,7 @@ ykeys.push(device.split("->")[1])
 			var donut = new Morris.Donut({
 				element : 'sales-chart2',
 				resize : true,
-				colors : [ '#F58C1F', '#64B246', '#91191C', '#F58C1F',
-					'#64B246', '#91191C', '#F58C1F', '#64B246', '#91191C' ],
+				colors : [ '#235E93', '#64B246', '#91191C','#F58C1F','#235E93', '#64B246', '#91191C','#F58C1F'],
 				data :monthconsumtion.SecondMonth,
 				hideHover : 'auto'
 			});
@@ -770,7 +788,7 @@ function createdonotjson(){
 		
 	}
 	
-	//console.log(monthconsumtion);
+	
 }
 
 
@@ -801,23 +819,33 @@ function getConsumtion(devid,fromDate,toDate,filter){
 
 }
 
-
+var collop = 0;
 function getLineColors(){
-			var staticlineColors = [ '#F58C1F', '#64B246', '#91191C']
 			
-			return staticlineColors[Math.floor(Math.random() * 3)]
+	if(collop == 4){
+		collop = 0;
+	}
+	var staticlineColors = [ '#235E93', '#64B246', '#91191C','#F58C1F']
+			
+			return staticlineColors[collop++]
 		
 		}
 		
+		
+		var colorloop = 0;
+		
 		function getBoxColor(){
-			
-			var totalBoxClasses = ['bg-green','bg-yellow','bg-red','bg-blue','bg-orange']
-			return totalBoxClasses[Math.floor(Math.random() * 3)]
+			if(colorloop == 4){
+				colorloop = 0;
+			}
+			var totalBoxClasses = ['unizen-blue','unizen-red','unizen-green','unizen-orange']
+			return totalBoxClasses[colorloop++]
 			
 		}
 		
 		function getcurrebtDaysReport() {
-
+			//loader.setAttribute("style","display:block")
+			
 			$.ajax({
 				url : 'getGraphOnBodyLoad',
 				async: false,
@@ -855,7 +883,7 @@ function getLineColors(){
 
 		function plotTotalConsuption() {
 			
-			
+			colorloop = 0;
 			var refdiv = document.getElementById('refTotal')
 
 			var devicesCount = Object.keys(totalConsumption).length;
@@ -898,7 +926,7 @@ function getLineColors(){
 		}
 
 		function plotdayChart() {
-
+			collop =0;
 			var ykeys = []
 			var labels = []
 			var lineColors = []
