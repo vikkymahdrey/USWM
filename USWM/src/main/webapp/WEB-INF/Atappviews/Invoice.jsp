@@ -45,17 +45,11 @@
         <small>#007612</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Invoice</li>
+      
       </ol>
     </section>
 
-    <div class="pad margin no-print">
-      <div class="callout callout-info" style="margin-bottom: 0!important;">
-        <h4><i class="fa fa-info"></i> Note:</h4>
-        This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-      </div>
-    </div>
+    
 
     <!-- Main content -->
     <section class="invoice">

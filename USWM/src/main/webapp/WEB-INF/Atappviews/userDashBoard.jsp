@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>AdminLTE 2 | Dashboard</title>
+
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -104,8 +104,8 @@
 					Total Water Cosumption <small></small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-refresh fa-spin" style="font-size:24px;" onclick="loadData()"></i> Home</a></li>
-					<li class="active">Dashboard</li>
+					<li><a href="#"><i class="fa fa-refresh fa-spin" style="font-size:24px;" onclick="loadData()"></i> </a></li>
+				
 				</ol>
 			</section>
 
@@ -570,8 +570,7 @@
 	var loader = document.getElementById("modal-info");
 	
 	
-//	setInterval(loadData, 60000);
-	//setInterval(loaderz, 59000);
+	setInterval(loadData, 60000);
 	
 	
 	var load = false;
@@ -767,7 +766,7 @@ function createdonotjson(){
 				tempconsumtion = tempconsumtion + result[obj].units;
 				
 			}
-			var devicedataref = {label:device.split("->")[1],value:tempconsumtion}
+			var devicedataref = {label:device.split("->")[0],value:tempconsumtion}
 			consuptionref.push(devicedataref);
 			
 		}
@@ -910,7 +909,7 @@ function getLineColors(){
 				
 				innerval.setAttribute("class",boxwidthclass)
  
-				innerval.getElementsByTagName("p")[0].innerHTML ="<span style='color:white'>"+ i+"</span>";
+				innerval.getElementsByTagName("p")[0].innerHTML ="<span style='color:white'>"+ i.split('->')[0]+"</span>";
 				
 				innerval.getElementsByTagName("div")[0].setAttribute("class","small-box");
 				innerval.getElementsByTagName("div")[0].classList.add(getBoxColor())
