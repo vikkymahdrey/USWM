@@ -80,8 +80,8 @@
           </a>
         </li>
         <li>
-          <a href="invoice">
-           <i class="fa fa-credit-card-alt"></i>  <span>Invoice</span>
+          <a href="transactions">
+           <i class="fa fa-credit-card-alt"></i>  <span>Payements</span>
             <span class="pull-right-container">
              <!--  <small class="label pull-right bg-green">new</small> -->
             </span>
