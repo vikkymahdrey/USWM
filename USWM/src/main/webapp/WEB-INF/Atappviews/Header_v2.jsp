@@ -1,3 +1,10 @@
+<%@page import="java.util.*"%>
+<%@page import="com.team.app.constant.*"%>
+<%@page import="com.team.app.domain.*"%>
+<%@page import="com.team.app.service.impl.UserLoginServiceImpl"%>
+<%@ page errorPage="error.jsp" %> 
+<% TblUserInfo userSession = (TblUserInfo) request.getSession().getAttribute("user"); %>
+ 
   <header class="main-header">
    
   
@@ -28,7 +35,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="dashboard/dist/img/logo.png" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"><%=userSession.getUname()%></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -36,8 +43,7 @@
                 <img src="dashboard/dist/img/logo.png" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                 <%=userSession.getUname()%>
                 </p>
               </li>
               <!-- Menu Body -->
