@@ -43,7 +43,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-info1">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="logout" class="btn btn-default btn-flat">Sign out</a>
@@ -106,5 +106,45 @@
        
       </ul>
     </section>
+    <!-- user details edit  model -->
+    
     <!-- /.sidebar -->
   </aside>
+  <div class="modal modal-info fade in" id="modal-info1" style="display:none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Edit User Deails </h4>
+              </div>
+              <div class="modal-body">
+                
+                <form>
+                <div class="form-group">
+                  <label>User Name</label>
+                  
+                </div>
+                
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  
+                </div>
+                
+                <div class="form-group">
+                  <label>Email</label>
+                  
+                </div>
+                 </form>
+              </div>
+              
+              <div class="modal-footer">
+                <input type="submit" class="btn btn-outline" value="Submit">
+              </div>
+              
+             
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
