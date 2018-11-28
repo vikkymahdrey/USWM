@@ -107,7 +107,10 @@ function validate() {
 	
 	
 </head>
-<body class="hold-transition login-page" onload="loadScript()">
+<body class="hold-transition login-page" onload="loadScript()" style="background-image:url('dashboard/dist/img/Background.jpg');background-size: 100%">
+	
+	<img src="dashboard/dist/img/unizen_logo.png" class="user-image" alt="User Image"  style="padding-top:20px;padding-left:20px">
+  
 		<%String statusLogg=(String)request.getAttribute("statusLog");
 			String url=(String)request.getAttribute("url");
 				String exception=(String)request.getAttribute("exception");
@@ -145,13 +148,15 @@ function validate() {
 					%>	
 
 <div class="login-box">
-  <div class="login-logo">
-    <h3><b>Unizen</b>SWM Sol.</h3>
-  </div>
+  
   <!-- /.login-logo -->
-  <div class="login-box-body">
-    <p class="login-box-msg"><b>Please Sign-in</b></p>
-
+  <div class="login-box-body" style="border-radius: 25px;border-style: solid;border-width: thin;border-color:white;background-color:#235E93">
+    <p class="login-box-msg" style="color:white">
+     <a href="dashboard/index2.html">
+    <img src="dashboard/dist/img/Watermeter.png" class="user-image" alt="User Image" width="50px" height="50px">
+    <b style="color:white;font-family:Gabriola;font-size:24px">Easy Count</b></a>
+    
+    </p>
     <form action="onSubmitlogin" name="user_validation_form" id="user_validation_form" method="post" onsubmit="return validate()">
     
 			      <div class="form-group has-feedback">
@@ -172,11 +177,28 @@ function validate() {
 			      <div class="row" style="text-align:center;">
 				   				        
 				        <!-- /.col -->
-				        <div class="col-xs-4">
-				          <button type="submit" style="margin-left: 135%;" class="btn btn-primary btn-block btn-flat text-bold">Sign In</button>
+				        
+				         <div class="col-xs-3">
+         
+         
+        </div>
+				        <div class="col-xs-6">
+				          <button type="submit" style="border-radius: 10px;background-color:#64B246" class="btn btn-primary btn-block btn-flat text-bold">Sign In</button>
 				        </div>
 				        <!-- /.col -->
 			      </div>
+			      <div class="row" style="color:white;padding-top:10px">
+        <div class="col-xs-4">
+         
+         
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-8">
+         
+         <a href="#" style="color:white;">forgot password ?</a>
+           </div>
+        <!-- /.col -->
+      </div>
     </form>
 
    
