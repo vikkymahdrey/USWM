@@ -18,4 +18,10 @@ public class InvoiceController
 	}
 	
 
+	@RequestMapping(value= {"/transactions"}, method=RequestMethod.GET)
+	public String transactions()
+	{
+		
+		return "transactions";
+	}
 }

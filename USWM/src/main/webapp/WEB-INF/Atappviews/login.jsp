@@ -29,11 +29,11 @@
 </head>
 <body class="hold-transition login-page" style="background-image:url('dashboard/dist/img/Background.jpg');background-size: 100%">
 
-  <img src="dashboard/dist/img/UnizenLogo.png" class="user-image" alt="User Image" width="50px" height="50px" style="opacity:0.5">
+  <img src="dashboard/dist/img/credit/UnizenLogo.png" class="user-image" alt="User Image"  style="opacity:1;padding-left:15px;padding-top:15px">
   
 
 <div class="login-box">
-  <div class="login-logo" style="padding-top:80px;">
+  <div class="login-logo" style="padding-top:60px;">
   
   
    
@@ -42,7 +42,7 @@
   <div class="login-box-body" style="border-radius: 25px;border-style: solid;border-width: thin;border-color:white;background-color:#235E93">
     <p class="login-box-msg" style="color:white">
      <a href="dashboard/index2.html">
-    <img src="dashboard/dist/img/LoginLogo.png" class="user-image" alt="User Image" width="50px" height="50px">
+    <img src="dashboard/dist/img/wm_logo.png" class="user-image" alt="User Image" width="50px" height="50px">
     <b style="color:white;font-family:Gabriola;font-size:24px">Easy Count</b></a>
     
     </p>

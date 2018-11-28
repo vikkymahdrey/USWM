@@ -101,7 +101,7 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Total Water Consumed <small>by user</small>
+					Total Water Cosumption <small></small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-refresh fa-spin" style="font-size:24px;" onclick="loadData()"></i> Home</a></li>
@@ -670,7 +670,7 @@ ykeys.push(device.split("->")[1])
 				element : 'bar-chart',
 				resize : true,
 				data : tempdata,
-				barColors :  [ '#235E93', '#64B246', '#91191C','#F58C1F','#235E93', '#64B246', '#91191C','#F58C1F'],
+				barColors :  [ '#F58C1F', '#64B246', '#91191C','#235E93','#235E93', '#64B246', '#91191C','#F58C1F'],
 				xkey : 'y',
 				ykeys : ykeys,
 				labels : ykeys,
@@ -825,7 +825,7 @@ function getLineColors(){
 	if(collop == 4){
 		collop = 0;
 	}
-	var staticlineColors = [ '#235E93', '#64B246', '#91191C','#F58C1F']
+	var staticlineColors = [ '#F58C1F', '#64B246', '#91191C','#235E93']
 			
 			return staticlineColors[collop++]
 		
@@ -838,7 +838,7 @@ function getLineColors(){
 			if(colorloop == 4){
 				colorloop = 0;
 			}
-			var totalBoxClasses = ['unizen-blue','unizen-red','unizen-green','unizen-orange']
+			var totalBoxClasses = ['unizen-orange','unizen-green','unizen-red','unizen-blue']
 			return totalBoxClasses[colorloop++]
 			
 		}
@@ -910,13 +910,13 @@ function getLineColors(){
 				
 				innerval.setAttribute("class",boxwidthclass)
  
-				innerval.getElementsByTagName("p")[0].innerHTML = i;
+				innerval.getElementsByTagName("p")[0].innerHTML ="<span style='color:white'>"+ i+"</span>";
 				
 				innerval.getElementsByTagName("div")[0].setAttribute("class","small-box");
 				innerval.getElementsByTagName("div")[0].classList.add(getBoxColor())
 				
 
-				innerval.getElementsByTagName("h3")[0].innerHTML = totalConsumption[i] + "<small>Ltrs</small>";
+				innerval.getElementsByTagName("h3")[0].innerHTML = "<span style='color:white'>"+totalConsumption[i] + "<small style='color:white'>Ltrs</small>"+"</span>";
 				
 				document.getElementById('totalConsumption').appendChild(
 						innerval);
