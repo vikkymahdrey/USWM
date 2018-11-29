@@ -45,17 +45,11 @@
         <small>#007612</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Invoice</li>
+      
       </ol>
     </section>
 
-    <div class="pad margin no-print">
-      <div class="callout callout-info" style="margin-bottom: 0!important;">
-        <h4><i class="fa fa-info"></i> Note:</h4>
-        This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-      </div>
-    </div>
+    
 
     <!-- Main content -->
     <section class="invoice">
@@ -178,6 +172,7 @@
         </div>
         <!-- /.col -->
       </div>
+      
       <!-- /.row -->
 
       <div class="row">
@@ -240,13 +235,8 @@
     <div class="clearfix"></div>
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer no-print">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
-    </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-    reserved.
-  </footer>
+ 	<%@include file="footer_v2.jsp"%>
+
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
