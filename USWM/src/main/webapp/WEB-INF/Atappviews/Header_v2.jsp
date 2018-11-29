@@ -182,7 +182,7 @@
               <form role="form">
                 
                 <div class="form-group">
-                  <label>Old Password</label>
+                  <label>Current Password</label>
                   <input type="password" class="form-control" placeholder="Old Password" autocomplete="off" required >
                 </div>
                 

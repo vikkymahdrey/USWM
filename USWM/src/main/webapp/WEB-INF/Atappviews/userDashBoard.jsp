@@ -612,13 +612,13 @@
 			
 			
 var tempdata = []
-var ykeys = []
+var yykeys = []
 
 
 
-for(var device in totalConsumption){
+for(var devices in totalConsumption){
 
-ykeys.push(device.split("->")[1])
+yykeys.push(devices.split("->")[0])
 }
 
 			
@@ -644,7 +644,7 @@ ykeys.push(device.split("->")[1])
 						
 					}
 					
-					consuptionref[''+device.split("->")[1]+''] = tempconsumtion
+					consuptionref[''+device.split("->")[0]+''] = tempconsumtion
 					
 
 				}
@@ -658,8 +658,8 @@ ykeys.push(device.split("->")[1])
 				data : tempdata,
 				barColors :  [ '#F58C1F', '#64B246', '#91191C','#235E93','#235E93', '#64B246', '#91191C','#F58C1F'],
 				xkey : 'y',
-				ykeys : ykeys,
-				labels : ykeys,
+				ykeys : yykeys,
+				labels : yykeys,
 				hideHover : 'auto'
 			});
 			
@@ -939,7 +939,7 @@ function getLineColors(){
 				for ( var k in config) {
 
 					ykeys.push(config[k].name);
-					labels.push(config[k].name);
+					labels.push(config[k].name.split('->')[0]);
 					lineColors.push(getLineColors())
 
 				}
