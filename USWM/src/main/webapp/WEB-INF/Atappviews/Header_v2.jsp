@@ -46,7 +46,7 @@
                   <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-info1">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="logout" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#modal-info2">Change Password</a>
                 </div>
               </li>
             </ul>
@@ -81,7 +81,7 @@
         </li>
         <li>
           <a href="transactions">
-           <i class="fa fa-credit-card-alt"></i>  <span>Payements</span>
+           <i class="fa fa-credit-card-alt"></i>  <span>Payments</span>
             <span class="pull-right-container">
              <!--  <small class="label pull-right bg-green">new</small> -->
             </span>
@@ -110,38 +110,92 @@
     
     <!-- /.sidebar -->
   </aside>
-  <div class="modal modal-info fade in" id="modal-info1" style="display:none;">
+  <div class="modal  fade in" id="modal-info1" style="display:none;">
           <div class="modal-dialog">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header" style="background-color:#235E93">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Edit User Deails </h4>
+                <h4 class="modal-title" style="color:#ffff">User Details</h4>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" style="background-color:#f9f9f9">
                 
-                <form>
+                <div class="box-body">
+              <form role="form">
+                
                 <div class="form-group">
-                  <label>User Name</label>
-                  
+                  <label>Name</label>
+                  <input type="text" class="form-control" placeholder="Enter Name"  readonly="readonly">
                 </div>
                 
                 <div class="form-group">
-                  <label>Phone Number</label>
-                  
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" name="email" 
+                  pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+                  placeholder="Enter email" required>
                 </div>
                 
                 <div class="form-group">
-                  <label>Email</label>
-                  
+                  <label for="phone">Phone Number</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" pattern="[1-9][0-9]{9}" 
+                  placeholder="Enter Number" required>
                 </div>
-                 </form>
+                 <div class="form-group text-center">
+                  <button  class="btn btn-success" style="background-color:#64B246;width:100px">Edit</button>
+                </div>
+                </form>
+                </div>
+                
+                 
               </div>
               
-              <div class="modal-footer">
-                <input type="submit" class="btn btn-outline" value="Submit">
+             
+             
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        
+        <!-- Change Password Model -->
+        
+        <div class="modal  fade in" id="modal-info2" style="display:none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color:#235E93">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" style="color:#ffff">Change Password</h4>
+              </div>
+              <div class="modal-body" style="background-color:#f9f9f9">
+                
+                <div class="box-body">
+              <form role="form">
+                
+                <div class="form-group">
+                  <label>Old Password</label>
+                  <input type="password" class="form-control" placeholder="Old Password" autocomplete="off" required >
+                </div>
+                
+                <div class="form-group">
+                  <label >New Password</label>
+                  <input type="password" class="form-control" placeholder="New Password" autocomplete="off" required>
+                </div>
+                
+                <div class="form-group">
+                  <label >Confirm NewPassword</label>
+                  <input type="password" class="form-control" placeholder="Confirm NewPassword" autocomplete="off" required>
+                </div>
+                 <div class="form-group text-center">
+                  <button  class="btn btn-success" style="background-color:#64B246;width:100px">Save</button>
+                </div>
+                </form>
+                </div>
+                
+                 
               </div>
               
+             
              
             </div>
             <!-- /.modal-content -->
