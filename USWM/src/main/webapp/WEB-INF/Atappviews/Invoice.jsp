@@ -172,6 +172,7 @@
         </div>
         <!-- /.col -->
       </div>
+      
       <!-- /.row -->
 
       <div class="row">
@@ -221,7 +222,7 @@
       <div class="row no-print">
         <div class="col-xs-12">
          <!--<a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>-->
-          <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal-info">
+          <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal-info" style="background-color:#64B246; ">
           <i class="fa fa-credit-card"></i> Submit Payment
           </button>
           <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
@@ -433,13 +434,13 @@
 </div>
 <!-- ./wrapper -->
 
-<div class="modal modal-info fade" id="modal-info">
-          <div class="modal-dialog">
-            <div class="modal-content">
+<div class="modal  fade" id="modal-info">
+          <div class="modal-dialog" >
+            <div class="modal-content" style="background-color:#235E93">
               <div class="modal-header" >
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">
+                <h3 class="modal-title" style="color:white">
                 <span class="fa fa-money"></span> PayU
                 </h3>
               </div>
@@ -449,40 +450,40 @@
               <form role="form">
                 
                 <div class="form-group">
-                  <label>Name</label>
+                  <label style="color:white">Name</label>
                   <input type="text" class="form-control" placeholder="Enter Name" disabled>
                 </div>
                 
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
+                  <label for="exampleInputEmail1" style="color:white">Email address</label>
                   <input type="email" class="form-control" id="exampleInputEmail1" name="email" 
                   pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
                   placeholder="Enter email" required>
                 </div>
                 
                 <div class="form-group">
-                  <label for="phone">Phone Number</label>
+                  <label for="phone" style="color:white">Phone Number</label>
                   <input type="tel" class="form-control" id="phone" name="phone" pattern="[1-9][0-9]{9}" 
                   placeholder="Enter Number" required>
                 </div>
                 
                 <div class="form-group">
-                  <label>Amount</label>
+                  <label style="color:white">Amount</label>
                   <input type="text" class="form-control" placeholder="Amount to Pay" disabled>
                 </div>
+                <div class="checkbox" style="color:white">
+                  <label>
+                    <input type="checkbox" required> I have read and agree to the terms and conditions.
+                  </label>
+                </div><br>
+                <div class="form-group text-center">
+                <input type="submit" class="btn " value="Proceed To Pay" style="color:white;background-color:#64B246">
                 
-                <div class="form-group">
-                <label>
-                  <input type="checkbox" class="minimal" required>
-                  I have read and agree to the terms and conditions.
-                </label> 
                 </div>
                </div>
                 
               </div>
-              <div class="modal-footer">
-                <input type="submit" class="btn btn-outline" value="Proceed To Pay">
-              </div>
+              
               </form>
             </div>
             <!-- /.modal-content -->

@@ -49,41 +49,42 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">      
-        <div class="col-xs-12">
+        <div class="col-md-12">
           <div class="box">
             <div class="box-body">
             
             <div class="row">      
-              <div class="col-xs-2 pull-right">
-                    <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#modal-info">
+              <div class="col-md-2 pull-right">
+                    <button type="button" class="btn btn-block  btn-success" data-toggle="modal" data-target="#modal-info" style="background-color:#64B246; ">
                     <b>New Issue</b></button>
               </div>
             </div>
             
               <br>
-              <table id="example2" class="table table-hover">
-                <thead>
-                <tr class="active">
+           <div class="table-responsive">
+              <table id="example2" class="table table-hover " style="width:100%">
+                <thead class="text-right">
+                <tr class="active ">
+                  <th>Issue Id</th>
                   <th>Device Name</th>
-                  <th>Transaction ID</th>
                   <th>Raised Date</th>
                   <th>Query</th>
+                  
                   <th>Status</th>
-                  <th> </th>
+                  <th>Actions</th>
                 </tr>
                 </thead>
-                 <tbody>
+                 <tbody style="width:100%">
                  <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td> 4</td>
-                  <td>X</td>
-                  <td>
-                  
-                   <button type="button" class="btn btn-box-tool btn-success" data-toggle="collapse" data-target="#collapse-info"><b style="color:white">Details</b>
+                  <td>1</td>
+                  <td>WM_Demo_P1->1200000000002345 </td>
+                  <td>28/11/2018</td>
+                   <td>Meter Drained </td>
+                 
+                  <td>Success</td>
+                  <td >
+                 
+                    <button type="button" class="btn btn-box-tool btn-success " data-toggle="collapse" data-target="#collapse-info"style="color:white; background-color:#64B246;width:100px"><b >Details</b>
                     </button>
                       
                    </td>
@@ -92,108 +93,10 @@
                    <td colspan="6">
                    
                    <div class="box-body">
-                   <div class="direct-chat-messages">
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                        
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      
-                      <div class="direct-chat-text pull-left">
-                        Is this template really for free? That's unbelievable!
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      
-                      <div class="direct-chat-text pull-right">
-                        You better believe it!
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                        
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      
-                      <div class="direct-chat-text pull-left">
-                        Working with AdminLTE on a great new app! Wanna join?
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
-                      </div>
-                      
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                      <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      
-                      <div class="direct-chat-text pull-right">
-                        I would love to.
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 6:10 pm</span>
-                      </div>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                    <!-- /.direct-chat-msg -->
-                    </div> 
-                  </div>
-                   
-                   <div class="box-footer col-xs-12">
-                  <form action="#" method="post">
-                    <div class="input-group">
-                      <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                      <span class="input-group-btn">
-                            <button type="button" class="btn btn-success btn-flat">Send</button>
-                          </span>
-                    </div>
-                  </form>
-                </div>
-                   
-                   </td>
-                   </tr>
-               
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 5.0
-                  </td>
-                  <td>Win 95+</td>
-                  <td>5</td>
-                  <td>C</td>
-                  <td>
-                  
-                   <button type="button" class="btn btn-box-tool btn-success" data-toggle="collapse" data-target="#collapse-info1"><b style="color:white">Details</b>
-                    </button>
-                      
-                   </td>
-                   
-                   </tr>
-                   <tr id="collapse-info1" class="collapse">
-                   <td  colspan="6" >
-                  
-                  <div class="box-body">
+                   <div class=" direct-chat direct-chat-warning">
+                
+              
+                  <!-- Conversations are loaded here -->
                   <div class="direct-chat-messages">
                     <!-- Message. Default to the left -->
                     <div class="direct-chat-msg">
@@ -202,10 +105,9 @@
                         
                       </div>
                       <!-- /.direct-chat-info -->
-                      
                       <div class="direct-chat-text pull-left">
-                        Is this template really for free? That's unbelievable!
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                        Is this template really for free? That's unbelievable! 
+                      <br><span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
                       </div>
                       <!-- /.direct-chat-text -->
                     </div>
@@ -215,13 +117,13 @@
                     <div class="direct-chat-msg right">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        
+                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
                       </div>
                       <!-- /.direct-chat-info -->
-                      
                       <div class="direct-chat-text pull-right">
                         You better believe it!
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
+                        <br>
+                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
                       </div>
                       <!-- /.direct-chat-text -->
                     </div>
@@ -231,15 +133,12 @@
                     <div class="direct-chat-msg">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                        
                       </div>
                       <!-- /.direct-chat-info -->
-                      
                       <div class="direct-chat-text pull-left">
                         Working with AdminLTE on a great new app! Wanna join?
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
+                        <br> <span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
                       </div>
-                      
                       <!-- /.direct-chat-text -->
                     </div>
                     <!-- /.direct-chat-msg -->
@@ -248,18 +147,23 @@
                     <div class="direct-chat-msg right">
                       <div class="direct-chat-info clearfix">
                         <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                        
                       </div>
                       <!-- /.direct-chat-info -->
-                      
                       <div class="direct-chat-text pull-right">
                         I would love to.
-                        <br><span class="direct-chat-timestamp pull-right">23 Jan 6:10 pm</span>
+                       <br> <span class="direct-chat-timestamp pull-left">23 Jan 6:10 pm</span>
                       </div>
                       <!-- /.direct-chat-text -->
                     </div>
                     <!-- /.direct-chat-msg -->
+
                   </div>
+                  <!--/.direct-chat-messages-->
+
+                  <!-- Contacts are loaded here -->
+                                    <!-- /.direct-chat-pane -->
+                </div>   <!-- /.box-body -->
+                
                   </div>
                    
                    <div class="box-footer col-xs-12">
@@ -272,7 +176,233 @@
                     </div>
                   </form>
                 </div>
+                   
+                   </td>
+                   </tr>
+                   <tr >
+                  <td >2</td>
+                  <td>WM_Demo_P2->0000013450006603
+                  </td>
+                  <td>30/11/2018</td>
+                  <td>Water Leak
+                  </td>
+                  <td>Pending</td>
+                  <td>
+                 
+                   <button type="button" class="btn btn-box-tool btn-success  text-center " data-toggle="modal" data-target="#modal-info3" style="color:white;background-color:#64B246;width:100Px"><b >Details</b>
+                    </button>
+                      
+                   </td>
+                   
+                   </tr>
+                
+              </table>
+              </div>
+              
+            </div>
+            <!-- /.box-body -->
+          </div>
+    </div>
+    </div>
+    </section>
+     
+  </div>
+  <footer class="main-footer no-print">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.4.0
+    </div>
+    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+    reserved.
+  </footer>
+
+
+  <!-- Control Sidebar -->
+  
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+
+
+
+<div class="modal  fade in" id="modal-info" style="display:none;">
+          <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#eee ">
+              <div class="modal-header" style=" border: 0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+               <h4 class="modal-title"><b>New Issue</b></h4>
+              </div>
+              <div class="modal-body">
+              
+              <from>
+              <div class="row"> 
+              
+              <div class="col-xs-12">
+              
+              
+              <div class="col-xs-6">
+              
+              <div class="form-group">
+              
+                  <select class="form-control" style=" border: 0;border-radius:6px;" required>
+                  <option>Select Device</option>
+                    <option>option 1</option>
+                    <option>option 2</option>
+                    <option>option 3</option>
+                    <option>option 4</option>
+                    <option>option 5</option>
+                  </select>
+              </div>
+              
+              </div>
+              <div class="col-xs-6">
+              <div class="form-group">
+             
+                  <select class="form-control" style=" border: 0; border-radius:6px;" required>
+                    <option>Select Query</option>
+                    <option>option 1</option>
+                    <option>option 2</option>
+                    <option>option 3</option>
+                    <option>option 4</option>
+                    <option>option 5</option>
+                  </select>
+              </div>
+              
+              </div>
+              
+              <div class="col-xs-12">
+              <div class="form-group">
                   
+                  <textarea class="form-control" rows="15" placeholder="Enter your comment here" style=" border:0;border-radius:6px;" required></textarea>
+                </div>
+              </div>
+              <div class="col-xs-12">
+              <div class="form-group">
+                  
+                 <button type="button" class="btn btn-block btn-success" style="background-color:#64B246;width:100px">Submit</button>
+                </div>
+              </div>
+              </div>
+              
+              </div>
+              
+              </from>
+ 
+              </div>
+             </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+
+
+<!-- View issue details model -->
+    <div class="modal fade in" id="modal-info3" style="display:none;">
+          <div class="modal-dialog">
+            <div class="modal-content" >
+              <div class="modal-header" style="background-color:#eee ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+               <h4 class="modal-title"><b>Issue Details</b></h4>
+              </div>
+              <div class="modal-body">
+              
+               <div class=" direct-chat direct-chat-warning">
+                
+              
+                  <!-- Conversations are loaded here -->
+                  <div class="direct-chat-messages">
+                    <!-- Message. Default to the left -->
+                    <div class="direct-chat-msg">
+                      <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
+                        
+                      </div>
+                      <!-- /.direct-chat-info -->
+                      <div class="direct-chat-text pull-left">
+                        Is this template really for free? That's unbelievable! 
+                      <br><span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                      </div>
+                      <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+
+                    <!-- Message to the right -->
+                    <div class="direct-chat-msg right">
+                      <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
+                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                      </div>
+                      <!-- /.direct-chat-info -->
+                      <div class="direct-chat-text pull-right">
+                        You better believe it!
+                        <br>
+                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+                      </div>
+                      <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+
+                    <!-- Message. Default to the left -->
+                    <div class="direct-chat-msg">
+                      <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-left">Alexander Pierce</span>
+                      </div>
+                      <!-- /.direct-chat-info -->
+                      <div class="direct-chat-text pull-left">
+                        Working with AdminLTE on a great new app! Wanna join?
+                        <br> <span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
+                      </div>
+                      <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+
+                    <!-- Message to the right -->
+                    <div class="direct-chat-msg right">
+                      <div class="direct-chat-info clearfix">
+                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
+                      </div>
+                      <!-- /.direct-chat-info -->
+                      <div class="direct-chat-text pull-right">
+                        I would love to.
+                       <br> <span class="direct-chat-timestamp pull-left">23 Jan 6:10 pm</span>
+                      </div>
+                      <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+
+                  </div>
+                  <!--/.direct-chat-messages-->
+
+                  <!-- Contacts are loaded here -->
+                                    <!-- /.direct-chat-pane -->
+                </div>   <!-- /.box-body -->
+                
+                 
+                  </div>
+                   
+                   <div class="box-footer col-xs-12">
+                  <form action="#" method="post">
+                    <div class="input-group">
+                      <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                      <span class="input-group-btn">
+                            <button type="button" class="btn btn-success "style="background-color:#64B246;width:100px">Send</button>
+                          </span>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                      <button type="button" class="btn btn-success" style="background-color:#64B246;width:100px">Re-Open</button>
+                          
+                    </div>
+                  </form>
+                </div>
+                  
+<<<<<<< HEAD
+                   
+                   
+ 
+=======
                    </td>
                    </tr>
                 
@@ -524,10 +654,9 @@
               </div>
               <div class="modal-footer">
                 <input type="submit" class="btn btn-outline" value="Submit">
+>>>>>>> f9f940aa0316e3fc1a1a222eb4f5156b972c8974
               </div>
-              
-              </form>
-            </div>
+             </div>
             <!-- /.modal-content -->
           </div>
           <!-- /.modal-dialog -->

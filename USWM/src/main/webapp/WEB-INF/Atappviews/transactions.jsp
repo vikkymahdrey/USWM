@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Payments</title>
+  
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -57,6 +58,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <div class="table-responsive">
               <table id="example2"  class="table">
                 <thead>
                 <tr>
@@ -80,7 +82,7 @@
                   <td> - </td>
                    <td> Pending </td>
                     <td>
-                    <a  class="btn btn-block btn-success" href="invoice" style="background-color:#F58C1F">Check Out</a>
+                    <a  class="btn btn-block " href="invoice" style="background-color:#F58C1F;color:white">Check Out</a>
                     </td>
                 </tr>
                
@@ -123,6 +125,7 @@
                 </tr>
                 </tfoot>
               </table>
+              </div>
             </div>
             <!-- /.box-body -->
           </div>
