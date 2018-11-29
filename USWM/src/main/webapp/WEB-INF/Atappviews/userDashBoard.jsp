@@ -341,14 +341,8 @@
 			<!-- /.content -->
 		</div>
 		<!-- /.content-wrapper -->
-		<footer class="main-footer">
-			<div class="pull-right hidden-xs">
-				<b>Version</b> 2.4.0
-			</div>
-			<strong>Copyright &copy; 2014-2016 <a
-				href="https://adminlte.io">Almsaeed Studio</a>.
-			</strong> All rights reserved.
-		</footer>
+			<%@include file="footer_v2.jsp"%>
+
 
 		<!-- Control Sidebar -->
 		<aside class="control-sidebar control-sidebar-dark">
@@ -627,6 +621,8 @@
 		
 		function drawbarchart(){
 			
+			//console.log(weekJSON);
+			
 var tempdata = []
 var ykeys = []
 
@@ -640,13 +636,17 @@ ykeys.push(device.split("->")[1])
 			
 			for(var week in weekJSON){
 				
+				
+				
+				
 				var consuptionref = {y:''+weekJSON[week].from+'-'+weekJSON[week].to};
 				for(var device in totalConsumption){
 					
-					
+					//console.log(weekJSON[week].from+" "+weekJSON[week].to)
 					var responsejson = JSON.parse(getConsumtion(device.split("->")[1],weekJSON[week].from,weekJSON[week].to,null))
 					
-					
+					//console.log(responsejson);
+					//console.log(week)
 					var result = responsejson.result;
 					
 					var tempconsumtion = 0;
@@ -689,8 +689,9 @@ ykeys.push(device.split("->")[1])
 
 		   weekJSON.FirstWeek.from = new Date(year, month, 1).toLocaleDateString();
 		   weekJSON.FirstWeek.to=new Date(year, month, 7).toLocaleDateString();
-		       
-		   weekJSON.SecondWeek.from = new Date(year, month, 8).toLocaleDateString();
+		       //never change the below line it causes issue with database.
+		  // weekJSON.SecondWeek.from = new Date(year, month, 08).toLocaleDateString().split()"/";
+		   weekJSON.SecondWeek.from = "11/08/2018"
 		   weekJSON.SecondWeek.to=new Date(year, month, 14).toLocaleDateString();
 		       
 		   weekJSON.ThirdWeek.from= new Date(year, month, 15).toLocaleDateString();
@@ -803,9 +804,7 @@ function getConsumtion(devid,fromDate,toDate,filter){
            success: function (data) {
         	   jsonVal=data; 
         	  
-        	
-           			
-               },
+        	   },
 		 		error: function(e){
 	     			        alert('Error: ' + e);
 	     		 }
@@ -867,7 +866,7 @@ function getLineColors(){
 				success : function(data) {
 					totalConsumption = data;
 					
-					//console.log(totalConsumption)
+					////console.log(totalConsumption)
 					
 					plotTotalConsuption()
 
@@ -883,7 +882,7 @@ function getLineColors(){
 		function plotTotalConsuption() {
 			
 			colorloop = 0;
-			var refdiv = document.getElementById('refTotal')
+			var refdiv = document.getElementById('refTotal')	
 
 			var devicesCount = Object.keys(totalConsumption).length;
 			
