@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+ <title>Dash board</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -101,7 +101,7 @@
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Total Water Cosumption <small></small>
+					Total Water Consumption <small></small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-refresh fa-spin" style="font-size:24px;" onclick="loadData()"></i> </a></li>
@@ -177,7 +177,7 @@
 						<div class="nav-tabs-custom">
 							<!-- Tabs within a box -->
 							<div class="box-header with-border">
-								<h3 class="box-title">Day Report</h3>
+								<h3 class="box-title">Daily history</h3>
 
 							
 							</div>
@@ -228,7 +228,7 @@
 						<!-- BAR CHART -->
 						<div class="box box-success">
 							<div class="box-header with-border">
-								<h3 class="box-title">Current Month Consumption </h3>
+								<h3 class="box-title">Monthly history </h3>
 
 								
 							</div>
@@ -596,23 +596,12 @@
 	
 
 	
-	/* $(function() {
-		getcurrebtDaysReport();
-		getMonthDates();
-		createdonotjson();
-		lastFirstmonthdonut();
-		lastSecondmonthdonut();
-		lastThirdmonthdonut();
-		getWeeksDates();
-		drawbarchart();
-	}); */
+	
 		var dayreportjson = {}
 		var totalConsumption = {}
 		var dateJSON={"FirstMonth":{from:" ",to:" "},"SecondMonth":{from:" ",to:" "},"ThiredMonth":{from:" ",to:" "}};
 
 		var monthconsumtion = {"FirstMonth":'',"SecondMonth":'',"ThiredMonth":''}
-		
-		//{ devId : '1200000000002345',fromDate : '11/20/2018 12:12 PM', toDate:'11/22/2018 12:12 PM',type: 'days'}
 		
 		var weekJSON={"FirstWeek":{from:" ",to:" "},"SecondWeek":{from:" ",to:" "},"ThirdWeek":{from:" ",to:" "},"FourthWeek":{from:" ",to:" "}};
 		const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -621,7 +610,6 @@
 		
 		function drawbarchart(){
 			
-			//console.log(weekJSON);
 			
 var tempdata = []
 var ykeys = []
@@ -642,11 +630,10 @@ ykeys.push(device.split("->")[1])
 				var consuptionref = {y:''+weekJSON[week].from+'-'+weekJSON[week].to};
 				for(var device in totalConsumption){
 					
-					//console.log(weekJSON[week].from+" "+weekJSON[week].to)
+				
 					var responsejson = JSON.parse(getConsumtion(device.split("->")[1],weekJSON[week].from,weekJSON[week].to,null))
 					
-					//console.log(responsejson);
-					//console.log(week)
+					
 					var result = responsejson.result;
 					
 					var tempconsumtion = 0;
@@ -687,20 +674,33 @@ ykeys.push(device.split("->")[1])
 		   var date = new Date();
 		   var year = date.getFullYear(), month = date.getMonth();
 
+		  
 		   weekJSON.FirstWeek.from = new Date(year, month, 1).toLocaleDateString();
-		   weekJSON.FirstWeek.to=new Date(year, month, 7).toLocaleDateString();
-		       //never change the below line it causes issue with database.
-		  // weekJSON.SecondWeek.from = new Date(year, month, 08).toLocaleDateString().split()"/";
-		   weekJSON.SecondWeek.from = "11/08/2018"
-		   weekJSON.SecondWeek.to=new Date(year, month, 14).toLocaleDateString();
+		   weekJSON.FirstWeek.to=new Date(year, month, 8).toLocaleDateString();
+		   
+		   weekJSON.SecondWeek.from = (month+1)+"/08/"+year
+		   weekJSON.SecondWeek.to=new Date(year, month, 15).toLocaleDateString();
 		       
 		   weekJSON.ThirdWeek.from= new Date(year, month, 15).toLocaleDateString();
-		   weekJSON.ThirdWeek.to=new Date(year, month, 21).toLocaleDateString();
+		   weekJSON.ThirdWeek.to=new Date(year, month, 22).toLocaleDateString();
 		       
 		   weekJSON.FourthWeek.from = new Date(year, month, 22).toLocaleDateString();
-		   weekJSON.FourthWeek.to=new Date(year, month + 1, 0).toLocaleDateString();      
+		   
+		   weekJSON.FourthWeek.to=new Date(year, month + 1, 1).toLocaleDateString();      
 		
+		   weekJSON.FourthWeek.to =   weekJSON.FourthWeek.to.split("/")[0]+"/0"+weekJSON.FourthWeek.to.split("/")[1]+"/"+weekJSON.FourthWeek.to.split("/")[2]
 			
+		   
+		if(weekJSON.FourthWeek.from.split("/")[0].length == 1){
+			weekJSON.FourthWeek.from = "0"+weekJSON.FourthWeek.from
+			
+		}
+		if(weekJSON.FourthWeek.to.split("/")[0].length == 1){
+			weekJSON.FourthWeek.to = "0"+weekJSON.FourthWeek.to
+			
+		}
+		   
+	
 		}
 		
 		function lastFirstmonthdonut(){
@@ -842,7 +842,7 @@ function getLineColors(){
 		}
 		
 		function getcurrebtDaysReport() {
-			//loader.setAttribute("style","display:block")
+			
 			
 			$.ajax({
 				url : 'getGraphOnBodyLoad',
@@ -866,8 +866,7 @@ function getLineColors(){
 				success : function(data) {
 					totalConsumption = data;
 					
-					////console.log(totalConsumption)
-					
+				
 					plotTotalConsuption()
 
 				},
@@ -991,20 +990,45 @@ function getLineColors(){
 
 		}
 		
+		
+		
+		
+		 function monthformat(value){
+			 
+				if(value.split("/")[0].length == 1){
+					   
+					   return "0"+value;
+					   
+				   } else{
+					   return value;
+					   
+				   }
+				 }
+		
+		
 			function getMonthDates()
 		{
 
 		   var date = new Date();
 		   var year = date.getFullYear(), month = date.getMonth();
 
-		   dateJSON.FirstMonth.from = new Date(year, month, 1).toLocaleDateString();
-		   dateJSON.FirstMonth.to = new Date(year, month + 1, 0).toLocaleDateString();
+		   dateJSON.FirstMonth.from = monthformat(new Date(year, month, 1).toLocaleDateString());
 		   
-		   dateJSON.SecondMonth.from = new Date(year, month-1, 1).toLocaleDateString();
-		   dateJSON.SecondMonth.to = new Date(year, (month-1) + 1, 0).toLocaleDateString();
 		   
-		   dateJSON.ThiredMonth.from = new Date(year, month-2, 1).toLocaleDateString();
-		   dateJSON.ThiredMonth.to= new Date(year, (month-2) + 1, 0).toLocaleDateString();
+		
+		   
+		   dateJSON.FirstMonth.to = monthformat(new Date(year, month + 1, 1).toLocaleDateString());
+		   
+		   dateJSON.SecondMonth.from = monthformat(new Date(year, month-1, 1).toLocaleDateString());
+		   dateJSON.SecondMonth.to = monthformat(new Date(year, (month-1)+1, 1).toLocaleDateString());
+		 
+		   
+		   dateJSON.ThiredMonth.from =monthformat( new Date(year, month-2, 1).toLocaleDateString());
+		   dateJSON.ThiredMonth.to= monthformat(new Date(year, (month-2) + 1, 1).toLocaleDateString());
+		
+		 
+		   
+		
 		   
 		}
 		
